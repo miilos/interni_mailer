@@ -54,6 +54,4 @@ class EmailDto
     {
         return $this->body;
     }
-
-
 }

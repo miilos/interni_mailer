@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\EmailTemplateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: EmailTemplateRepository::class)]
+#[UniqueEntity(fields: ['name'], message: 'That template name is already in use!')]
 class EmailTemplate
 {
     #[ORM\Id]

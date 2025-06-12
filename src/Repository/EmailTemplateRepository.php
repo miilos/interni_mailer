@@ -2,42 +2,58 @@
 
 namespace App\Repository;
 
+use App\Dto\EmailTemplateDto;
 use App\Entity\EmailTemplate;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Faker\Factory;
 
 /**
  * @extends ServiceEntityRepository<EmailTemplate>
  */
 class EmailTemplateRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, EmailTemplate::class);
+        $this->entityManager = $entityManager;
     }
 
-    //    /**
-    //     * @return EmailTemplate[] Returns an array of EmailTemplate objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('e.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getAllEmailTemplateNames(): array
+    {
+        return $this->createQueryBuilder('template')
+            ->select('template.name')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?EmailTemplate
-    //    {
-    //        return $this->createQueryBuilder('e')
-    //            ->andWhere('e.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function createEmailTemplate(EmailTemplateDto  $emailTemplateDto): EmailTemplate
+    {
+        $template = new EmailTemplate();
+
+        if ($emailTemplateDto->getName()) {
+            $template->setName($emailTemplateDto->getName());
+        }
+        else {
+            $faker = Factory::create('en_US');
+            $name = implode('-', $faker->words(2)) . '-' . time();
+            $template->setName($name);
+        }
+
+        $template->setSubject($emailTemplateDto->getSubject());
+        $template->setFromAddr($emailTemplateDto->getFrom());
+        $template->setToAddr($emailTemplateDto->getTo());
+        $template->setCc($emailTemplateDto->getCc());
+        $template->setBcc($emailTemplateDto->getBcc());
+        $template->setBody($emailTemplateDto->getBody());
+        $template->setCreatedAt(new \DateTimeImmutable());
+
+        $this->entityManager->persist($template);
+        $this->entityManager->flush();
+
+        return $template;
+    }
 }
