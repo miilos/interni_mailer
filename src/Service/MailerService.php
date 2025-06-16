@@ -3,25 +3,35 @@
 namespace App\Service;
 
 use App\Dto\EmailDto;
+use App\Repository\EmailTwigTemplateRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
 class MailerService
 {
     public function __construct(
-        private MailerInterface $mailer
+        private MailerInterface $mailer,
+        private EmailTwigTemplateRepository  $emailTwigTemplateRepository,
     ) {}
 
     public function send(EmailDto $emailDto): void
     {
-        $email = (new Email())
-            ->from($emailDto->getFrom())
-            ->subject($emailDto->getSubject())
-            ->text($emailDto->getBody());
+        $email = null;
 
-        foreach ($emailDto->getTo() as $to) {
-            $email->addTo($to);
+        if ($emailDto->getTwigTemplate()) {
+            $email = new TemplatedEmail();
+            $template = $this->getTwigTemplateFilePath($emailDto->getTwigTemplate())['filePath'];
+            $email->htmlTemplate($template);
         }
+        else {
+            $email = new Email();
+            $email->text($emailDto->getBody());
+        }
+
+        $email
+            ->from($emailDto->getFrom())
+            ->subject($emailDto->getSubject());
 
         if ($emailDto->getCc()) {
             foreach ($emailDto->getCc() as $cc) {
@@ -35,6 +45,14 @@ class MailerService
             }
         }
 
-        $this->mailer->send($email);
+        foreach ($emailDto->getTo() as $to) {
+            $email->to($to);
+            $this->mailer->send($email);
+        }
+    }
+
+    private function getTwigTemplateFilePath(string $templateName): array
+    {
+        return $this->emailTwigTemplateRepository->getEmailTwigTemplateByName($templateName);
     }
 }

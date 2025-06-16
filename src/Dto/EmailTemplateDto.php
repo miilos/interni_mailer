@@ -28,6 +28,8 @@ class EmailTemplateDto
 
         #[Assert\NotBlank(message: 'Template body is required!')]
         private ?string $body = null,
+
+        private ?string $twigTemplateName = null
     ) {}
 
     public function getName(): ?string
@@ -63,5 +65,50 @@ class EmailTemplateDto
     public function getBody(): ?string
     {
         return $this->body;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setSubject(?string $subject): void
+    {
+        $this->subject = $subject;
+    }
+
+    public function setFrom(?string $from): void
+    {
+        $this->from = $from;
+    }
+
+    public function setTo(array $to): void
+    {
+        $this->to = $to;
+    }
+
+    public function setCc(array $cc): void
+    {
+        $this->cc = $cc;
+    }
+
+    public function setBcc(array $bcc): void
+    {
+        $this->bcc = $bcc;
+    }
+
+    public function setBody(?string $body): void
+    {
+        $this->body = $body;
+    }
+
+    public function getTwigTemplateName(): ?string
+    {
+        return $this->twigTemplateName;
+    }
+
+    public function setTwigTemplateName(?string $twigTemplateName): void
+    {
+        $this->twigTemplateName = $twigTemplateName;
     }
 }

@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use App\Dto\EmailDto;
 use App\Repository\EmailTemplateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\ObjectMapper\Attribute\Map;
 
 #[ORM\Entity(repositoryClass: EmailTemplateRepository::class)]
 #[UniqueEntity(fields: ['name'], message: 'That template name is already in use!')]
+#[Map(target: EmailDto::class)]
 class EmailTemplate
 {
     #[ORM\Id]
@@ -23,9 +26,11 @@ class EmailTemplate
     private ?string $subject = null;
 
     #[ORM\Column(length: 255)]
+    #[Map(target: 'from')]
     private ?string $fromAddr = null;
 
     #[ORM\Column(type: Types::JSON)]
+    #[Map(target: 'to')]
     private array $toAddr = [];
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
@@ -39,6 +44,9 @@ class EmailTemplate
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $twigTemplateName = null;
 
     public function getId(): ?int
     {
@@ -137,6 +145,18 @@ class EmailTemplate
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getTwigTemplateName(): ?string
+    {
+        return $this->twigTemplateName;
+    }
+
+    public function setTwigTemplateName(?string $twigTemplateName): static
+    {
+        $this->twigTemplateName = $twigTemplateName;
 
         return $this;
     }

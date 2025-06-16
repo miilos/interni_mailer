@@ -50,6 +50,7 @@ class EmailTemplateRepository extends ServiceEntityRepository
         $template->setBcc($emailTemplateDto->getBcc());
         $template->setBody($emailTemplateDto->getBody());
         $template->setCreatedAt(new \DateTimeImmutable());
+        $template->setTwigTemplateName($emailTemplateDto->getTwigTemplateName());
 
         $this->entityManager->persist($template);
         $this->entityManager->flush();

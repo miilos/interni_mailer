@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Command\AssembleTemplateCommand;
 use App\Dto\EmailDto;
 use App\Event\SendEmailEvent;
+use App\Service\EmailTemplateAssemblerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,10 +31,17 @@ class EmailController extends AbstractController
 
     #[Route('/api/{templateName}/send', methods: ['POST'])]
     public function sendFromTemplate(
-        string $templateName
+        string $templateName,
+        EmailTemplateAssemblerService $templateAssembler,
+        EventDispatcherInterface $dispatcher,
+        Request $request,
     ): JsonResponse
     {
-        // use EmailTemplateAssemblerService to create email from template and dispatch the send event
+        $valuesToChange = json_decode($request->getContent(), true);
+
+        $emailDto = $templateAssembler->createEmailFromTemplate($templateName,  $valuesToChange);
+
+        $dispatcher->dispatch(new SendEmailEvent($emailDto));
 
         return $this->json([
             'status' => 'success',

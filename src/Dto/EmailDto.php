@@ -22,7 +22,9 @@ class EmailDto
         private array $bcc = [],
 
         #[Assert\NotBlank(message: 'Email body can\'t blank!')]
-        private ?string $body = null
+        private ?string $body = null,
+
+        private ?string $twigTemplate = null
     ) {}
 
     public function getSubject(): string
@@ -53,5 +55,15 @@ class EmailDto
     public function getBody(): string
     {
         return $this->body;
+    }
+
+    public function getTwigTemplate(): ?string
+    {
+        return $this->twigTemplate;
+    }
+
+    public function setTwigTemplate(?string $twigTemplate): void
+    {
+        $this->twigTemplate = $twigTemplate;
     }
 }
