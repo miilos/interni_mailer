@@ -3,13 +3,13 @@
 namespace App\EventSubscriber;
 
 use App\Event\SendEmailEvent;
-use App\Service\MailerService;
+use App\Service\EmailSenderService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SendEmailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private MailerService $mailer
+        private EmailSenderService $sender
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -21,6 +21,6 @@ class SendEmailSubscriber implements EventSubscriberInterface
 
     public function onSendEmail(SendEmailEvent $event): void
     {
-        $this->mailer->send($event->getEmail());
+        $this->sender->send($event->getEmail());
     }
 }

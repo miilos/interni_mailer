@@ -2,8 +2,10 @@
 
 namespace App\Validator\UniqueTemplateName;
 
+use App\Dto\EmailBodyDto;
 use App\Dto\EmailTemplateDto;
 use App\Dto\EmailTwigTemplateDto;
+use App\Repository\EmailBodyRepository;
 use App\Repository\EmailTemplateRepository;
 use App\Repository\EmailTwigTemplateRepository;
 use Symfony\Component\Validator\Constraint;
@@ -12,13 +14,14 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 /**
- * both EmailTemplate and EmailTwigTemplate names should be unique, so this validator works for both
+ * both EmailTemplate and EmailBody names should be unique, so this validator works for both
  */
 class UniqueTemplateNameValidator extends ConstraintValidator
 {
     public function __construct(
         private EmailTemplateRepository $emailTemplateRepository,
-        private EmailTwigTemplateRepository  $emailTwigTemplateRepository
+        private EmailTwigTemplateRepository  $emailTwigTemplateRepository,
+        private EmailBodyRepository $emailBodyRepository
     ) {}
 
     public function validate(mixed $value, Constraint $constraint): void
@@ -43,6 +46,10 @@ class UniqueTemplateNameValidator extends ConstraintValidator
 
         if ($this->context->getObject() instanceof EmailTwigTemplateDto) {
             $allNames =  $this->emailTwigTemplateRepository->getAllEmailTwigTemplateNames();
+        }
+
+        if ($this->context->getObject() instanceof EmailBodyDto) {
+            $allNames = $this->emailBodyRepository->getAllBodyTemplateNames();
         }
 
         foreach ($allNames as $name) {
