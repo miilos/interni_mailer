@@ -26,10 +26,9 @@ class EmailTemplateDto
 
         private array $bcc = [],
 
-        #[Assert\NotBlank(message: 'Template body is required!')]
         private ?string $body = null,
 
-        private ?string $twigTemplateName = null
+        private ?string $bodyTemplateName = null
     ) {}
 
     public function getName(): ?string
@@ -102,13 +101,13 @@ class EmailTemplateDto
         $this->body = $body;
     }
 
-    public function getTwigTemplateName(): ?string
+    public function getBodyTemplateName(): ?string
     {
-        return $this->twigTemplateName;
+        return $this->bodyTemplateName;
     }
 
-    public function setTwigTemplateName(?string $twigTemplateName): void
+    public function setBodyTemplateName(?string $bodyTemplateName): void
     {
-        $this->twigTemplateName = $twigTemplateName;
+        $this->bodyTemplateName = $bodyTemplateName;
     }
 }

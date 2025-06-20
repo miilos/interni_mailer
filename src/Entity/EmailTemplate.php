@@ -46,7 +46,7 @@ class EmailTemplate
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $twigTemplateName = null;
+    private ?string $bodyTemplateName = null;
 
     public function getId(): ?int
     {
@@ -149,14 +149,14 @@ class EmailTemplate
         return $this;
     }
 
-    public function getTwigTemplateName(): ?string
+    public function getBodyTemplateName(): ?string
     {
-        return $this->twigTemplateName;
+        return $this->bodyTemplateName;
     }
 
-    public function setTwigTemplateName(?string $twigTemplateName): static
+    public function setBodyTemplateName(?string $bodyTemplateName): static
     {
-        $this->twigTemplateName = $twigTemplateName;
+        $this->bodyTemplateName = $bodyTemplateName;
 
         return $this;
     }

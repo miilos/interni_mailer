@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 class EmailController extends AbstractController
 {
@@ -35,9 +36,10 @@ class EmailController extends AbstractController
         EmailTemplateAssemblerService $templateAssembler,
         EventDispatcherInterface $dispatcher,
         Request $request,
+        DecoderInterface $serializer
     ): JsonResponse
     {
-        $valuesToChange = json_decode($request->getContent(), true);
+        $valuesToChange = $serializer->decode($request->getContent(), 'json');
 
         $emailDto = $templateAssembler->createEmailFromTemplate($templateName,  $valuesToChange);
 

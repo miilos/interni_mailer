@@ -20,7 +20,6 @@ class UniqueTemplateNameValidator extends ConstraintValidator
 {
     public function __construct(
         private EmailTemplateRepository $emailTemplateRepository,
-        private EmailTwigTemplateRepository  $emailTwigTemplateRepository,
         private EmailBodyRepository $emailBodyRepository
     ) {}
 
@@ -42,10 +41,6 @@ class UniqueTemplateNameValidator extends ConstraintValidator
 
         if ($this->context->getObject() instanceof EmailTemplateDto) {
             $allNames = $this->emailTemplateRepository->getAllEmailTemplateNames();
-        }
-
-        if ($this->context->getObject() instanceof EmailTwigTemplateDto) {
-            $allNames =  $this->emailTwigTemplateRepository->getAllEmailTwigTemplateNames();
         }
 
         if ($this->context->getObject() instanceof EmailBodyDto) {
