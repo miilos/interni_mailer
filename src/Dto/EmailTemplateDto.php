@@ -2,9 +2,11 @@
 
 namespace App\Dto;
 
+use App\Validator\EmailBodyNotNull\EmailBodyNotNull;
 use App\Validator\UniqueTemplateName\UniqueTemplateName;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[EmailBodyNotNull]
 class EmailTemplateDto
 {
     public function __construct(
@@ -28,7 +30,7 @@ class EmailTemplateDto
 
         private ?string $body = null,
 
-        private ?string $bodyTemplateName = null
+        private ?string $bodyTemplate = null,
     ) {}
 
     public function getName(): ?string
@@ -36,39 +38,14 @@ class EmailTemplateDto
         return $this->name;
     }
 
-    public function getSubject(): ?string
-    {
-        return $this->subject;
-    }
-
-    public function getFrom(): ?string
-    {
-        return $this->from;
-    }
-
-    public function getTo(): array
-    {
-        return $this->to;
-    }
-
-    public function getCc(): array
-    {
-        return $this->cc;
-    }
-
-    public function getBcc(): array
-    {
-        return $this->bcc;
-    }
-
-    public function getBody(): ?string
-    {
-        return $this->body;
-    }
-
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
     }
 
     public function setSubject(?string $subject): void
@@ -76,9 +53,19 @@ class EmailTemplateDto
         $this->subject = $subject;
     }
 
+    public function getFrom(): ?string
+    {
+        return $this->from;
+    }
+
     public function setFrom(?string $from): void
     {
         $this->from = $from;
+    }
+
+    public function getTo(): array
+    {
+        return $this->to;
     }
 
     public function setTo(array $to): void
@@ -86,9 +73,19 @@ class EmailTemplateDto
         $this->to = $to;
     }
 
+    public function getCc(): array
+    {
+        return $this->cc;
+    }
+
     public function setCc(array $cc): void
     {
         $this->cc = $cc;
+    }
+
+    public function getBcc(): array
+    {
+        return $this->bcc;
     }
 
     public function setBcc(array $bcc): void
@@ -96,18 +93,23 @@ class EmailTemplateDto
         $this->bcc = $bcc;
     }
 
+    public function getBody(): ?string
+    {
+        return $this->body;
+    }
+
     public function setBody(?string $body): void
     {
         $this->body = $body;
     }
 
-    public function getBodyTemplateName(): ?string
+    public function getBodyTemplate(): ?string
     {
-        return $this->bodyTemplateName;
+        return $this->bodyTemplate;
     }
 
-    public function setBodyTemplateName(?string $bodyTemplateName): void
+    public function setBodyTemplate(?string $bodyTemplate): void
     {
-        $this->bodyTemplateName = $bodyTemplateName;
+        $this->bodyTemplate = $bodyTemplate;
     }
 }

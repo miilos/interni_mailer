@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Dto\BodyContent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -12,7 +13,7 @@ class EmailBuilderService
     private array $sendTo = [];
 
     public function __construct(
-        private EmailBodyTemplateParserService $emailBodyTemplateParser,
+        private EmailParserService $emailParser,
         private MailerInterface $mailer
     ) {}
 
@@ -30,7 +31,9 @@ class EmailBuilderService
 
     public function subject(string $subject): static
     {
-        $this->email->subject($subject);
+        $this->email->subject(
+            $this->emailParser->parseVariables($subject)
+        );
 
         return $this;
     }
@@ -64,22 +67,24 @@ class EmailBuilderService
         return $this;
     }
 
-    public function plainBody(string $body): static
+    public function body(BodyContent $body): static
     {
-        $this->email->text($body);
+        $bodyContent = "";
 
-        return $this;
-    }
-
-    public function bodyTemplate(string $templateName): static
-    {
-        $body = $this->emailBodyTemplateParser->parseBodyTemplate($templateName);
-
-        if (preg_match('/<\s?[^\>]*\/?\s?>/i', $body)) {
-            $this->email->html($body);
+        if ($body->usesTemplate()) {
+            $bodyContent = $this->emailParser->parseBodyTemplate($body->getContent());
         }
         else {
-            $this->email->text($body);
+            $bodyContent = $body->getContent();
+        }
+
+        $bodyContent = $this->emailParser->parseVariables($bodyContent);
+
+        if ($this->emailParser->isHtml($bodyContent)) {
+            $this->email->html($bodyContent);
+        }
+        else {
+            $this->email->text($bodyContent);
         }
 
         return $this;
