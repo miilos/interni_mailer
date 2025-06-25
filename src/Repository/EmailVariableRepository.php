@@ -24,6 +24,14 @@ class EmailVariableRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
     }
 
+    public function getAllEmailVariableNames(): array
+    {
+        return $this->createQueryBuilder('variable')
+            ->select('variable.name')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getEmailVariableByName(string $name): ?EmailVariable
     {
         return $this->createQueryBuilder('variable')

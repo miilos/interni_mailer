@@ -2,14 +2,14 @@
 
 namespace App\Dto;
 
-use App\Validator\UniqueTemplateName\UniqueTemplateName;
+use App\Validator\UniqueName\UniqueName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class EmailTwigTemplateDto
 {
     public function __construct(
         #[Assert\NotBlank(message: 'Twig template name can\'t be blank!')]
-        #[UniqueTemplateName]
+        #[UniqueName]
         private ?string $name = null,
 
         #[Assert\NotBlank(message: 'Twig template file path can\'t be blank!')]

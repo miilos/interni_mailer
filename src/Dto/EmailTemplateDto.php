@@ -2,16 +2,19 @@
 
 namespace App\Dto;
 
+use App\Entity\EmailTemplate;
 use App\Validator\EmailBodyNotNull\EmailBodyNotNull;
-use App\Validator\UniqueTemplateName\UniqueTemplateName;
+use App\Validator\UniqueName\UniqueName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[EmailBodyNotNull]
 class EmailTemplateDto
 {
     public function __construct(
-        // the validator runs only if the template name is user-generated
-        #[UniqueTemplateName]
+        #[UniqueName(
+            entityClass: EmailTemplate::class,
+            repoMethod: 'getAllEmailTemplateNames'
+        )]
         private ?string $name = null,
 
         #[Assert\NotBlank(message: 'Template subject is required!')]

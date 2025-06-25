@@ -2,15 +2,19 @@
 
 namespace App\Dto;
 
+use App\Entity\EmailBody;
 use App\Validator\SupportedBodyFileExtension\SupportedBodyFileExtension;
-use App\Validator\UniqueTemplateName\UniqueTemplateName;
+use App\Validator\UniqueName\UniqueName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class EmailBodyDto
 {
     public function __construct(
         #[Assert\NotBlank(message: 'The template name can\'t be blank!')]
-        #[UniqueTemplateName]
+        #[UniqueName(
+            entityClass: EmailBody::class,
+            repoMethod: 'getAllBodyTemplateNames'
+        )]
         private ?string $name = null,
 
         #[Assert\NotBlank(message: 'The content of the body can\'t be blank!')]
