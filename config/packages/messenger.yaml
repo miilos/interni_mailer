@@ -9,11 +9,13 @@ framework:
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
             email: '%env(MESSENGER_TRANSPORT_DSN)%'
+            file: '%env(MESSENGER_TRANSPORT_DSN)%'
 
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
             'Symfony\Component\Mailer\Messenger\SendEmailMessage': email
+            'App\Message\CreateBodyTemplateFile': file
 
 # when@test:
 #    framework:

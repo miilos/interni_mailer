@@ -16,7 +16,7 @@ services:
     App\:
         resource: '../src/'
 
-    App\Service\EmailBodyFileCreatorService:
+    App\MessageHandler\CreateBodyTemplateFileHandler:
         arguments:
             $rootDir: '%kernel.project_dir%'
 
