@@ -14,6 +14,7 @@ class EmailBuilderService
 
     public function __construct(
         private EmailParserService $emailParser,
+        private GroupResolverService $groupResolver,
         private MailerInterface $mailer
     ) {}
 
@@ -48,7 +49,8 @@ class EmailBuilderService
     // doesn't change the email object so that a separate email can be sent for every address passed
     public function to(array $to): static
     {
-        $this->sendTo = $to;
+        // replace any group email addresses with the addresses of the group members
+        $this->sendTo = $this->groupResolver->resolveGroupAddresses($to);
 
         return $this;
     }
