@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Dto\BodyContent;
 use App\Dto\EmailDto;
 
 class EmailSenderService
@@ -13,21 +12,13 @@ class EmailSenderService
 
     public function send(EmailDto $emailDto): void
     {
-        $emailBuilder = $this->builder
+        $this->builder
             ->createEmail()
             ->subject($emailDto->getSubject())
             ->from($emailDto->getFrom())
             ->cc($emailDto->getCc())
-            ->bcc($emailDto->getBcc());
-
-        if ($emailDto->getBodyTemplate()) {
-            $emailBuilder = $emailBuilder->body(BodyContent::template($emailDto->getBodyTemplate()));
-        }
-        else {
-            $emailBuilder = $emailBuilder->body(BodyContent::plain($emailDto->getBody()));
-        }
-
-        $emailBuilder
+            ->bcc($emailDto->getBcc())
+            ->body($emailDto->getBody())
             ->to($emailDto->getTo())
             ->send();
     }

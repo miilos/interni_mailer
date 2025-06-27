@@ -8,6 +8,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[EmailBodyNotNull]
 class EmailDto
 {
+    private string $id;
+
     public function __construct(
         #[Assert\NotBlank(message: 'Subject can\'t blank!')]
         private ?string $subject = null,
@@ -26,7 +28,19 @@ class EmailDto
         private ?string $body = null,
 
         private ?string $bodyTemplate = null
-    ) {}
+    ) {
+        $this->id = bin2hex(random_bytes(8));
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
 
     public function getSubject(): ?string
     {

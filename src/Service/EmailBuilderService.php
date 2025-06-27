@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Dto\BodyContent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -13,8 +12,6 @@ class EmailBuilderService
     private array $sendTo = [];
 
     public function __construct(
-        private EmailParserService $emailParser,
-        private GroupResolverService $groupResolver,
         private MailerInterface $mailer
     ) {}
 
@@ -32,9 +29,7 @@ class EmailBuilderService
 
     public function subject(string $subject): static
     {
-        $this->email->subject(
-            $this->emailParser->parseVariables($subject)
-        );
+        $this->email->subject($subject);
 
         return $this;
     }
@@ -49,8 +44,7 @@ class EmailBuilderService
     // doesn't change the email object so that a separate email can be sent for every address passed
     public function to(array $to): static
     {
-        // replace any group email addresses with the addresses of the group members
-        $this->sendTo = $this->groupResolver->resolveGroupAddresses($to);
+        $this->sendTo = $to;
 
         return $this;
     }
@@ -69,25 +63,9 @@ class EmailBuilderService
         return $this;
     }
 
-    public function body(BodyContent $body): static
+    public function body(string $body): static
     {
-        $bodyContent = "";
-
-        if ($body->usesTemplate()) {
-            $bodyContent = $this->emailParser->parseBodyTemplate($body->getContent());
-        }
-        else {
-            $bodyContent = $body->getContent();
-        }
-
-        $bodyContent = $this->emailParser->parseVariables($bodyContent);
-
-        if ($this->emailParser->isHtml($bodyContent)) {
-            $this->email->html($bodyContent);
-        }
-        else {
-            $this->email->text($bodyContent);
-        }
+        $this->email->html($body);
 
         return $this;
     }

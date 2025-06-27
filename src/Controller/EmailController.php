@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\EmailDto;
 use App\Event\SendEmailEvent;
+use App\Service\EmailParserService;
 use App\Service\EmailTemplateAssemblerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -18,10 +19,12 @@ class EmailController extends AbstractController
     #[Route('/api/send', methods: ['POST'])]
     public function send(
         EventDispatcherInterface $dispatcher,
+        EmailParserService $parser,
         #[MapRequestPayload]
         EmailDto $emailDto,
     ): JsonResponse
     {
+        $emailDto = $parser->parse($emailDto);
         $dispatcher->dispatch(new SendEmailEvent($emailDto));
 
         return $this->json([
@@ -35,13 +38,16 @@ class EmailController extends AbstractController
         string $templateName,
         EmailTemplateAssemblerService $templateAssembler,
         EventDispatcherInterface $dispatcher,
+        EmailParserService $parser,
         Request $request,
         DecoderInterface $serializer
     ): JsonResponse
     {
         $valuesToChange = $serializer->decode($request->getContent(), 'json');
 
-        $emailDto = $templateAssembler->createEmailFromTemplate($templateName,  $valuesToChange);
+        $emailDto = $parser->parse(
+            $templateAssembler->createEmailFromTemplate($templateName,  $valuesToChange)
+        );
 
         $dispatcher->dispatch(new SendEmailEvent($emailDto));
 
