@@ -46,6 +46,7 @@ class EmailTemplate
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Map(target: 'bodyTemplate')]
     private ?string $bodyTemplateName = null;
 
     public function getId(): ?int

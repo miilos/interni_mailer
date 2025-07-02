@@ -11,9 +11,10 @@ class LogEmail
 
     public function __construct(
         EmailDto $emailDto,
-        string $status
+        string $status,
+        ?string $error = null,
     ) {
-        $this->emailLogDto = new EmailLogDto($emailDto, $status);
+        $this->emailLogDto = new EmailLogDto($emailDto, $status, $error);
     }
 
     public function getEmailLogDto(): EmailLogDto

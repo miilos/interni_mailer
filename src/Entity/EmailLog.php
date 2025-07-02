@@ -41,6 +41,15 @@ class EmailLog
     #[ORM\Column]
     private ?\DateTimeImmutable $loggedAt = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $error = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bodyTemplate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $emailTemplate = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +159,42 @@ class EmailLog
     public function setLoggedAt(\DateTimeImmutable $loggedAt): static
     {
         $this->loggedAt = $loggedAt;
+
+        return $this;
+    }
+
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    public function setError(?string $error): static
+    {
+        $this->error = $error;
+
+        return $this;
+    }
+
+    public function getBodyTemplate(): ?string
+    {
+        return $this->bodyTemplate;
+    }
+
+    public function setBodyTemplate(?string $bodyTemplate): static
+    {
+        $this->bodyTemplate = $bodyTemplate;
+
+        return $this;
+    }
+
+    public function getEmailTemplate(): ?string
+    {
+        return $this->emailTemplate;
+    }
+
+    public function setEmailTemplate(?string $emailTemplate): static
+    {
+        $this->emailTemplate = $emailTemplate;
 
         return $this;
     }

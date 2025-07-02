@@ -30,6 +30,7 @@ class EmailTemplateAssemblerService
         }
 
         $emailDto = $this->mapper->map($template, EmailDto::class);
+        $emailDto->setEmailTemplate($template->getName());
 
         $validationErrors = $this->validator->validate($emailDto);
         if ($validationErrors->count() > 0) {

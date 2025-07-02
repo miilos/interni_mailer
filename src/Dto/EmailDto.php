@@ -27,10 +27,10 @@ class EmailDto
 
         private ?string $body = null,
 
-        private ?string $bodyTemplate = null
-    ) {
-        $this->id = bin2hex(random_bytes(8));
-    }
+        private ?string $bodyTemplate = null,
+
+        private ?string $emailTemplate = null
+    ) {}
 
     public function getId(): string
     {
@@ -110,5 +110,15 @@ class EmailDto
     public function setBodyTemplate(?string $bodyTemplate): void
     {
         $this->bodyTemplate = $bodyTemplate;
+    }
+
+    public function getEmailTemplate(): ?string
+    {
+        return $this->emailTemplate;
+    }
+
+    public function setEmailTemplate(?string $emailTemplate): void
+    {
+        $this->emailTemplate = $emailTemplate;
     }
 }

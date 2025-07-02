@@ -3,14 +3,14 @@
 namespace App\Controller;
 
 use App\Dto\EmailDto;
-use App\Event\SendEmailEvent;
+use App\Message\SendEmail;
 use App\Service\EmailParserService;
 use App\Service\EmailTemplateAssemblerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
@@ -18,14 +18,14 @@ class EmailController extends AbstractController
 {
     #[Route('/api/send', methods: ['POST'])]
     public function send(
-        EventDispatcherInterface $dispatcher,
+        MessageBusInterface $messageBus,
         EmailParserService $parser,
         #[MapRequestPayload]
         EmailDto $emailDto,
     ): JsonResponse
     {
         $emailDto = $parser->parse($emailDto);
-        $dispatcher->dispatch(new SendEmailEvent($emailDto));
+        $messageBus->dispatch(new SendEmail($emailDto));
 
         return $this->json([
             'status' => 'success',
@@ -37,7 +37,7 @@ class EmailController extends AbstractController
     public function sendFromTemplate(
         string $templateName,
         EmailTemplateAssemblerService $templateAssembler,
-        EventDispatcherInterface $dispatcher,
+        MessageBusInterface $messageBus,
         EmailParserService $parser,
         Request $request,
         DecoderInterface $serializer
@@ -49,7 +49,7 @@ class EmailController extends AbstractController
             $templateAssembler->createEmailFromTemplate($templateName,  $valuesToChange)
         );
 
-        $dispatcher->dispatch(new SendEmailEvent($emailDto));
+        $messageBus->dispatch(new SendEmail($emailDto));
 
         return $this->json([
             'status' => 'success',

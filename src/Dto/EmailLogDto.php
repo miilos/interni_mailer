@@ -5,7 +5,8 @@ namespace App\Dto;
 class EmailLogDto
 {
     private string $emailId;
-    private ?string $templateName;
+    private ?string $bodyTemplateName;
+    private ?string $emailTemplate;
     private string $subject;
     private string $from;
     private array $to;
@@ -14,13 +15,16 @@ class EmailLogDto
     private string $body;
     private string $status;
     private \DateTimeImmutable $loggedAt;
+    private ?string $error;
 
     public function __construct (
         EmailDto $emailDto,
-        string $status
+        string $status,
+        ?string $error = null,
     ) {
         $this->emailId = $emailDto->getId();
-        $this->templateName = $emailDto->getBodyTemplate();
+        $this->bodyTemplateName = $emailDto->getBodyTemplate();
+        $this->emailTemplate = $emailDto->getEmailTemplate();
         $this->subject = $emailDto->getSubject();
         $this->from = $emailDto->getFrom();
         $this->to = $emailDto->getTo();
@@ -29,6 +33,7 @@ class EmailLogDto
         $this->body = $emailDto->getBody();
         $this->status = $status;
         $this->loggedAt = new \DateTimeImmutable();
+        $this->error = $error;
     }
 
     public function getEmailId(): string
@@ -76,8 +81,18 @@ class EmailLogDto
         return $this->loggedAt;
     }
 
-    public function getTemplateName(): ?string
+    public function getBodyTemplateName(): ?string
     {
-        return $this->templateName;
+        return $this->bodyTemplateName;
+    }
+
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    public function getEmailTemplate(): ?string
+    {
+        return $this->emailTemplate;
     }
 }

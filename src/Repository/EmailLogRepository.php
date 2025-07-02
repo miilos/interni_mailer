@@ -34,6 +34,9 @@ class EmailLogRepository extends ServiceEntityRepository
         $log->setBody($emailLog->getBody());
         $log->setStatus(EmailStatusEnum::from($emailLog->getStatus()));
         $log->setLoggedAt($emailLog->getLoggedAt());
+        $log->setError($emailLog->getError());
+        $log->setBodyTemplate($emailLog->getBodyTemplateName());
+        $log->setEmailTemplate($emailLog->getEmailTemplate());
 
         $this->entityManager->persist($log);
         $this->entityManager->flush();

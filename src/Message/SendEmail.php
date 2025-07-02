@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Event;
+namespace App\Message;
 
 use App\Dto\EmailDto;
-use Symfony\Contracts\EventDispatcher\Event;
 
-final class SendEmailEvent extends Event
+class SendEmail
 {
     public function __construct(private EmailDto $email) {}
 
