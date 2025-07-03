@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\EmailParser;
 
 use App\Entity\Group;
 use App\Repository\GroupRepository;
@@ -25,17 +25,24 @@ class GroupResolverService
         $groupAddresses = $this->getGroupAddresses();
         foreach ($addressList as $address) {
             if (in_array($address, $groupAddresses)) {
-                $groupMembers = $this->getGroup($address)->getRecipients();
-                array_push($finalAddressList, ...$groupMembers);
+                $groupMembers = $this->getGroup($address)->getUsers();
+
+                $memberAddresses = [];
+                foreach ($groupMembers as $groupMember) {
+                    $memberAddresses[] = $groupMember->getEmail();
+                }
+
+                array_push($finalAddressList, ...$memberAddresses);
             }
             else {
-                array_push($finalAddressList, $address);
+                $finalAddressList[] = $address;
             }
         }
 
         return $finalAddressList;
     }
 
+    // gets the addresses of all the groups in the db
     private function getGroupAddresses(): array
     {
         $addresses = [];
@@ -47,6 +54,7 @@ class GroupResolverService
         return $addresses;
     }
 
+    // gets the specific group by the address
     public function getGroup(string $address): ?Group
     {
         $group = null;

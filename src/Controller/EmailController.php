@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Dto\EmailDto;
 use App\Message\SendEmail;
-use App\Service\EmailParserService;
+use App\Service\EmailParser\EmailParserService;
 use App\Service\EmailTemplateAssemblerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,10 +40,10 @@ class EmailController extends AbstractController
         MessageBusInterface $messageBus,
         EmailParserService $parser,
         Request $request,
-        DecoderInterface $serializer
+        DecoderInterface $decoder
     ): JsonResponse
     {
-        $valuesToChange = $serializer->decode($request->getContent(), 'json');
+        $valuesToChange = $decoder->decode($request->getContent(), 'json');
 
         $emailDto = $parser->parse(
             $templateAssembler->createEmailFromTemplate($templateName,  $valuesToChange)

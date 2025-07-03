@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\EmailParser;
 
 use App\Entity\EmailBody;
 use App\Repository\EmailBodyRepository;

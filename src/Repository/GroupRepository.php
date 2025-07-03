@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Dto\GroupDto;
 use App\Entity\Group;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -15,7 +16,10 @@ class GroupRepository extends ServiceEntityRepository
 {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $entityManager
+    )
     {
         parent::__construct($registry, Group::class);
         $this->entityManager = $entityManager;
@@ -28,31 +32,31 @@ class GroupRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getAllGroupNames(): array
-    {
-        return $this->createQueryBuilder('g')
-            ->select('g.name')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function getGroupByAddress(string $address): ?Group
-    {
-        return $this->createQueryBuilder('g')
-            ->where('g.address = :address')
-            ->setParameter('address', $address)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
     public function createGroup(GroupDto $groupDto): Group
     {
         $group = new Group();
         $group->setName($groupDto->getName());
         $group->setAddress($groupDto->getAddress());
-        $group->setRecipients($groupDto->getRecipients());
+
+        foreach ($groupDto->getRecipients() as $user) {
+            $group->addUser($user);
+        }
 
         $this->entityManager->persist($group);
+        $this->entityManager->flush();
+        return $group;
+    }
+
+    public function addUserToGroup(Group $group, User $user): Group
+    {
+        $group->addUser($user);
+        $this->entityManager->flush();
+        return $group;
+    }
+
+    public function removeUserFromGroup(Group $group, User $user): Group
+    {
+        $group->removeUser($user);
         $this->entityManager->flush();
         return $group;
     }

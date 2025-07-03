@@ -39,4 +39,9 @@ class GroupDto
     {
         return $this->recipients;
     }
+
+    public function setRecipients(array $recipients): void
+    {
+        $this->recipients = $recipients;
+    }
 }
