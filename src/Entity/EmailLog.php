@@ -23,8 +23,8 @@ class EmailLog
     #[ORM\Column(length: 255)]
     private ?string $fromAddr = null;
 
-    #[ORM\Column(type: Types::JSON)]
-    private array $toAddr = [];
+    #[ORM\Column(length: 255)]
+    private ?string $toAddr = null;
 
     #[ORM\Column(type: Types::JSON)]
     private array $cc = [];
@@ -91,12 +91,12 @@ class EmailLog
         return $this;
     }
 
-    public function getToAddr(): array
+    public function getToAddr(): string
     {
         return $this->toAddr;
     }
 
-    public function setToAddr(array $toAddr): static
+    public function setToAddr(string $toAddr): static
     {
         $this->toAddr = $toAddr;
 

@@ -19,7 +19,7 @@ class EmailDto
         private ?string $from = null,
 
         #[Assert\NotBlank(message: 'Receiver address(es) can\'t blank!')]
-        private array $to = [],
+        private array|string|null $to = null,
 
         private array $cc = [],
 
@@ -62,12 +62,12 @@ class EmailDto
         $this->from = $from;
     }
 
-    public function getTo(): array
+    public function getTo(): array|string|null
     {
         return $this->to;
     }
 
-    public function setTo(array $to): void
+    public function setTo(array|string|null $to): void
     {
         $this->to = $to;
     }

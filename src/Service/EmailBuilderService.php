@@ -9,7 +9,6 @@ use Symfony\Component\Mime\Email;
 class EmailBuilderService
 {
     private Email $email;
-    private array $sendTo = [];
 
     public function __construct(
         private MailerInterface $mailer
@@ -41,10 +40,9 @@ class EmailBuilderService
         return $this;
     }
 
-    // doesn't change the email object so that a separate email can be sent for every address passed
-    public function to(array $to): static
+    public function to(string $to): static
     {
-        $this->sendTo = $to;
+        $this->email->to($to);
 
         return $this;
     }
@@ -72,9 +70,6 @@ class EmailBuilderService
 
     public function send(): void
     {
-        foreach ($this->sendTo as $to) {
-            $this->email->to($to);
-            $this->mailer->send($this->email);
-        }
+        $this->mailer->send($this->email);
     }
 }

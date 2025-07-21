@@ -24,8 +24,10 @@ class EmailController extends AbstractController
         EmailDto $emailDto,
     ): JsonResponse
     {
-        $emailDto = $parser->parse($emailDto);
-        $messageBus->dispatch(new SendEmail($emailDto));
+        $emailDtosToSend = $parser->parse($emailDto);
+        foreach ($emailDtosToSend as $email) {
+            $messageBus->dispatch(new SendEmail($email));
+        }
 
         return $this->json([
             'status' => 'success',

@@ -2,6 +2,7 @@
 
 namespace App\Service\EmailParser;
 
+use App\Dto\EmailDto;
 use App\Entity\EmailVariable;
 use App\Repository\EmailVariableRepository;
 use App\Repository\UserRepository;
@@ -13,13 +14,25 @@ class TwigContextBuilderService
         private EmailVariableRepository $emailVariableRepository,
         private UserRepository $userRepository,
     ) {
-        $this->context['globals'] = $this->getGlobals();
-        // $this->context['users'] = $this->userRepository->findAll();
+        $this->buildContext();
     }
 
-    public function getContext(): array
+    // if the email dto is passed, the context includes only the user object of the user who is receiving the email
+    // if the dto is not passed, the context includes all the users
+    public function getContext(?EmailDto $emailDto): array
     {
-        return $this->context;
+        $context = $this->context;
+
+        if ($emailDto) {
+            foreach ($this->context['users'] as $user) {
+                if ($user->getEmail() === $emailDto->getTo()) {
+                    $context['user'] = $user;
+                    unset($context['users']);
+                }
+            }
+        }
+
+        return $context;
     }
 
     private function getGlobals(): array
@@ -32,5 +45,16 @@ class TwigContextBuilderService
         }
 
         return $globals;
+    }
+
+    private function getUsers(): array
+    {
+        return $this->userRepository->findAll();
+    }
+
+    private function buildContext(): void
+    {
+        $this->context['globals'] = $this->getGlobals();
+        $this->context['users'] = $this->getUsers();
     }
 }

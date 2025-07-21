@@ -2,22 +2,20 @@
 
 namespace App\Service\EmailParser;
 
+use App\Dto\EmailDto;
 use Twig\Environment;
 
 class TwigBodyParserService
 {
-    private array $context;
-
     public function __construct(
         private Environment $twig,
         private TwigContextBuilderService $twigContextBuilderService
-    ) {
-        $this->context = $this->twigContextBuilderService->getContext();
-    }
+    ) {}
 
-    public function renderTemplate(string $templateContent): string
+    public function renderTemplate(string $templateContent, ?EmailDto $emailDto = null): string
     {
+        $context = $this->twigContextBuilderService->getContext($emailDto);
         $template = $this->twig->createTemplate($templateContent);
-        return $template->render($this->context);
+        return $template->render($context);
     }
 }

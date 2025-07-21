@@ -9,7 +9,7 @@ class EmailLogDto
     private ?string $emailTemplate;
     private string $subject;
     private string $from;
-    private array $to;
+    private string $to;
     private array $cc;
     private array $bcc;
     private string $body;
@@ -51,7 +51,7 @@ class EmailLogDto
         return $this->from;
     }
 
-    public function getTo(): array
+    public function getTo(): string
     {
         return $this->to;
     }
