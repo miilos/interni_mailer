@@ -11,6 +11,7 @@ class EmailParserService
         private EmailBodyTemplateResolverService $bodyTemplateResolver,
         private GroupResolverService $groupResolver,
         private TwigBodyParserService $twigBodyParser,
+        private MjmlBodyParserService $mjmlBodyParser,
     ) {}
 
     public function parse(EmailDto $emailDto): EmailDto
@@ -26,7 +27,10 @@ class EmailParserService
             $body = $template['content'];
 
             if ($template['extension'] === 'html.twig') {
-                $body = $this->twigBodyParser->renderTemplate($body);
+                $body = $this->twigBodyParser->parseTemplate($body);
+            }
+            elseif ($template['extension'] === 'mjml') {
+                $body = $this->mjmlBodyParser->parseTemplate($body);
             }
 
             $emailDto->setBody($body);

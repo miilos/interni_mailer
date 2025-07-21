@@ -11,10 +11,8 @@ class TwigContextBuilderService
     private array $context;
     public function __construct(
         private EmailVariableRepository $emailVariableRepository,
-        private UserRepository $userRepository,
     ) {
         $this->context['globals'] = $this->getGlobals();
-        // $this->context['users'] = $this->userRepository->findAll();
     }
 
     public function getContext(): array

@@ -4,7 +4,7 @@ namespace App\Service\EmailParser;
 
 use Twig\Environment;
 
-class TwigBodyParserService
+class TwigBodyParserService implements BodyParserInterface
 {
     private array $context;
 
@@ -15,7 +15,7 @@ class TwigBodyParserService
         $this->context = $this->twigContextBuilderService->getContext();
     }
 
-    public function renderTemplate(string $templateContent): string
+    public function parseTemplate(string $templateContent): string
     {
         $template = $this->twig->createTemplate($templateContent);
         return $template->render($this->context);
