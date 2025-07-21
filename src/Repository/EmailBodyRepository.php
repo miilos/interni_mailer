@@ -32,14 +32,15 @@ class EmailBodyRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function createEmailSubject(EmailBodyDto $subjectDto):  EmailBody
+    public function createEmailBody(EmailBodyDto $bodyDto):  EmailBody
     {
-        $emailSubject = new EmailBody();
-        $emailSubject->setName($subjectDto->getName());
-        $emailSubject->setContent($subjectDto->getContent());
+        $emailBody = new EmailBody();
+        $emailBody->setName($bodyDto->getName());
+        $emailBody->setContent($bodyDto->getContent());
+        $emailBody->setExtension($bodyDto->getExtension());
 
-        $this->entityManager->persist($emailSubject);
+        $this->entityManager->persist($emailBody);
         $this->entityManager->flush();
-        return $emailSubject;
+        return $emailBody;
     }
 }

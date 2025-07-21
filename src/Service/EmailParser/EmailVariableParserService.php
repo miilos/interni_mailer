@@ -10,22 +10,9 @@ class EmailVariableParserService
     private array $variables;
 
     public function __construct(
-        private EmailBodyRepository $emailBodyRepository,
         private EmailVariableRepository $emailVariableRepository,
     ) {
         $this->variables = $this->emailVariableRepository->findAll();
-    }
-
-    public function parseBodyTemplate(string $templateName): string
-    {
-        $body = $this->emailBodyRepository->findOneBy(['name' => $templateName])->getContent();
-
-        return $body;
-    }
-
-    public function isHtml(string $content): bool
-    {
-        return preg_match('/<\s?[^\>]*\/?\s?>/i',  $content);
     }
 
     // gets only the names of all the variables in the given text,

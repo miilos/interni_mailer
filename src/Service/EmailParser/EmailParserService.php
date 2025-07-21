@@ -9,7 +9,8 @@ class EmailParserService
     public function __construct(
         private EmailVariableParserService $variableParser,
         private EmailBodyTemplateResolverService $bodyTemplateResolver,
-        private GroupResolverService $groupResolver
+        private GroupResolverService $groupResolver,
+        private TwigBodyParserService $twigBodyParser,
     ) {}
 
     public function parse(EmailDto $emailDto): EmailDto
@@ -21,9 +22,14 @@ class EmailParserService
         );
 
         if ($emailDto->getBodyTemplate()) {
-            $emailDto->setBody(
-                $this->bodyTemplateResolver->resolve($emailDto->getBodyTemplate())
-            );
+            $template = $this->bodyTemplateResolver->resolve($emailDto->getBodyTemplate());
+            $body = $template['content'];
+
+            if ($template['extension'] === 'html.twig') {
+                $body = $this->twigBodyParser->renderTemplate($body);
+            }
+
+            $emailDto->setBody($body);
         }
 
         $emailDto->setBody(

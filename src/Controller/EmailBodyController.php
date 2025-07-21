@@ -21,7 +21,7 @@ class EmailBodyController extends AbstractController
         EmailBodyDto $emailBodyDto
     ): JsonResponse
     {
-        $body = $emailBodyRepository->createEmailSubject($emailBodyDto);
+        $body = $emailBodyRepository->createEmailBody($emailBodyDto);
 
         $messageBus->dispatch(new CreateBodyTemplateFile($emailBodyDto));
 

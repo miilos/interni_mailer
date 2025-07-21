@@ -12,7 +12,7 @@ class EmailBodyTemplateResolverService
         private EmailBodyRepository $emailBodyRepository,
     ) {}
 
-    public function resolve(string $templateName): string
+    public function resolve(string $templateName): array
     {
         $template = $this->findTemplate($templateName);
 
@@ -20,7 +20,10 @@ class EmailBodyTemplateResolverService
             throw new BadRequestException(sprintf('No template "%s" found!', $templateName));
         }
 
-        return $template->getContent();
+        return [
+            'content' => $template->getContent(),
+            'extension' => $template->getExtension(),
+        ];
     }
 
     private function findTemplate(string $templateName): ?EmailBody
