@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <table class="logs">
+            <tr>
+                <th>Id</th>
+                <th>Email Id</th>
+                <th>Subject</th>
+                <th>From</th>
+                <th>To</th>
+                <th>CC</th>
+                <th>BCC</th>
+                <th>Body</th>
+                <th>Status</th>
+                <th>Logged At</th>
+                <th>Error</th>
+                <th>Body Template</th>
+                <th>Email Template</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="modal-content">
+                <h2 class="modal-title"></h2>
+                <div class="modal-text">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('/scripts/modal.js') }}"></script>
+    <script src="{{ asset('/scripts/logsTable.js') }}"></script>
+{% endblock %}
