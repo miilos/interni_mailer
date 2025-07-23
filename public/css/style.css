@@ -107,3 +107,8 @@ body {
 .expanded-cell {
     max-width: none;
 }
+
+.no-results-msg {
+    text-align: center;
+    font-size: 2rem;
+}

@@ -12,6 +12,9 @@ class LogSearchCriteria
     private ?string $emailTemplate = null;
     private string $sortBy = 'id';
     private string $sortDirection = 'ASC';
+    private int $page = 1;
+    private int $limit = 10;
+
 
     public function getSubject(): ?string
     {
@@ -111,6 +114,30 @@ class LogSearchCriteria
     public function setSortDirection(string $sortDirection): static
     {
         $this->sortDirection = $sortDirection;
+
+        return $this;
+    }
+
+    public function getPage(): int
+    {
+        return $this->page;
+    }
+
+    public function setPage(int $page): static
+    {
+        $this->page = max(1, $page);
+
+        return $this;
+    }
+
+    public function getLimit(): int
+    {
+        return $this->limit;
+    }
+
+    public function setLimit(int $limit): static
+    {
+        $this->limit = $limit;
 
         return $this;
     }

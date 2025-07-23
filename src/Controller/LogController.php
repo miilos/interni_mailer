@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Dto\LogSearchCriteria;
 use App\Entity\EmailStatusEnum;
-use App\Repository\EmailLogRepository;
 use App\Service\Search\LogSearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,10 +15,15 @@ class LogController extends AbstractController
 {
     #[Route('/api/logs', name: 'getLogs')]
     public function getAllLogs(
-        EmailLogRepository $emailLogRepository,
+        LogSearchService $logSearchService,
+        Request $request
     ): JsonResponse
     {
-        $logs = $emailLogRepository->findAll();
+        $criteria = new LogSearchCriteria();
+        $criteria->setPage($request->query->get('page', $criteria->getPage()));
+        $criteria->setLimit($request->query->get('limit', $criteria->getLimit()));
+
+        $logs = $logSearchService->searchAll($criteria);
 
         return $this->json([
             'status' => 'success',
@@ -46,7 +50,10 @@ class LogController extends AbstractController
             ->setBodyTemplate($reqSearchCriteria['bodyTemplate'] ?? null)
             ->setEmailTemplate($reqSearchCriteria['emailTemplate'] ?? null);
 
-        $logs = $logSearchService->search($criteria);
+        $criteria->setPage($request->query->get('page', $criteria->getPage()));
+        $criteria->setLimit($request->query->get('limit', $criteria->getLimit()));
+
+        $logs = $logSearchService->searchByCriteria($criteria);
 
         return $this->json([
             'status' => 'success',

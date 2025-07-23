@@ -9,6 +9,7 @@ const statusInput = document.getElementById('status')
 const bodyTemplateInput = document.getElementById('body-template')
 const emailTemplateInput = document.getElementById('email-template')
 const searchBtn = document.querySelector('.search-btn')
+const resetBtn = document.querySelector('.reset-btn')
 
 /**** data fetching ****/
 
@@ -111,6 +112,8 @@ const resetTableContent = () => {
 /**** main function to render content in table ****/
 
 const renderTable = (logs) => {
+    resetTableContent()
+
     logs.forEach(log => {
         const formattedToAddr = formatArray(log.toAddr)
         const formattedCC = formatArray(log.cc)
@@ -126,7 +129,8 @@ const renderTable = (logs) => {
             statusEl = `<span class="status status--failed">${log.status.toUpperCase()}</span>`
         }
 
-        table.insertAdjacentHTML('beforeend',
+        const tbody = table.querySelector('tbody')
+        tbody.insertAdjacentHTML('beforeend',
             `
                 <tr>
                     <td>${log.id}</td>
@@ -159,6 +163,31 @@ window.addEventListener('load', async () => {
 searchBtn.addEventListener('click', async (e) => {
     const logs = await fetchSearchResults()
 
-    resetTableContent()
+    if (logs.length === 0) {
+        resetTableContent()
+
+        table.querySelector('tbody').insertAdjacentHTML('beforeend', `
+            <tr>
+                <td colspan="13" class="no-results-msg">
+                    No results for this filter
+                </td>
+            </tr>
+        `)
+
+        return
+    }
+
+    renderTable(logs)
+})
+
+resetBtn.addEventListener('click', async (e) => {
+    subjectInput.value = ''
+    fromInput.value = ''
+    toInput.value = ''
+    statusInput.selectedIndex = 0
+    bodyTemplateInput.value = ''
+    emailTemplateInput.value = ''
+
+    const logs = await fetchLogs()
     renderTable(logs)
 })

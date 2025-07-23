@@ -45,6 +45,11 @@ class EmailLogRepository extends ServiceEntityRepository
         return $log;
     }
 
+    public function buildFindAll(): QueryBuilder
+    {
+        return $this->createQueryBuilder('log');
+    }
+
     public function buildSearch(LogSearchCriteria $criteria): QueryBuilder
     {
         $qb = $this->createQueryBuilder('log');
@@ -82,12 +87,5 @@ class EmailLogRepository extends ServiceEntityRepository
         $qb->addOrderBy('log.'.$criteria->getSortBy(), $criteria->getSortDirection());
 
         return $qb;
-    }
-
-    public function findByCriteria(LogSearchCriteria $criteria): array
-    {
-        return $this->buildSearch($criteria)
-            ->getQuery()
-            ->getResult();
     }
 }
