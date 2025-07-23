@@ -1,7 +1,5 @@
 function openModal(title, td) {
-    const content = td.innerHTML
-
-    if (!content) return
+    if (!td.innerHTML) return
 
     const overlay = document.getElementById('modalOverlay');
     overlay.classList.add('active');
@@ -9,12 +7,8 @@ function openModal(title, td) {
 
     document.querySelector('.modal-title').innerText = title
 
-    if (td.dataset.body) {
-        document.querySelector('.modal-text').innerHTML = decodeURIComponent(td.dataset.body)
-    }
-    else {
-        document.querySelector('.modal-text').innerHTML = content
-    }
+    const content = decodeURIComponent(td.dataset.content)
+    document.querySelector('.modal-text').innerHTML = content
 }
 
 function closeModal(event) {

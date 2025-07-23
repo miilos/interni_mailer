@@ -1,24 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="search">
+        <h1 class="search-title">Search</h1>
+
+        <div class="search-inputs">
+            <div class="search-input-group">
+                <div class="search-input-container">
+                    <label for="subject">Subject: </label>
+                    <input type="text" id="subject" name="subject" class="search-input" />
+                </div>
+
+                <div class="search-input-container">
+                    <label for="from">From: </label>
+                    <input type="text" id="from" name="from" class="search-input" />
+                </div>
+            </div>
+
+            <div class="search-input-group">
+                <div class="search-input-container">
+                    <label for="to">To: </label>
+                    <input type="text" id="to" name="to" class="search-input" />
+                </div>
+
+                <div class="search-input-container">
+                    <label for="status">Status: </label>
+                    <select id="status" name="status" class="search-input search-input--select">
+                        <option value="-">-</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="search-input-group">
+                <div class="search-input-container">
+                    <label for="body-template">Body Template: </label>
+                    <input type="text" id="body-template" name="body-template" class="search-input" />
+                </div>
+
+                <div class="search-input-container">
+                    <label for="email-template">Email Template: </label>
+                    <input type="text" id="email-template" name="email-template" class="search-input" />
+                </div>
+            </div>
+
+            <button class="btn search-btn">Search</button>
+        </div>
+    </div>
+
     <div class="container">
-        <table class="logs">
-            <tr>
-                <th>Id</th>
-                <th>Email Id</th>
-                <th>Subject</th>
-                <th>From</th>
-                <th>To</th>
-                <th>CC</th>
-                <th>BCC</th>
-                <th>Body</th>
-                <th>Status</th>
-                <th>Logged At</th>
-                <th>Error</th>
-                <th>Body Template</th>
-                <th>Email Template</th>
-            </tr>
-        </table>
+        <div class="logs-container">
+            <table class="logs">
+                <tr>
+                    <th>Id</th>
+                    <th>Email Id</th>
+                    <th>Subject</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>CC</th>
+                    <th>BCC</th>
+                    <th>Body</th>
+                    <th>Status</th>
+                    <th>Logged At</th>
+                    <th>Error</th>
+                    <th>Body Template</th>
+                    <th>Email Template</th>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
