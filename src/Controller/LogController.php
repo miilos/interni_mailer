@@ -7,59 +7,34 @@ use App\Entity\EmailStatusEnum;
 use App\Service\Search\LogSearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 class LogController extends AbstractController
 {
     #[Route('/api/logs', name: 'getLogs')]
-    public function getAllLogs(
+    public function getLogs(
         LogSearchService $logSearchService,
-        Request $request
+        #[MapQueryString]
+        LogSearchCriteria $criteria
     ): JsonResponse
     {
-        $criteria = new LogSearchCriteria();
-        $criteria->setPage($request->query->get('page', $criteria->getPage()));
-        $criteria->setLimit($request->query->get('limit', $criteria->getLimit()));
-
-        $logs = $logSearchService->searchAll($criteria);
-
-        return $this->json([
-            'status' => 'success',
-            'data' => [
-                'logs' => $logs,
-            ],
-        ]);
-    }
-
-    #[Route('/api/logs/search', methods: ['POST'])]
-    public function searchLogs(
-        LogSearchService $logSearchService,
-        Request $request,
-        DecoderInterface $decoder
-    ): JsonResponse
-    {
-        $reqSearchCriteria = $decoder->decode($request->getContent(), 'json');
-
-        $criteria = (new LogSearchCriteria())
-            ->setSubject($reqSearchCriteria['subject'] ?? null)
-            ->setFrom($reqSearchCriteria['from'] ?? null)
-            ->setTo($reqSearchCriteria['to'] ?? null)
-            ->setStatus($reqSearchCriteria['status'] ?? null)
-            ->setBodyTemplate($reqSearchCriteria['bodyTemplate'] ?? null)
-            ->setEmailTemplate($reqSearchCriteria['emailTemplate'] ?? null);
-
-        $criteria->setPage($request->query->get('page', $criteria->getPage()));
-        $criteria->setLimit($request->query->get('limit', $criteria->getLimit()));
-
-        $logs = $logSearchService->searchByCriteria($criteria);
+        $paginator = $logSearchService->searchByCriteria($criteria);
+        $logs = $paginator->getItems();
 
         return $this->json([
             'status' => 'success',
             'results' => count($logs),
             'data' => [
                 'logs' => $logs,
+            ],
+            'pagination' => [
+                'currentPage' => $paginator->getCurrentPageNumber(),
+                'totalPages' => $paginator->getPageCount(),
+                'totalItems' => $paginator->getTotalItemCount(),
+                'itemsPerPage' => $paginator->getItemNumberPerPage(),
+                'hasNextPage' => $paginator->getCurrentPageNumber() < $paginator->getPageCount(),
+                'hasPrevPage' => $paginator->getCurrentPageNumber() > 1,
             ]
         ]);
     }

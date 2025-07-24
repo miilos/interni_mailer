@@ -1,3 +1,5 @@
+const API_URL = '/api/logs'
+
 const table = document.querySelector('.logs')
 
 /**** search inputs ****/
@@ -11,18 +13,24 @@ const emailTemplateInput = document.getElementById('email-template')
 const searchBtn = document.querySelector('.search-btn')
 const resetBtn = document.querySelector('.reset-btn')
 
+/**** pagination ****/
+
+const prevBtn = document.getElementById('btn-prev')
+const nextBtn = document.getElementById('btn-next')
+const pageInfo = document.getElementById('page-info')
+let currPage = 1
+let limit = 10
+let paginationData = null
+
 /**** data fetching ****/
 
-const fetchLogs = async () => {
-    const res = await fetch('/api/logs')
-    const json = await res.json()
-    const data = json.data
-
-    return data.logs
+const displayPaginationInfo = (pagination) => {
+    paginationData = pagination
+    pageInfo.innerText = `Showing page ${pagination.currentPage} of ${pagination.totalPages} (${pagination.totalItems} items total)`
 }
 
 const fetchStatusValues = async () => {
-    const res = await fetch('/api/logs/statuses')
+    const res = await fetch(API_URL+'/statuses')
     const statuses = (await res.json()).data.statuses
 
     statuses.forEach(status => {
@@ -30,30 +38,21 @@ const fetchStatusValues = async () => {
     })
 }
 
-const fetchSearchResults = async () => {
-    const subject = subjectInput.value
-    const from = fromInput.value
-    const to = toInput.value
-    const status = statusInput.value
-    const bodyTemplate = bodyTemplateInput.value
-    const emailTemplate = emailTemplateInput.value
+const fetchResults = async () => {
+    const subject = subjectInput.value || ''
+    const from = fromInput.value || ''
+    const to = toInput.value || ''
+    const status = statusInput.value || ''
+    const bodyTemplate = bodyTemplateInput.value || ''
+    const emailTemplate = emailTemplateInput.value || ''
 
-    const res = await fetch('/api/logs/search', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            subject,
-            from,
-            to,
-            status,
-            bodyTemplate,
-            emailTemplate
-        })
-    })
+    const res = await fetch(
+        `${API_URL}?subject=${subject}&from=${from}&to=${to}&status=${status}&bodyTemplate=${bodyTemplate}&emailTemplate=${emailTemplate}&page=${currPage}&limit=${limit}`
+    )
 
     const json = await res.json()
+
+    displayPaginationInfo(json.pagination)
 
     return json.data.logs
 }
@@ -109,7 +108,7 @@ const resetTableContent = () => {
     `
 }
 
-/**** main function to render content in table ****/
+/**** result rendering ****/
 
 const renderTable = (logs) => {
     resetTableContent()
@@ -151,17 +150,21 @@ const renderTable = (logs) => {
     })
 }
 
+const fetchAndDisplayResults = async () => {
+    const logs = await fetchResults()
+    renderTable(logs)
+}
+
 /**** event listeners ****/
 
 window.addEventListener('load', async () => {
     await fetchStatusValues()
-
-    const logs = await fetchLogs()
-    renderTable(logs)
+    await fetchAndDisplayResults()
 })
 
 searchBtn.addEventListener('click', async (e) => {
-    const logs = await fetchSearchResults()
+    currPage = 1
+    const logs = await fetchResults()
 
     if (logs.length === 0) {
         resetTableContent()
@@ -188,6 +191,20 @@ resetBtn.addEventListener('click', async (e) => {
     bodyTemplateInput.value = ''
     emailTemplateInput.value = ''
 
-    const logs = await fetchLogs()
-    renderTable(logs)
+    currPage = 1
+    await fetchAndDisplayResults()
+})
+
+prevBtn.addEventListener('click', async (e) => {
+    if (currPage === 1) return
+
+    currPage--
+    await fetchAndDisplayResults()
+})
+
+nextBtn.addEventListener('click', async (e) => {
+    if (currPage === paginationData.totalPages) return
+
+    currPage++
+    await fetchAndDisplayResults()
 })
