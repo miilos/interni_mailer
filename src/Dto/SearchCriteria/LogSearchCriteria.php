@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Dto\SearchCriteria;
 
-class LogSearchCriteria
+class LogSearchCriteria extends SearchCriteria
 {
     private ?string $subject = null;
     private ?string $from = null;
@@ -10,8 +10,6 @@ class LogSearchCriteria
     private ?string $status = null;
     private ?string $bodyTemplate = null;
     private ?string $emailTemplate = null;
-    private string $sortBy = 'id';
-    private string $sortDirection = 'ASC';
     private int $page = 1;
     private int $limit = 10;
 
@@ -90,30 +88,6 @@ class LogSearchCriteria
     public function setEmailTemplate(?string $emailTemplate): static
     {
         $this->emailTemplate = $emailTemplate;
-
-        return $this;
-    }
-
-    public function getSortBy(): string
-    {
-        return $this->sortBy;
-    }
-
-    public function setSortBy(string $sortBy): static
-    {
-        $this->sortBy = $sortBy;
-
-        return $this;
-    }
-
-    public function getSortDirection(): string
-    {
-        return $this->sortDirection;
-    }
-
-    public function setSortDirection(string $sortDirection): static
-    {
-        $this->sortDirection = $sortDirection;
 
         return $this;
     }

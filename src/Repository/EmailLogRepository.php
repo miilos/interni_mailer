@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Dto\EmailLogDto;
-use App\Dto\LogSearchCriteria;
+use App\Dto\SearchCriteria\LogSearchCriteria;
 use App\Entity\EmailLog;
 use App\Entity\EmailStatusEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

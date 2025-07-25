@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Dto\LogSearchCriteria;
+use App\Dto\SearchCriteria\LogSearchCriteria;
 use App\Entity\EmailStatusEnum;
 use App\Service\Search\LogSearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

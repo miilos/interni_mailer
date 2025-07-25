@@ -23,6 +23,9 @@ class EmailBody
     #[ORM\Column(length: 255)]
     private ?string $extension = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $parsedBodyHtml = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class EmailBody
     public function setExtension(string $extension): static
     {
         $this->extension = $extension;
+
+        return $this;
+    }
+
+    public function getParsedBodyHtml(): ?string
+    {
+        return $this->parsedBodyHtml;
+    }
+
+    public function setParsedBodyHtml(?string $parsedBodyHtml): static
+    {
+        $this->parsedBodyHtml = $parsedBodyHtml;
 
         return $this;
     }

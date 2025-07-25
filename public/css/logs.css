@@ -1,0 +1,61 @@
+.logs-container {
+    border-radius: 1.2rem;
+    overflow: scroll;
+    box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.3);
+    height: 70rem;
+}
+
+.logs {
+    border: 1px solid var(--color-primary);
+    border-collapse: collapse;
+    table-layout: fixed;
+    background-color: #fff;
+}
+
+.logs td,
+.logs th {
+    border: 1px solid var(--color-primary);
+    padding: 0.7rem;
+    width: 8.33%;
+}
+
+.logs th {
+    background-color: var(--color-primary);
+    color: #fff;
+    text-align: left;
+}
+
+.logs td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;
+}
+
+.status {
+    padding: .5rem;
+    border-radius: .5rem;
+    display: inline-block;
+}
+
+.status--sent {
+    background-color: #d9f4d5;
+    color: #216a19;
+}
+
+.status--failed {
+    background-color: #f6cfc1;
+    color: #8a2511;
+}
+
+.truncate-cell {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.no-results-msg {
+    text-align: center;
+    font-size: 2rem;
+}

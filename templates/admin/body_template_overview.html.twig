@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email Body Templates Overview{% endblock %}
+
+{% block javascripts %}
+    <!-- vkBeautify -->
+    <script src="https://cdn.jsdelivr.net/gh/vkiryukhin/vkBeautify/vkbeautify.min.js"></script>
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="template_overview">
+            <div class="templates template_overview-container">
+                <h1 class="template_overview-title">Your Email Body Templates</h1>
+
+                <div class="templates-search">
+                    <input type="text" name="template-name" id="template-name" class="search-input" placeholder="Search templates..." />
+                    <button class="btn btn--primary template-search-btn">
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>
+                    </button>
+                </div>
+
+                <div class="templates-container">
+                </div>
+            </div>
+
+            <div class="templates-content template_overview-container">
+                <h1 class="template_overview-title">Template Content</h1>
+
+                <div class="template-content-container">
+                </div>
+            </div>
+
+            <div class="templates-view template_overview-container">
+                <h1 class="template_overview-title">Template View</h1>
+
+                <div class="template-view-container">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('/scripts/bodyTemplateOverview.js') }}"></script>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 namespace App\Service\Search;
 
-use App\Dto\LogSearchCriteria;
+use App\Dto\SearchCriteria\LogSearchCriteria;
 use App\Repository\EmailLogRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
