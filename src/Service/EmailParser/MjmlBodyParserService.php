@@ -3,7 +3,6 @@
 namespace App\Service\EmailParser;
 
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
 class MjmlBodyParserService implements BodyParserInterface
 {

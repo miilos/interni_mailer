@@ -35,18 +35,14 @@ const onTemplateResultClick = (e) => {
     const name = parent.querySelector('.template-title').innerText
     const template = templates.find(template => template.name === name)
 
-    // generating <code> and <pre> tags so Highlight.js can apply it's styles
-    // vkBeautify to format code in case it's unformatted
-    const html = vkbeautify.xml(template.content, 2);
-    const pre = document.createElement('pre');
-    const code = document.createElement('code');
-    code.className = 'language-html';
-    code.textContent = html;
-    pre.appendChild(code);
+    // display the template code in the editor
+    const beautifiedTemplateContent = vkbeautify.xml(template.content, 2)
+    // editor.js contains the event listener that updates the editor text
+    document.dispatchEvent(new CustomEvent('updateEditor', {
+        detail: { content: beautifiedTemplateContent }
+    }));
 
-    templateContentContainer.appendChild(pre);
-    hljs.highlightElement(code)
-
+    // display the rendered template
     if (template.parsedBodyHtml) {
         templateViewContainer.innerHTML = template.parsedBodyHtml
     }
@@ -58,7 +54,6 @@ const onTemplateResultClick = (e) => {
 /**** render functions ****/
 
 const clearTemplateView = () => {
-    templateContentContainer.innerHTML = ''
     templateViewContainer.innerHTML = ''
 }
 

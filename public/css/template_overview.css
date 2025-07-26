@@ -95,3 +95,18 @@
 }
 
 .template-delete-icon:hover {}
+
+#editor {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#editor .cm-editor {
+    height: 100%;
+}
+
+#editor .cm-scroller {
+    height: 100%;
+    overflow-y: auto;
+}

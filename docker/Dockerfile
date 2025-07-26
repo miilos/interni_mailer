@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
     librabbitmq-dev \
     libssl-dev \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
     && docker-php-ext-install mysqli pdo pdo_mysql \
     && pecl install amqp \
     && docker-php-ext-enable amqp \

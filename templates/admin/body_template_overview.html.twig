@@ -5,10 +5,6 @@
 {% block javascripts %}
     <!-- vkBeautify -->
     <script src="https://cdn.jsdelivr.net/gh/vkiryukhin/vkBeautify/vkbeautify.min.js"></script>
-    <!-- Highlight.js -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
 {% endblock %}
 
 {% block body %}
@@ -33,7 +29,7 @@
             <div class="templates-content template_overview-container">
                 <h1 class="template_overview-title">Template Content</h1>
 
-                <div class="template-content-container">
+                <div class="template-content-container" id="editor">
                 </div>
             </div>
 
@@ -47,4 +43,5 @@
     </div>
 
     <script src="{{ asset('/scripts/bodyTemplateOverview.js') }}"></script>
+    <script src="{{ asset('/scripts/bundle.js') }}"></script>
 {% endblock %}
