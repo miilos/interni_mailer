@@ -15,8 +15,20 @@ class AdminPanelController extends AbstractController
     }
 
     #[Route('/admin/templates-body', name: 'body_template_overview')]
-    public function templateOverview(): Response
+    public function bodyTemplateOverview(): Response
     {
         return $this->render('admin/body_template_overview.html.twig');
+    }
+
+    #[Route('/admin/templates-email', name: 'email_template_overview')]
+    public function emailTemplateOverview(): Response
+    {
+        return $this->render('admin/email_template_overview.html.twig');
+    }
+
+    #[Route('/admin/groups', name: 'groups')]
+    public function groups(): Response
+    {
+        return $this->render('admin/groups.html.twig');
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\EventListener;
 
+use App\Service\EmailParser\ParserException;
+use App\Service\GroupManager\GroupManagerException;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
-// #[AsEventListener]
+#[AsEventListener]
 final class ExceptionListener
 {
     public function __invoke(ExceptionEvent $event): void
@@ -16,6 +19,9 @@ final class ExceptionListener
 
         $error = match ($e::class) {
             BadRequestException::class => $this->getResponse($e, 'Bad data in request!', Response::HTTP_BAD_REQUEST),
+            ParserException::class,
+            GroupManagerException::class
+                => $this->getResponse($e, $e->getMessage(), $e->getCode()),
             default => $this->getResponse($e, 'Something went wrong!', Response::HTTP_INTERNAL_SERVER_ERROR),
         };
 

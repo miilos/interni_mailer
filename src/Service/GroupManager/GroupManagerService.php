@@ -35,7 +35,7 @@ class GroupManagerService
         $group = $this->groupRepository->find([ 'id' => $groupId ]);
 
         if (!$group) {
-            throw new GroupManagerException('Group not found!');
+            throw new GroupManagerException('Group not found!', 404);
         }
 
         return $group;
@@ -46,7 +46,7 @@ class GroupManagerService
         $user = $this->userRepository->find([ 'id' => $userId ]);
 
         if (!$user) {
-            throw new GroupManagerException('User not found!');
+            throw new GroupManagerException('User not found!', 404);
         }
 
         return $user;

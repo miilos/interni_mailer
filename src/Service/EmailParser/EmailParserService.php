@@ -29,7 +29,7 @@ class EmailParserService
             if ($template['extension'] === 'html.twig') {
                 $body = $this->twigBodyParser->parseTemplate($body);
             }
-            elseif ($template['extension'] === 'mjml') {
+            elseif ($template['extension'] === 'mjml.html') {
                 $body = $this->mjmlBodyParser->parseTemplate($body);
             }
 

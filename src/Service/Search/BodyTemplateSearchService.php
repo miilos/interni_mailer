@@ -4,7 +4,6 @@ namespace App\Service\Search;
 
 use App\Dto\SearchCriteria\BodyTemplateSearchCriteria;
 use App\Repository\EmailBodyRepository;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class BodyTemplateSearchService
 {

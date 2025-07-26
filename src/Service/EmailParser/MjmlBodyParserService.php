@@ -2,22 +2,31 @@
 
 namespace App\Service\EmailParser;
 
-use Symfony\Component\Process\Process;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
 class MjmlBodyParserService implements BodyParserInterface
 {
     public function parseTemplate(string $templateContent): string
     {
-        $process = new Process([
-            'mjml', '--stdin', '--stdout'
-        ]);
-        $process->setInput($templateContent);
-        $process->run();
+        $httpClient = HttpClient::create();
 
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException('MJML compilation error: ' . $process->getErrorOutput());
+        $response = $httpClient->request('POST', 'http://mjml:3000/parse', [
+            'json' => [
+                'mjml' => $templateContent,
+            ],
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ]
+        ]);
+
+        $content = $response->toArray(false);
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode >= 400) {
+            throw new ParserException($content['message'], $statusCode);
         }
 
-        return $process->getOutput();
+        return $content['data']['html'];
     }
 }

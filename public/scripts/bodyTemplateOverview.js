@@ -84,6 +84,9 @@ const renderTemplates = () => {
                 <div class="template">
                     <h3 class="template-title">${template.name}</h3>
                     <p class="template-format template-format--${extension}">${extension !== 'twig' ? extension.toUpperCase() : extension.charAt(0).toUpperCase()+extension.slice(1)}</p>
+                    <span class="material-symbols-outlined template-delete-icon">
+                        delete
+                    </span>
                 </div>
             `);
     })

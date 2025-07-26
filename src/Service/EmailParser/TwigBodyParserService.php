@@ -10,7 +10,8 @@ class TwigBodyParserService implements BodyParserInterface
 
     public function __construct(
         private Environment $twig,
-        private TwigContextBuilderService $twigContextBuilderService
+        private TwigContextBuilderService $twigContextBuilderService,
+        private MjmlBodyParserService $mjmlBodyParserService,
     ) {
         $this->context = $this->twigContextBuilderService->getContext();
     }
@@ -18,6 +19,8 @@ class TwigBodyParserService implements BodyParserInterface
     public function parseTemplate(string $templateContent): string
     {
         $template = $this->twig->createTemplate($templateContent);
-        return $template->render($this->context);
+        $content = $template->render($this->context);
+        $html = $this->mjmlBodyParserService->parseTemplate($content);
+        return $html;
     }
 }

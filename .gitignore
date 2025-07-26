@@ -10,4 +10,6 @@
 /vendor/
 /docker/.env
 /docker/mysql_data
+/node_modules
+/mjml-service/node_modules
 ###< symfony/framework-bundle ###
