@@ -6,10 +6,11 @@ const templateContainer = document.querySelector('.templates-container')
 const templateContentContainer = document.querySelector('.template-content-container')
 const templateViewContainer = document.querySelector('.template-view-container')
 
-/**** search inputs ****/
+/**** inputs ****/
 
 const templateNameInput = document.getElementById('template-name')
 const searchBtn = document.querySelector('.template-search-btn')
+const testSendBtn = document.querySelector('.test-send-btn')
 
 let templates = []
 
@@ -37,10 +38,8 @@ const onTemplateResultClick = (e) => {
 
     // display the template code in the editor
     const beautifiedTemplateContent = vkbeautify.xml(template.content, 2)
-    // editor.js contains the event listener that updates the editor text
-    document.dispatchEvent(new CustomEvent('updateEditor', {
-        detail: { content: beautifiedTemplateContent }
-    }));
+    // editor.js contains the editor definition
+    window.editor.setContent(beautifiedTemplateContent)
 
     // display the rendered template
     if (template.parsedBodyHtml) {
@@ -54,13 +53,15 @@ const onTemplateResultClick = (e) => {
 /**** render functions ****/
 
 const clearTemplateView = () => {
+    window.editor.setContent('Select a template to see the code...')
     templateViewContainer.innerHTML = ''
 }
 
 const renderTemplates = () => {
     templates.forEach(template => {
-        // there's 3 formats: html, twig.html and mjml.html,
-        // so for twig and mjml the .html extensions need to be removed
+        // the 2 formats are: html.twig and mjml.html,
+        // so the .html extensions need to be removed
+        // when displaying the template info
         let extension = template.extension
 
         switch (extension) {
@@ -93,16 +94,44 @@ const renderTemplates = () => {
     clearTemplateView()
 }
 
-const fetchAndRenderTemplates = async () => {
-    templates = await fetchTemplates()
-    renderTemplates()
-}
-
 const setActiveClassForActiveTemplate = (activeTemplate) => {
     document.querySelectorAll('.template').forEach(curr => {
         curr.classList.remove('template--active')
     })
     activeTemplate.classList.add('template--active')
+}
+
+/**** util functions ****/
+
+const fetchAndRenderTemplates = async () => {
+    templates = await fetchTemplates()
+    renderTemplates()
+}
+
+const formatExtension = (extension) => {
+    let formattedExtension = extension
+
+    switch (extension) {
+        case 'twig':
+            formattedExtension = 'html.'+extension
+            break
+        case 'mjml':
+            formattedExtension = extension+'.html'
+            break
+        default:
+            break
+    }
+
+    return formattedExtension
+}
+
+const getActiveTemplateExtension = () => {
+    const activeTemplate = document.querySelector('.template--active')
+
+    if (!activeTemplate) return
+
+    const extensionElText = activeTemplate.querySelector('.template-format').innerText
+    return formatExtension(extensionElText.toLowerCase())
 }
 
 /**** event listeners ****/
@@ -111,7 +140,7 @@ window.addEventListener('load', async (e) => {
     await fetchAndRenderTemplates()
 })
 
-document.addEventListener('keydown', async (e) => {
+templateNameInput.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
         templateContainer.innerHTML = ''
         await fetchAndRenderTemplates()
@@ -121,4 +150,22 @@ document.addEventListener('keydown', async (e) => {
 searchBtn.addEventListener('click', async (e) => {
     templateContainer.innerHTML = ''
     await fetchAndRenderTemplates()
+})
+
+testSendBtn.addEventListener('click', async (e) => {
+    const extension = getActiveTemplateExtension()
+
+    const res = await fetch('/api/email-body/render', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            body: window.editor.getContent(),
+            extension
+        })
+    })
+
+    const json = await res.json()
+    templateViewContainer.innerHTML = json.data.body
 })

@@ -19,6 +19,34 @@ import {html} from "@codemirror/lang-html";
 import {oneDark} from "@codemirror/theme-one-dark";
 
 let editor
+const editorExtensions = [
+    html(),
+    oneDark,
+    lineNumbers(),
+    foldGutter(),
+    highlightSpecialChars(),
+    history(),
+    drawSelection(),
+    dropCursor(),
+    EditorState.allowMultipleSelections.of(true),
+    indentOnInput(),
+    syntaxHighlighting(defaultHighlightStyle),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightActiveLineGutter(),
+    keymap.of([
+        ...closeBracketsKeymap,
+        ...defaultKeymap,
+        ...historyKeymap,
+        ...foldKeymap,
+        ...completionKeymap,
+    ])
+]
+
 document.addEventListener('DOMContentLoaded', function() {
     const editorElement = document.getElementById('editor');
 
@@ -30,46 +58,24 @@ document.addEventListener('DOMContentLoaded', function() {
     editor = new EditorView({
         state: EditorState.create({
             doc: `Select a template to see the code...`,
-            extensions: [
-                html(),
-                oneDark,
-                lineNumbers(),
-                foldGutter(),
-                highlightSpecialChars(),
-                history(),
-                drawSelection(),
-                dropCursor(),
-                EditorState.allowMultipleSelections.of(true),
-                indentOnInput(),
-                syntaxHighlighting(defaultHighlightStyle),
-                bracketMatching(),
-                closeBrackets(),
-                autocompletion(),
-                rectangularSelection(),
-                crosshairCursor(),
-                highlightActiveLine(),
-                highlightActiveLineGutter(),
-                keymap.of([
-                    ...closeBracketsKeymap,
-                    ...defaultKeymap,
-                    ...historyKeymap,
-                    ...foldKeymap,
-                    ...completionKeymap,
-                ])
-            ]
+            extensions: editorExtensions
         }),
         parent: editorElement
     });
-});
 
-document.addEventListener('updateEditor', function(event) {
-    if (editor && event.detail.content) {
-        editor.dispatch({
-            changes: {
-                from: 0,
-                to: editor.state.doc.length,
-                insert: event.detail.content
+    window.editor = {
+        getContent: () => {
+            return editor ? editor.state.doc.toString() : ''
+        },
+        setContent: (newContent) => {
+            if (editor) {
+                const newState = EditorState.create({
+                    doc: newContent,
+                    extensions: editorExtensions
+                });
+
+                editor.setState(newState);
             }
-        });
+        }
     }
 });

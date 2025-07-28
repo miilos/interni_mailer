@@ -110,3 +110,24 @@
     height: 100%;
     overflow-y: auto;
 }
+
+.templates-content {
+    position: relative;
+}
+
+.test-send-btn {
+    position: absolute;
+    bottom: 5rem;
+    right: 5rem;
+    box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.test-send-btn:hover {
+    transform: scale(1.01,1.01);
+}

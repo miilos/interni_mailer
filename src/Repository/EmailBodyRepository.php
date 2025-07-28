@@ -5,8 +5,9 @@ namespace App\Repository;
 use App\Dto\EmailBodyDto;
 use App\Dto\SearchCriteria\BodyTemplateSearchCriteria;
 use App\Entity\EmailBody;
-use App\Service\EmailParser\MjmlBodyParserService;
-use App\Service\EmailParser\TwigBodyParserService;
+use App\Service\EmailParser\BodyParser\BodyParserService;
+use App\Service\EmailParser\BodyParser\TwigBodyParserService;
+use App\Service\EmailParser\BodyParser\MjmlBodyParserService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -18,20 +19,17 @@ use Doctrine\Persistence\ManagerRegistry;
 class EmailBodyRepository extends ServiceEntityRepository
 {
     private EntityManagerInterface $entityManager;
-    private TwigBodyParserService $twigBodyParser;
-    private MjmlBodyParserService $mjmlBodyParser;
+    private BodyParserService $bodyParser;
 
     public function __construct(
         ManagerRegistry $registry,
         EntityManagerInterface $entityManager,
-        TwigBodyParserService $twigBodyParser,
-        MjmlBodyParserService $mjmlBodyParser
+        BodyParserService $bodyParser,
     )
     {
         parent::__construct($registry, EmailBody::class);
         $this->entityManager = $entityManager;
-        $this->twigBodyParser = $twigBodyParser;
-        $this->mjmlBodyParser = $mjmlBodyParser;
+        $this->bodyParser = $bodyParser;
     }
 
     public function getAllBodyTemplateNames(): array
@@ -48,20 +46,9 @@ class EmailBodyRepository extends ServiceEntityRepository
         $emailBody->setName($bodyDto->getName());
         $emailBody->setContent($bodyDto->getContent());
         $emailBody->setExtension($bodyDto->getExtension());
-
-        switch ($bodyDto->getExtension()) {
-            case 'html':
-                $emailBody->setParsedBodyHtml($bodyDto->getContent());
-                break;
-            case 'html.twig':
-                $emailBody->setParsedBodyHtml($this->twigBodyParser->parseTemplate($bodyDto->getContent()));
-                break;
-            case 'mjml.html':
-                $emailBody->setParsedBodyHtml($this->mjmlBodyParser->parseTemplate($bodyDto->getContent()));
-                break;
-            default:
-                break;
-        }
+        $emailBody->setParsedBodyHtml(
+            $this->bodyParser->parse($bodyDto->getContent(), $bodyDto->getExtension())
+        );
 
         $this->entityManager->persist($emailBody);
         $this->entityManager->flush();

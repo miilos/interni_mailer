@@ -2,7 +2,8 @@
 
 namespace App\EventListener;
 
-use App\Service\EmailParser\ParserException;
+use App\Service\EmailParser\BodyParser\ParserException;
+use App\Service\EmailParser\BodyParser\UnsupportedTemplateFormatException;
 use App\Service\GroupManager\GroupManagerException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -20,7 +21,8 @@ final class ExceptionListener
         $error = match ($e::class) {
             BadRequestException::class => $this->getResponse($e, 'Bad data in request!', Response::HTTP_BAD_REQUEST),
             ParserException::class,
-            GroupManagerException::class
+            GroupManagerException::class,
+            UnsupportedTemplateFormatException::class
                 => $this->getResponse($e, $e->getMessage(), $e->getCode()),
             default => $this->getResponse($e, 'Something went wrong!', Response::HTTP_INTERNAL_SERVER_ERROR),
         };

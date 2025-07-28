@@ -3,6 +3,9 @@
 namespace App\Service\EmailParser;
 
 use App\Dto\EmailDto;
+use App\Service\EmailParser\BodyParser\BodyParserService;
+use App\Service\EmailParser\BodyParser\MjmlBodyParserService;
+use App\Service\EmailParser\BodyParser\TwigBodyParserService;
 
 class EmailParserService
 {
@@ -10,8 +13,7 @@ class EmailParserService
         private EmailVariableParserService $variableParser,
         private EmailBodyTemplateResolverService $bodyTemplateResolver,
         private GroupResolverService $groupResolver,
-        private TwigBodyParserService $twigBodyParser,
-        private MjmlBodyParserService $mjmlBodyParser,
+        private BodyParserService $bodyParser,
     ) {}
 
     public function parse(EmailDto $emailDto): EmailDto
@@ -25,13 +27,7 @@ class EmailParserService
         if ($emailDto->getBodyTemplate()) {
             $template = $this->bodyTemplateResolver->resolve($emailDto->getBodyTemplate());
             $body = $template['content'];
-
-            if ($template['extension'] === 'html.twig') {
-                $body = $this->twigBodyParser->parseTemplate($body);
-            }
-            elseif ($template['extension'] === 'mjml.html') {
-                $body = $this->mjmlBodyParser->parseTemplate($body);
-            }
+            $body = $this->bodyParser->parse($body, $template['extension']);
 
             $emailDto->setBody($body);
         }

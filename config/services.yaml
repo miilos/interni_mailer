@@ -24,5 +24,13 @@ services:
         arguments:
             $rootDir: '%kernel.project_dir%'
 
+    _instanceof:
+        App\Service\EmailParser\BodyParser\BodyParserInterface:
+            tags: ['body.parser']
+
+    App\Service\EmailParser\BodyParser\BodyParserService:
+        arguments:
+            $parsers: !tagged_iterator body.parser
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

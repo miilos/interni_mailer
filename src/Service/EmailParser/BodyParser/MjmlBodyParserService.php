@@ -1,11 +1,17 @@
 <?php
 
-namespace App\Service\EmailParser;
+namespace App\Service\EmailParser\BodyParser;
 
+use App\Service\EmailParser\BodyParser\ParserException;
 use Symfony\Component\HttpClient\HttpClient;
 
 class MjmlBodyParserService implements BodyParserInterface
 {
+    public function supports(string $extension): bool
+    {
+        return str_contains($extension, 'mjml');
+    }
+
     public function parseTemplate(string $templateContent): string
     {
         $httpClient = HttpClient::create();
