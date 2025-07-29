@@ -10,6 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Mime\Email;
 
 /**
  * @extends ServiceEntityRepository<EmailBody>
@@ -69,6 +70,25 @@ class EmailBodyRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+    public function updateBodyTemplate(EmailBody $emailBody, array $newValues):  EmailBody
+    {
+        $allowedFields = ['content', 'variables'];
+
+        foreach ($newValues as $key => $value) {
+            if (in_array($key, $allowedFields)) {
+                $setter = 'set'.ucfirst($key);
+                $emailBody->$setter($value);
+            }
+        }
+
+        $emailBody->setParsedBodyHtml(
+            $this->bodyParser->parse($emailBody->getContent(), $emailBody->getExtension(), $emailBody->getVariables())
+        );
+
+        $this->entityManager->flush();
+        return $emailBody;
     }
 
     public function deleteBodyTemplate(EmailBody $body): void

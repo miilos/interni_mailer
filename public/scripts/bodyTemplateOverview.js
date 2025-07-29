@@ -99,6 +99,7 @@ const onDeleteTemplate = async (e) => {
     templates = templates.filter(curr => curr.id != template.id)
 
     parent.remove()
+    clearTemplateView()
 }
 
 /**** render functions ****/
@@ -238,7 +239,6 @@ testSendBtn.addEventListener('click', async (e) => {
     })
 
     const json = await res.json()
-    console.log(json)
 
     if (json.status === 'fail') {
         templateViewContainer.innerHTML = `
@@ -254,7 +254,30 @@ testSendBtn.addEventListener('click', async (e) => {
 })
 
 saveBtn.addEventListener('click', async (e) => {
+    if (!activeTemplate) return
 
+    activeTemplate.content = window.editor.getContent()
+    activeTemplate.variables = getTemplateVariableInputValues()
+
+    const res = await fetch(`${API_URL}/${activeTemplate.id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            content: activeTemplate.content,
+            variables: activeTemplate.variables
+        })
+    })
+    const json = await res.json()
+
+    if (json.status === 'fail') {
+        openModal('Error', json.details)
+    }
+
+    // also update the parsed output to match the new updates
+    activeTemplate.parsedBodyHtml = json.data.body.parsedBodyHtml
+    openModal('Success!', json.message)
 })
 
 addVariableBtn.addEventListener('click', (e) => {

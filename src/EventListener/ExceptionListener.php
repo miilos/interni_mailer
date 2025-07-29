@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 #[AsEventListener]
 final class ExceptionListener
@@ -22,7 +23,8 @@ final class ExceptionListener
             BadRequestException::class => $this->getResponse($e, 'Bad data in request!', Response::HTTP_BAD_REQUEST),
             ParserException::class,
             GroupManagerException::class,
-            UnsupportedTemplateFormatException::class
+            UnsupportedTemplateFormatException::class,
+            ValidationFailedException::class
                 => $this->getResponse($e, $e->getMessage(), $e->getCode()),
             default => $this->getResponse($e, 'Something went wrong!', Response::HTTP_INTERNAL_SERVER_ERROR),
         };

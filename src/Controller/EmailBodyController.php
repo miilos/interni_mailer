@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EmailBodyController extends AbstractController
 {
@@ -60,9 +62,24 @@ class EmailBodyController extends AbstractController
     }
 
     #[Route('/api/email-body/{id}', methods: ['PATCH'])]
-    public function updateBodyTemplate(): JsonResponse
+    public function updateBodyTemplate(
+        EmailBody $body,
+        EmailBodyRepository $emailBodyRepository,
+        DecoderInterface $decoder,
+        Request $request
+    ): JsonResponse
     {
+        $newValues = $decoder->decode($request->getContent(), 'json');
 
+        $updatedBody = $emailBodyRepository->updateBodyTemplate($body, $newValues);
+
+        return $this->json([
+            'status' => 'success',
+            'message' => 'Email body template updated successfully!',
+            'data' => [
+                'body' => $updatedBody,
+            ]
+        ]);
     }
 
     #[Route('/api/email-body/{id}', methods: ['DELETE'])]
