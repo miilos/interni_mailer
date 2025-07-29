@@ -6,8 +6,6 @@ use App\Dto\EmailBodyDto;
 use App\Dto\SearchCriteria\BodyTemplateSearchCriteria;
 use App\Entity\EmailBody;
 use App\Service\EmailParser\BodyParser\BodyParserService;
-use App\Service\EmailParser\BodyParser\TwigBodyParserService;
-use App\Service\EmailParser\BodyParser\MjmlBodyParserService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -71,5 +69,11 @@ class EmailBodyRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+    public function deleteBodyTemplate(EmailBody $body): void
+    {
+        $this->entityManager->remove($body);
+        $this->entityManager->flush();
     }
 }

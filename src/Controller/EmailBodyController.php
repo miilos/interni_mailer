@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\EmailBodyDto;
 use App\Dto\SearchCriteria\BodyTemplateSearchCriteria;
+use App\Entity\EmailBody;
 use App\Message\CreateBodyTemplateFile;
 use App\Repository\EmailBodyRepository;
 use App\Service\EmailParser\BodyParser\BodyParserService;
@@ -62,6 +63,20 @@ class EmailBodyController extends AbstractController
     public function updateBodyTemplate(): JsonResponse
     {
 
+    }
+
+    #[Route('/api/email-body/{id}', methods: ['DELETE'])]
+    public function deleteBodyTemplate(
+        EmailBody $body,
+        EmailBodyRepository $emailBodyRepository
+    ): JsonResponse
+    {
+        $emailBodyRepository->deleteBodyTemplate($body);
+
+        return $this->json([
+            'status' => 'success',
+            'message' => 'Email body template deleted successfully!',
+        ], 204);
     }
 
     // called when the 'Test send' button is clicked on the frontend

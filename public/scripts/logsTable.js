@@ -136,13 +136,13 @@ const renderTable = (logs) => {
                     <td>${log.emailId}</td>
                     <td>${log.subject}</td>
                     <td>${log.fromAddr}</td>
-                    <td class="truncate-cell" data-content="${encodeURIComponent(formattedToAddr)}" onclick="openModal('All Recipient Addresses', this)">${formatEmailList(formattedToAddr)}</td>
-                    <td class="truncate-cell" data-content="${encodeURIComponent(formattedCC)}" onclick="openModal('All CC Addresses', this)">${formatEmailList(formattedCC)}</td>
-                    <td class="truncate-cell" data-content="${encodeURIComponent(formattedBCC)}" onclick="openModal('All BCC Addresses', this)">${formatEmailList(formattedBCC)}</td>
-                    <td class="truncate-cell" data-content="${encodeURIComponent(body)}" onclick="openModal('Full Email Body', this)">View body</td>
+                    <td class="truncate-cell" data-content="${encodeURIComponent(formattedToAddr)}" onclick="openModalLogs('All Recipient Addresses', this)">${formatEmailList(formattedToAddr)}</td>
+                    <td class="truncate-cell" data-content="${encodeURIComponent(formattedCC)}" onclick="openModalLogs('All CC Addresses', this)">${formatEmailList(formattedCC)}</td>
+                    <td class="truncate-cell" data-content="${encodeURIComponent(formattedBCC)}" onclick="openModalLogs('All BCC Addresses', this)">${formatEmailList(formattedBCC)}</td>
+                    <td class="truncate-cell" data-content="${encodeURIComponent(body)}" onclick="openModalLogs('Full Email Body', this)">View body</td>
                     <td class="status-td">${statusEl}</td>
                     <td>${formatDate(log.loggedAt)}</td>
-                    <td class="truncate-cell" data-content="${encodeURIComponent(error)}" onclick="openModal('Full Error', this)">${error}</td>
+                    <td class="truncate-cell" data-content="${encodeURIComponent(error)}" onclick="openModalLogs('Full Error', this)">${error}</td>
                     <td>${log.bodyTemplate || ''}</td>
                     <td>${log.emailTemplate || ''}</td>
                 </tr>

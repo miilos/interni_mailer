@@ -1,4 +1,4 @@
-function openModal(title, td) {
+function openModalLogs(title, td) {
     if (!td.innerHTML) return
 
     const overlay = document.getElementById('modalOverlay');
@@ -9,6 +9,16 @@ function openModal(title, td) {
 
     const content = decodeURIComponent(td.dataset.content)
     document.querySelector('.modal-text').innerHTML = content
+}
+
+function openModal(title, text) {
+    const overlay = document.getElementById('modalOverlay');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    document.querySelector('.modal-title').innerText = title
+
+    document.querySelector('.modal-text').innerHTML = text
 }
 
 function closeModal(event) {

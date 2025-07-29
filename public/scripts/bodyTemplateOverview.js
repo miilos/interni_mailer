@@ -35,6 +35,10 @@ const fetchTemplates = async () => {
 /**** click listener function ****/
 
 const onTemplateResultClick = (e) => {
+    // prevent this function from running if the delete button was clicked,
+    // since it also belongs to the div
+    if (e.target.classList.contains('template-delete-icon')) return
+
     clearTemplateView()
 
     const parent = e.target.closest('.template')
@@ -77,11 +81,35 @@ const onTemplateResultClick = (e) => {
     }
 }
 
+const onDeleteTemplate = async (e) => {
+    const parent = e.target.closest('.template')
+    const name = parent.querySelector('.template-title').innerText
+    const template = templates.find(template => template.name === name)
+
+    const res = await fetch(API_URL+`/${template.id}`, {
+        method: 'DELETE'
+    })
+
+    if (!res.ok) {
+        const json = await res.json()
+        openModal('Error', json.details)
+        return
+    }
+
+    templates = templates.filter(curr => curr.id != template.id)
+
+    parent.remove()
+}
+
 /**** render functions ****/
 
 const clearTemplateView = () => {
     window.editor.setContent('Select a template to see the code...')
     templateViewContainer.innerHTML = ''
+
+    // hide variables container
+    const container = document.querySelector('.template-variables')
+    container.style.display = 'none'
 }
 
 const renderTemplates = () => {
@@ -116,6 +144,7 @@ const renderTemplates = () => {
 
     document.querySelectorAll('.template').forEach(curr => {
         curr.addEventListener('click', onTemplateResultClick)
+        curr.querySelector('.template-delete-icon').addEventListener('click', onDeleteTemplate)
     })
 
     clearTemplateView()
@@ -196,7 +225,7 @@ testSendBtn.addEventListener('click', async (e) => {
     const extension = getActiveTemplateExtension()
     const variables = getTemplateVariableInputValues()
 
-    const res = await fetch('/api/email-body/render', {
+    const res = await fetch(`${API_URL}/render`, {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
