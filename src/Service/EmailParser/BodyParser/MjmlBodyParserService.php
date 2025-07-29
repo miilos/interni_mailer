@@ -12,7 +12,7 @@ class MjmlBodyParserService implements BodyParserInterface
         return str_contains($extension, 'mjml');
     }
 
-    public function parseTemplate(string $templateContent): string
+    public function parseTemplate(string $templateContent, array $variables = []): string
     {
         $httpClient = HttpClient::create();
 

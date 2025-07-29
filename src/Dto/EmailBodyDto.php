@@ -21,7 +21,9 @@ class EmailBodyDto
         private ?string $content = null,
 
         #[SupportedBodyFileExtension]
-        private ?string $extension = null
+        private ?string $extension = null,
+
+        private array $variables = [],
     ) {}
 
     public function getName(): ?string
@@ -37,5 +39,10 @@ class EmailBodyDto
     public function getExtension(): ?string
     {
         return $this->extension;
+    }
+
+    public function getVariables(): array
+    {
+        return $this->variables;
     }
 }

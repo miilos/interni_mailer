@@ -11,11 +11,11 @@ class BodyParserService
         $this->parsers = $parsers;
     }
 
-    public function parse(string $templateContent, string $extension): string
+    public function parse(string $templateContent, string $extension, array $variables = []): string
     {
         foreach ($this->parsers as $parser) {
             if ($parser->supports($extension)) {
-                return $parser->parseTemplate($templateContent);
+                return $parser->parseTemplate($templateContent, $variables);
             }
         }
 

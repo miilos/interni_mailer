@@ -26,24 +26,58 @@
                 </div>
             </div>
 
-            <div class="templates-content template_overview-container">
-                <h1 class="template_overview-title">Template Content</h1>
+            <div class="template-content-container">
+                <div class="templates-content template_overview-container">
+                    <h1 class="template_overview-title">Template Content</h1>
 
-                <div class="template-content-container" id="editor">
+                    <div class="template-content-container" id="editor">
+                    </div>
+
+                    <div class="buttons-container">
+                        <button class="btn btn--primary test-send-btn">
+                            <span>Test send</span>
+                            <span class="material-symbols-outlined">
+                                send
+                            </span>
+                        </button>
+                        <button class="btn btn--primary save-btn">
+                            <span>Save</span>
+                            <span class="material-symbols-outlined">
+                                save
+                            </span>
+                        </button>
+                    </div>
                 </div>
 
-                <button class="btn btn--primary test-send-btn">
-                    <span>Test send</span>
-                    <span class="material-symbols-outlined">
-                        send
-                    </span>
-                </button>
+                <div class="template_overview-container template-variables">
+                    <h1 class="template_overview-title">Variables</h1>
+
+                    <div class="variables-container">
+                        <!-- dynamically rendered variables -->
+                    </div>
+
+                    <div class="add-variables-container">
+                        <h3>Add variables</h3>
+
+                        <div class="add-variables-inputs">
+                            <input class="variable-input add-variable-input" id="add-variable-name" placeholder="Name..." />
+                            <input class="variable-input add-variable-input" id="add-variable-value" placeholder="Value..." />
+                            <button class="btn btn--primary add-variable-btn">Add</button>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
             <div class="templates-view template_overview-container">
                 <h1 class="template_overview-title">Template View</h1>
 
                 <div class="template-view-container">
+                    <!-- dynamically rendered error message
+                        <div class="error-msg-container">
+                            <p class="error-msg"></p>
+                        </div>
+                     -->
                 </div>
             </div>
         </div>

@@ -15,8 +15,12 @@ class TwigContextBuilderService
         $this->context['globals'] = $this->getGlobals();
     }
 
-    public function getContext(): array
+    public function getContext(array $variables): array
     {
+        foreach ($variables as $key => $value) {
+            $this->context[$key] = $value;
+        }
+
         return $this->context;
     }
 

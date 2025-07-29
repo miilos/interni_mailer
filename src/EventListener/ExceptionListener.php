@@ -33,7 +33,7 @@ final class ExceptionListener
     private function getResponse(\Throwable $exception, string $message, int $statusCode): JsonResponse
     {
         return new JsonResponse([
-            'status' => 'error',
+            'status' => 'fail',
             'message' => $message,
             'details' => $exception::class . ' ' . $exception->getMessage(),
         ], $statusCode);

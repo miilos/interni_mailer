@@ -58,8 +58,16 @@ class EmailBodyController extends AbstractController
         ], 201);
     }
 
+    #[Route('/api/email-body/{id}', methods: ['PATCH'])]
+    public function updateBodyTemplate(): JsonResponse
+    {
+
+    }
+
     // called when the 'Test send' button is clicked on the frontend
     // to render any changes made to the template in the editor
+    // only used to render the passed in string,
+    // it doesn't work with any actual template records from the db
     #[Route('/api/email-body/render', methods: ['POST'])]
     public function liveRenderBodyTemplate(
         DecoderInterface $decoder,
@@ -70,8 +78,9 @@ class EmailBodyController extends AbstractController
         $reqData = $decoder->decode($request->getContent(), 'json');
         $body = $reqData['body'];
         $extension = $reqData['extension'];
+        $variables = $reqData['variables'];
 
-        $parsedBody = $bodyParser->parse($body, $extension);
+        $parsedBody = $bodyParser->parse($body, $extension, $variables);
 
         return $this->json([
             'status' => 'success',

@@ -38,13 +38,13 @@
 }
 
 .status--sent {
-    background-color: #d9f4d5;
-    color: #216a19;
+    background-color: var(--color-success-secondary);
+    color: var(--color-success-primary);
 }
 
 .status--failed {
-    background-color: #f6cfc1;
-    color: #8a2511;
+    background-color: var(--color-error-secondary);
+    color: var(--color-error-primary);
 }
 
 .truncate-cell {

@@ -3,7 +3,7 @@ const API_URL = '/api/email-body'
 /**** containers ****/
 
 const templateContainer = document.querySelector('.templates-container')
-const templateContentContainer = document.querySelector('.template-content-container')
+const templateVariablesContainer = document.querySelector('.template-variables')
 const templateViewContainer = document.querySelector('.template-view-container')
 
 /**** inputs ****/
@@ -11,8 +11,15 @@ const templateViewContainer = document.querySelector('.template-view-container')
 const templateNameInput = document.getElementById('template-name')
 const searchBtn = document.querySelector('.template-search-btn')
 const testSendBtn = document.querySelector('.test-send-btn')
+const saveBtn = document.querySelector('.save-btn')
+const addVariableNameInput = document.getElementById('add-variable-name')
+const addVariableValueInput = document.getElementById('add-variable-value')
+const addVariableBtn = document.querySelector('.add-variable-btn')
 
 let templates = []
+
+// the currently selected template
+let activeTemplate = null
 
 /**** data fetching ****/
 
@@ -34,19 +41,39 @@ const onTemplateResultClick = (e) => {
     setActiveClassForActiveTemplate(parent)
 
     const name = parent.querySelector('.template-title').innerText
-    const template = templates.find(template => template.name === name)
+    activeTemplate = templates.find(template => template.name === name)
 
     // display the template code in the editor
-    const beautifiedTemplateContent = vkbeautify.xml(template.content, 2)
+    const beautifiedTemplateContent = vkbeautify.xml(activeTemplate.content, 2)
     // editor.js contains the editor definition
     window.editor.setContent(beautifiedTemplateContent)
 
     // display the rendered template
-    if (template.parsedBodyHtml) {
-        templateViewContainer.innerHTML = template.parsedBodyHtml
+    if (activeTemplate.parsedBodyHtml) {
+        templateViewContainer.innerHTML = activeTemplate.parsedBodyHtml
     }
     else {
-        templateViewContainer.innerHTML = template.content
+        templateViewContainer.innerHTML = activeTemplate.content
+    }
+
+    // display the template variables
+    if (activeTemplate.extension === 'html.twig') {
+        let variablesHtml = ``
+
+        for (const [key, value] of Object.entries(activeTemplate.variables)) {
+            variablesHtml += `
+                <div class="variable">
+                    <label for="var-${key}">${key}: </label>
+                    <input class="variable-input" id="var-${key}" name="var-${key}" value="${value}" />
+                </div>
+            `
+        }
+
+        templateVariablesContainer.style.display = 'block'
+        templateVariablesContainer.querySelector('.variables-container').innerHTML = variablesHtml
+    }
+    else {
+        templateVariablesContainer.style.display = 'none'
     }
 }
 
@@ -126,12 +153,25 @@ const formatExtension = (extension) => {
 }
 
 const getActiveTemplateExtension = () => {
-    const activeTemplate = document.querySelector('.template--active')
-
     if (!activeTemplate) return
 
-    const extensionElText = activeTemplate.querySelector('.template-format').innerText
-    return formatExtension(extensionElText.toLowerCase())
+    return formatExtension(activeTemplate.extension)
+}
+
+const getTemplateVariableInputValues = () => {
+    let variables = {}
+
+    // go through the selected template's variables and get the input values
+    // for them instead of just using its variables property
+    // in case the user changed the value of a variable
+    if (templateVariablesContainer.style.display !== 'none') {
+        for (const [key, value] of Object.entries(activeTemplate.variables)) {
+            const input = document.getElementById(`var-${key}`)
+            variables[key] = input.value
+        }
+    }
+
+    return variables
 }
 
 /**** event listeners ****/
@@ -154,6 +194,7 @@ searchBtn.addEventListener('click', async (e) => {
 
 testSendBtn.addEventListener('click', async (e) => {
     const extension = getActiveTemplateExtension()
+    const variables = getTemplateVariableInputValues()
 
     const res = await fetch('/api/email-body/render', {
         method: 'POST',
@@ -162,10 +203,53 @@ testSendBtn.addEventListener('click', async (e) => {
         },
         body: JSON.stringify({
             body: window.editor.getContent(),
-            extension
+            extension,
+            variables
         })
     })
 
     const json = await res.json()
+    console.log(json)
+
+    if (json.status === 'fail') {
+        templateViewContainer.innerHTML = `
+            <div class="error-msg-container">
+                <p class="error-msg">${json.details}</p>
+            </div>
+        `
+
+        return
+    }
+
     templateViewContainer.innerHTML = json.data.body
+})
+
+saveBtn.addEventListener('click', async (e) => {
+
+})
+
+addVariableBtn.addEventListener('click', (e) => {
+    const name = addVariableNameInput.value
+    const value = addVariableValueInput.value
+
+    if (!name || !value) return
+
+    const variablesContainer = templateVariablesContainer.querySelector('.variables-container')
+    variablesContainer.insertAdjacentHTML('beforeend', `
+        <div class="variable">
+            <label for="var-${name}">${name}: </label>
+            <input class="variable-input" id="var-${name}" name="var-${name}" value="${value}" />
+        </div>
+    `)
+
+    addVariableNameInput.value = ''
+    addVariableValueInput.value = ''
+
+    // update the active template and also the variables array which will be sent to the api
+    activeTemplate.variables[name] = value
+    templates.forEach(template => {
+        if (template.name === activeTemplate.name) {
+            template.variables = activeTemplate.variables
+        }
+    })
 })

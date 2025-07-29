@@ -26,6 +26,9 @@ class EmailBody
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $parsedBodyHtml = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $variables = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class EmailBody
     public function setParsedBodyHtml(?string $parsedBodyHtml): static
     {
         $this->parsedBodyHtml = $parsedBodyHtml;
+
+        return $this;
+    }
+
+    public function getVariables(): ?array
+    {
+        return $this->variables;
+    }
+
+    public function setVariables(?array $variables): static
+    {
+        $this->variables = $variables;
 
         return $this;
     }

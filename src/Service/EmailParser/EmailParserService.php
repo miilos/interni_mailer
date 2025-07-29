@@ -26,8 +26,8 @@ class EmailParserService
 
         if ($emailDto->getBodyTemplate()) {
             $template = $this->bodyTemplateResolver->resolve($emailDto->getBodyTemplate());
-            $body = $template['content'];
-            $body = $this->bodyParser->parse($body, $template['extension']);
+            $body = $template->getContent();
+            $body = $this->bodyParser->parse($body, $template->getExtension(), $template->getVariables());
 
             $emailDto->setBody($body);
         }

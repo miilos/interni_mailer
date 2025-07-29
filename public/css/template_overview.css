@@ -1,4 +1,6 @@
 .template_overview {
+    height: 95rem;
+
     display: grid;
     grid-template-columns: 35rem repeat(2, 1fr);
     gap: 2rem;
@@ -9,13 +11,9 @@
     border-radius: 2.5rem;
     overflow-y: scroll;
     box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.3);
-    height: 80rem;
-}
-
-.template-view-container {
-    background-color: transparent;
-    padding: 2rem;
-    overflow: scroll;
+    height: 100%;
+    min-width: 0;
+    position: relative;
 }
 
 .template_overview-title {
@@ -37,7 +35,6 @@
 
 .templates-container {
     border-top: 1px solid #878c94;
-    overflow-y: scroll;
 }
 
 .template {
@@ -73,11 +70,6 @@
     width: min-content;
 }
 
-.template-format--html {
-    background-color: #fa5528;
-    color: #fff;
-}
-
 .template-format--twig {
     background-color: #b2f578;
     color: #000;
@@ -92,9 +84,22 @@
     position: absolute;
     top: 2rem;
     right: 2rem;
+    transition: 0.3s;
+    padding: 0.5rem;
+    border-radius: 50%;
 }
 
-.template-delete-icon:hover {}
+.template-delete-icon:hover {
+    color: #c83535;
+    background-color: #ccbcbc;
+}
+
+.template-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-width: 0;
+}
 
 #editor {
     width: 100%;
@@ -111,14 +116,18 @@
     overflow-y: auto;
 }
 
-.templates-content {
-    position: relative;
+.buttons-container {
+    position: absolute;
+    bottom: 4rem;
+    right: 4rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem
 }
 
-.test-send-btn {
-    position: absolute;
-    bottom: 5rem;
-    right: 5rem;
+.buttons-container button {
     box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.3);
     transition: 0.3s;
 
@@ -128,6 +137,56 @@
     justify-content: center;
 }
 
-.test-send-btn:hover {
-    transform: scale(1.01,1.01);
+.template-variables {
+    height: 30rem;
+    display: none;
+}
+
+.variables-container {
+    padding: 2rem;
+    overflow-y: scroll;
+}
+
+.variable {
+    margin-bottom: 1.5rem;
+}
+
+.variable,
+.variable-input {
+    font-size: 2rem;
+}
+
+.variable-input {
+    border: none;
+    border-bottom: 1px solid var(--color-primary);
+    margin-left: 1rem;
+}
+
+.variable-input:focus {
+    outline: none;
+}
+
+.add-variables-container {
+    padding: 2rem;
+}
+
+.add-variable-input {
+    margin-left: 0;
+    margin-right: 1rem;
+}
+
+.template-view-container {
+    background-color: transparent;
+    padding: 2rem;
+    overflow: scroll;
+}
+
+.error-msg-container {
+    width: 100%;
+    margin: 0 auto;
+    background-color: var(--color-error-secondary);
+    color: var(--color-error-primary);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    font-size: 2rem;
 }

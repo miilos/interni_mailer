@@ -47,8 +47,9 @@ class EmailBodyRepository extends ServiceEntityRepository
         $emailBody->setContent($bodyDto->getContent());
         $emailBody->setExtension($bodyDto->getExtension());
         $emailBody->setParsedBodyHtml(
-            $this->bodyParser->parse($bodyDto->getContent(), $bodyDto->getExtension())
+            $this->bodyParser->parse($bodyDto->getContent(), $bodyDto->getExtension(), $bodyDto->getVariables())
         );
+        $emailBody->setVariables($bodyDto->getVariables());
 
         $this->entityManager->persist($emailBody);
         $this->entityManager->flush();
