@@ -24,13 +24,17 @@ class EmailParserService
             $this->variableParser->parseVariables($emailDto->getSubject())
         );
 
-        if ($emailDto->getBodyTemplate()) {
+        if ($emailDto->getBodyTemplate() && !$emailDto->getBody()) {
             $template = $this->bodyTemplateResolver->resolve($emailDto->getBodyTemplate());
             $body = $template->getContent();
             $body = $this->bodyParser->parse($body, $template->getExtension(), $template->getVariables());
 
             $emailDto->setBody($body);
         }
+
+        $emailDto->setBody(
+            $this->bodyParser->parse($emailDto->getBody(), 'html.twig', $emailDto->getVariables())
+        );
 
         $emailDto->setBody(
             $this->variableParser->parseVariables($emailDto->getBody())

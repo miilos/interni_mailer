@@ -46,8 +46,11 @@ class EmailTemplate
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Map(target: 'bodyTemplate')]
     private ?string $bodyTemplateName = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'body_template')]
+    private ?EmailBody $bodyTemplate = null;
 
     public function getId(): ?int
     {
@@ -158,6 +161,18 @@ class EmailTemplate
     public function setBodyTemplateName(?string $bodyTemplateName): static
     {
         $this->bodyTemplateName = $bodyTemplateName;
+
+        return $this;
+    }
+
+    public function getBodyTemplate(): ?EmailBody
+    {
+        return $this->bodyTemplate;
+    }
+
+    public function setBodyTemplate(?EmailBody $bodyTemplate): static
+    {
+        $this->bodyTemplate = $bodyTemplate;
 
         return $this;
     }

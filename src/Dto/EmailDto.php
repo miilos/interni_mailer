@@ -29,7 +29,9 @@ class EmailDto
 
         private ?string $bodyTemplate = null,
 
-        private ?string $emailTemplate = null
+        private ?string $emailTemplate = null,
+
+        private array $variables = []
     ) {}
 
     public function getId(): string
@@ -120,5 +122,15 @@ class EmailDto
     public function setEmailTemplate(?string $emailTemplate): void
     {
         $this->emailTemplate = $emailTemplate;
+    }
+
+    public function getVariables(): array
+    {
+        return $this->variables;
+    }
+
+    public function setVariables(array $variables): void
+    {
+        $this->variables = $variables;
     }
 }

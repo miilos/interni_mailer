@@ -44,7 +44,14 @@ const editorExtensions = [
         ...historyKeymap,
         ...foldKeymap,
         ...completionKeymap,
-    ])
+    ]),
+    EditorView.updateListener.of((update) => {
+        if (update.docChanged) {
+            const newContent = update.state.doc.toString();
+            const event = new CustomEvent('editorUpdate', { content: newContent })
+            window.dispatchEvent(event)
+        }
+    })
 ]
 
 document.addEventListener('DOMContentLoaded', function() {

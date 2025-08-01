@@ -31,10 +31,19 @@ class EmailBodyRepository extends ServiceEntityRepository
         $this->bodyParser = $bodyParser;
     }
 
+    public function getBodyTemplateByName(string $name): ?EmailBody
+    {
+        return $this->createQueryBuilder('body')
+            ->where('body.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function getAllBodyTemplateNames(): array
     {
-        return $this->createQueryBuilder('subject')
-            ->select('subject.name')
+        return $this->createQueryBuilder('body')
+            ->select('body.name')
             ->getQuery()
             ->getResult();
     }

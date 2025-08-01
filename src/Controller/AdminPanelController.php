@@ -8,6 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminPanelController extends AbstractController
 {
+    #[Route('/', name: 'send_email')]
+    public function sendEmail(): Response
+    {
+        return $this->render('admin/send_email.html.twig');
+    }
+
     #[Route('/admin/logs', name: 'admin_panel')]
     public function adminPanel(): Response
     {

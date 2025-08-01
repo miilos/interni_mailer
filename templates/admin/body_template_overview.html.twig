@@ -3,7 +3,6 @@
 {% block title %}Email Body Templates Overview{% endblock %}
 
 {% block javascripts %}
-    <!-- vkBeautify -->
     <script src="https://cdn.jsdelivr.net/gh/vkiryukhin/vkBeautify/vkbeautify.min.js"></script>
 {% endblock %}
 
@@ -84,6 +83,6 @@
     </div>
 
     <script src="{{ asset('/scripts/modal.js') }}"></script>
-    <script src="{{ asset('/scripts/bodyTemplateOverview.js') }}"></script>
+    <script src="{{ asset('/scripts/bodyTemplateOverview.js') }}" type="module"></script>
     <script src="{{ asset('/scripts/bundle.js') }}"></script>
 {% endblock %}

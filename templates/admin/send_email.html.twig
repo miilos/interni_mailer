@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Send Email{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/gh/vkiryukhin/vkBeautify/vkbeautify.min.js"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="send-container">
+            <div class="template-column-container">
+                <div class="templates template_overview-container template_overview-container--hidden">
+                    <span class="material-symbols-outlined templates-visibility-toggle-btn">
+                        arrow_forward_ios
+                    </span>
+
+                    <h1 class="template_overview-title">Your Email Templates</h1>
+
+                    <div class="template-overview-body-container">
+                        <div class="templates-search">
+                            <input type="text" name="template-name" id="template-name" class="search-input" placeholder="Search templates..." />
+                            <button class="btn btn--primary template-search-btn">
+                                <span class="material-symbols-outlined">
+                                    search
+                                </span>
+                            </button>
+                        </div>
+
+                        <div class="templates-container email-templates-container">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-templates template_overview-container template_overview-container--hidden">
+                    <span class="material-symbols-outlined templates-visibility-toggle-btn">
+                        arrow_forward_ios
+                    </span>
+
+                    <h1 class="template_overview-title">Your Email Body Templates</h1>
+
+                    <div class="template-overview-body-container">
+                        <div class="templates-search">
+                            <input type="text" name="template-name" id="template-name" class="search-input" placeholder="Search templates..." />
+                            <button class="btn btn--primary template-search-btn">
+                            <span class="material-symbols-outlined">
+                                search
+                            </span>
+                            </button>
+                        </div>
+
+                        <div class="templates-container body-templates-container">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="send-data-container">
+                <div class="send-data">
+                    <h1 class="send-title">Send an email</h1>
+
+                    <div class="send-inputs">
+                        <div class="send-input-container">
+                            <label class="send-input-label" for="subject">Subject</label>
+                            <input type="text" class="send-input" id="subject" />
+                            <span class="error-message" id="errmsg-subject">Subject can't be blank!</span>
+                        </div>
+
+                        <div class="send-input-container">
+                            <label class="send-input-label" for="from">From</label>
+                            <input type="text" class="send-input" id="from" />
+                            <span class="error-message" id="errmsg-from">You must specify a from address!</span>
+                        </div>
+
+                        <div class="send-input-container">
+                            <label class="send-input-label" for="to">To</label>
+                            <input type="text" class="send-input" id="to" />
+                            <span class="error-message" id="errmsg-to">You must specify at least one recipient address!</span>
+
+                            <div class="address-container to-address-container">
+                            </div>
+                        </div>
+
+                        <div class="send-input-container">
+                            <label class="send-input-label" for="cc">CC</label>
+                            <input type="text" class="send-input" id="cc" />
+
+                            <div class="address-container cc-address-container">
+                            </div>
+                        </div>
+
+                        <div class="send-input-container">
+                            <label class="send-input-label" for="bcc">BCC</label>
+                            <input type="text" class="send-input" id="bcc" />
+
+                            <div class="address-container bcc-address-container">
+                            </div>
+                        </div>
+
+                        <div class="send-input-container">
+                            <label class="send-input-label" for="body">Body</label>
+                            <div id="editor" class="editor"></div>
+
+                            <div class="send-variables-container">
+                                <p class="variables-title">Variables</p>
+                                <div class="variables">
+                                    <!-- dynamically generated variable inputs
+                                    <div class="variable-input-container">
+                                        <label>var1: </label>
+                                        <input type="text" class="variable-input send-input" />
+                                    </div>
+                                    -->
+                                </div>
+                                <div class="send-add-variables-container">
+                                    <div class="send-add-variables-inputs">
+                                        <input class="send-input send-add-variables-input" id="add-variable-name" placeholder="Name..." />
+                                        <input class="send-input send-add-variables-input" id="add-variable-value" placeholder="Value..." />
+                                        <button class="btn btn--secondary add-variable-btn">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="send-btn-container">
+                            <button class="btn btn--secondary send-btn">
+                                <span>Send</span>
+                                <span class="material-symbols-outlined">
+                                    send
+                                </span>
+                            </button>
+
+                            <div class="success-msg">
+                                <span>Sent!</span>
+                                <span class="material-symbols-outlined">
+                                    check_circle
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-preview-container">
+                <h1 class="template_overview-title">Preview</h1>
+
+                <div class="email-preview">
+                    <h2 class="preview-subject"></h2>
+
+                    <div class="preview-addresses-container">
+                        <p class="preview-from"></p>
+                        <p class="preview-to"></p>
+                    </div>
+
+                    <div class="preview-body"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('/scripts/bundle.js') }}"></script>
+    <script src="{{ asset('/scripts/modal.js') }}"></script>
+    <script src="{{ asset('/scripts/sendEmail.js') }}"></script>
+{% endblock %}

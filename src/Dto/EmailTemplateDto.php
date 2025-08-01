@@ -33,7 +33,7 @@ class EmailTemplateDto
 
         private ?string $body = null,
 
-        private ?string $bodyTemplate = null,
+        private ?string $bodyTemplateName = null,
     ) {}
 
     public function getName(): ?string
@@ -106,13 +106,13 @@ class EmailTemplateDto
         $this->body = $body;
     }
 
-    public function getBodyTemplate(): ?string
+    public function getBodyTemplateName(): ?string
     {
-        return $this->bodyTemplate;
+        return $this->bodyTemplateName;
     }
 
-    public function setBodyTemplate(?string $bodyTemplate): void
+    public function setBodyTemplateName(?string $bodyTemplateName): void
     {
-        $this->bodyTemplate = $bodyTemplate;
+        $this->bodyTemplateName = $bodyTemplateName;
     }
 }
