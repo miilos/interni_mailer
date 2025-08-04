@@ -3,19 +3,40 @@
 namespace App\Controller;
 
 use App\Dto\GroupDto;
+use App\Dto\SearchCriteria\GroupSearchCriteria;
 use App\Repository\GroupRepository;
 use App\Repository\UserRepository;
 use App\Service\GroupManager\GroupManagerException;
 use App\Service\GroupManager\GroupManagerService;
+use App\Service\Search\GroupSearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 class GroupController extends AbstractController
 {
+    #[Route('/api/groups', methods: ['GET'])]
+    public function getAllGroups(
+        #[MapQueryString]
+        GroupSearchCriteria $criteria,
+        GroupSearchService $searchService,
+    ): JsonResponse
+    {
+        $groups = $searchService->searchByCriteria($criteria);
+
+        return $this->json([
+            'status' => 'success',
+            'results' => count($groups),
+            'data' => [
+                'groups' => $groups
+            ]
+        ], context: [ 'groups' => 'groupData' ]);
+    }
+
     #[Route('/api/groups', methods: ['POST'])]
     public function createGroup(
         GroupRepository  $groupRepository,
@@ -37,7 +58,7 @@ class GroupController extends AbstractController
         ], context: [ 'groups' => 'groupData' ]);
     }
 
-    #[Route('/api/groups/{groupId}', methods: ['POST'])]
+    #[Route('/api/groups/{groupId}/users', methods: ['POST'])]
     public function addUserToGroup(
         int $groupId,
         GroupManagerService $groupManagerService,
@@ -46,16 +67,7 @@ class GroupController extends AbstractController
     ): JsonResponse
     {
         $userId = $decoder->decode($req->getContent(), 'json')['userId'];
-
-        try {
-            $group = $groupManagerService->addUserToGroup($groupId, $userId);
-        }
-        catch (GroupManagerException $e) {
-            return $this->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ]);
-        }
+        $group = $groupManagerService->addUserToGroup($groupId, $userId);
 
         return $this->json([
             'status' => 'success',
@@ -73,15 +85,7 @@ class GroupController extends AbstractController
         GroupManagerService $groupManagerService
     ): JsonResponse
     {
-        try {
-            $group = $groupManagerService->removeUserFromGroup($groupId, $userId);
-        }
-        catch (GroupManagerException $e) {
-            return $this->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ]);
-        }
+        $group = $groupManagerService->removeUserFromGroup($groupId, $userId);
 
         return $this->json([
             'status' => 'success',

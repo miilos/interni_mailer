@@ -5,6 +5,7 @@
 @import "logs.css";
 @import "template_overview.css";
 @import "send_email.css";
+@import "groups.css";
 
 * {
     margin: 0;

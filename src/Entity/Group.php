@@ -16,6 +16,7 @@ class Group
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('groupData')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

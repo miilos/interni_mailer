@@ -30,7 +30,8 @@
 }
 
 .template-search-btn {
-    padding: 0.7rem 1rem;
+    padding: 0.5rem 0.7rem;
+    font-size: 1.5rem;
 }
 
 .templates-container {

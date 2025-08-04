@@ -21,7 +21,6 @@ class GroupDto
         #[Assert\Email(message: 'Invalid group email address!')]
         private string $address,
 
-        #[Assert\NotNull(message: 'Group must have recipients!')]
         private array $recipients
     ) {}
 

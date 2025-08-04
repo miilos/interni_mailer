@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Groups{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="groups-container">
+            <div class="groups template_overview-container">
+                <h1 class="template_overview-title">Groups</h1>
+
+                <div class="templates-search">
+                    <input type="text" name="group-name" id="group-name" class="search-input" placeholder="Search groups..." />
+                    <button class="btn btn--primary template-search-btn group-search-btn">
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>
+                    </button>
+                </div>
+
+                <div class="group-results-container templates-container">
+                </div>
+            </div>
+
+            <div class="group-details template_overview-container">
+                <h1 class="template_overview-title">Group details</h1>
+
+                <div class="group-details-content">
+                    <!--
+                    <h1 class="group-details-name">Group name</h1>
+                    <h2 class="group-details-address">address@gmail.com</h2>
+
+                    <div class="group-members-container">
+                        <div class="group-members-list">
+                            <h3 class="group-members-title">Members</h3>
+
+                            <div class="group-members">
+                                <div class="member">
+                                    <div class="member-pfp"></div>
+                                    <h4 class="member-name">Member name</h4>
+                                    <p class="member-address">address@gmail.com</p>
+
+                                    <span class="material-symbols-outlined remove-from-group-btn">
+                                        remove
+                                    </span>
+                                </div>
+                                <div class="member">
+                                    <div class="member-pfp"></div>
+                                    <h4 class="member-name">Member name</h4>
+                                    <p class="member-address">address@gmail.com</p>
+
+                                    <span class="material-symbols-outlined remove-from-group-btn">
+                                        remove
+                                    </span>
+                                </div>
+                                <div class="member">
+                                    <div class="member-pfp"></div>
+                                    <h4 class="member-name">Member name</h4>
+                                    <p class="member-address">address@gmail.com</p>
+
+                                    <span class="material-symbols-outlined remove-from-group-btn">
+                                        remove
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="add-members-container">
+                            <h3 class="group-members-title">Add members</h3>
+
+                            <div class="add-members-search-container">
+                                <div class="add-members-search-bar">
+                                    <input type="text" name="user-name" id="user-name" class="search-input" placeholder="Search users..." />
+                                    <button class="btn btn--primary template-search-btn group-search-btn">
+                                    <span class="material-symbols-outlined">
+                                        search
+                                    </span>
+                                    </button>
+                                </div>
+                                <div class="add-members-search-results">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('/scripts/groups.js') }}"></script>
+    <script src="{{ asset('/scripts/modal.js') }}"></script>
+{% endblock %}

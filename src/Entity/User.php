@@ -14,21 +14,23 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('groupData')]
+    #[Groups(['groupData', 'userData'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('groupData')]
+    #[Groups(['groupData', 'userData'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['groupData', 'userData'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['groupData', 'userData'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('groupData')]
+    #[Groups(['groupData', 'userData'])]
     private ?string $email = null;
 
     /**

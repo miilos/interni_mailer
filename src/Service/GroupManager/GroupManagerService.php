@@ -19,6 +19,10 @@ class GroupManagerService
         $group = $this->getGroup($groupId);
         $user = $this->getUser($userId);
 
+        if ($group->getUsers()->contains($user)) {
+            throw new GroupManagerException('This user is already a member of this group!', 400);
+        }
+
         return $this->groupRepository->addUserToGroup($group, $user);
     }
 

@@ -1,0 +1,159 @@
+.groups-container {
+    height: 95rem;
+
+    display: grid;
+    grid-template-columns: 35rem 1fr;
+    gap: 2rem;
+}
+
+.group-results-container {
+    border-top: 1px solid #878c94;
+}
+
+.group {
+    padding: 2rem;
+    border-bottom: 1px solid #878c94;
+    cursor: pointer;
+}
+
+.group:hover {
+    background-color: #e8eaef;
+}
+
+.group--active {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.group--active .group-member-count {
+    color: #fff;
+}
+
+.group--active:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.group-name-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.group-name {
+    font-size: 2.2rem;
+}
+
+.group-member-count {
+    margin-top: 1rem;
+    color: #383b43;
+}
+
+.group-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.group-details-address {
+    margin-top: 1rem;
+    font-size: 2.2rem;
+}
+
+.group-details-content {
+    padding: 2rem;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.group-members-container {
+    margin-top: 4rem;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.group-members-title {
+    font-size: 2.2rem;
+}
+
+.group-members {
+    width: 35rem;
+    height: 95%;
+    overflow-y: scroll;
+    margin-top: 1rem;
+}
+
+.member {
+    width: 100%;
+    height: 5rem;
+    margin-bottom: 1rem;
+    position: relative;
+
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: 5rem 1fr;
+    column-gap: 1rem;
+}
+
+.member-pfp {
+    grid-row: 1 / -1;
+    grid-column: 1 / 2;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--color-success-secondary);
+}
+
+.member-address {
+    color: #383b43;
+    align-self: start;
+}
+
+.remove-from-group-btn {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1rem;
+    border: 1px solid #000;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.remove-from-group-btn:hover {
+    color: var(--color-error-primary);
+    border: 1px solid var(--color-error-primary);
+    background-color: var(--color-error-secondary);
+}
+
+.add-members-search-bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.add-members-search-results {
+    width: 35rem;
+    background-color: #f3f4f6;
+    transform: translateY(-1rem);
+    color: #383b43;
+    padding: 1rem;
+}
+
+.add-to-group-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.5rem;
+    cursor: pointer;
+    padding: 0.7rem;
+    border-radius: 50%;
+}
+
+.add-to-group-btn:hover {
+    background-color: var(--color-success-secondary);
+    color: var(--color-success-primary);
+}

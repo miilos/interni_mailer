@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use App\Dto\GroupDto;
+use App\Dto\SearchCriteria\GroupSearchCriteria;
 use App\Entity\Group;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,6 +32,20 @@ class GroupRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('g')
             ->getQuery()
             ->getResult();
+    }
+
+    public function buildSearch(GroupSearchCriteria $criteria): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('g');
+
+        if ($criteria->getName()) {
+            $qb->andWhere('g.name LIKE :name')
+                ->setParameter('name', '%' . $criteria->getName() . '%');
+        }
+
+        $qb->addOrderBy('g.'.$criteria->getSortBy(), $criteria->getSortDirection());
+
+        return $qb;
     }
 
     public function createGroup(GroupDto $groupDto): Group
