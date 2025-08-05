@@ -19,6 +19,7 @@ import {html} from "@codemirror/lang-html";
 import {oneDark} from "@codemirror/theme-one-dark";
 
 let editor
+let renderTimeout
 const editorExtensions = [
     html(),
     oneDark,
@@ -45,11 +46,18 @@ const editorExtensions = [
         ...foldKeymap,
         ...completionKeymap,
     ]),
+    EditorView.lineWrapping,
     EditorView.updateListener.of((update) => {
         if (update.docChanged) {
-            const newContent = update.state.doc.toString();
-            const event = new CustomEvent('editorUpdate', { content: newContent })
-            window.dispatchEvent(event)
+            clearTimeout(renderTimeout)
+
+            // the listeners call the api to render the editor content,
+            // so the input is debounced so that the api isn't being called for every single character entered
+            renderTimeout = setTimeout(() => {
+                const newContent = update.state.doc.toString();
+                const event = new CustomEvent('editorUpdate', { content: newContent })
+                window.dispatchEvent(event)
+            }, 300)
         }
     })
 ]
@@ -64,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     editor = new EditorView({
         state: EditorState.create({
-            doc: `Select a template to see the code...`,
+            doc: ``,
             extensions: editorExtensions
         }),
         parent: editorElement

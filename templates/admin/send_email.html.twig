@@ -10,49 +10,11 @@
     <div class="container">
         <div class="send-container">
             <div class="template-column-container">
-                <div class="templates template_overview-container template_overview-container--hidden">
-                    <span class="material-symbols-outlined templates-visibility-toggle-btn">
-                        arrow_forward_ios
-                    </span>
+                {% embed 'admin/_email_templates.html.twig'%}{% endembed %}
 
-                    <h1 class="template_overview-title">Your Email Templates</h1>
-
-                    <div class="template-overview-body-container">
-                        <div class="templates-search">
-                            <input type="text" name="template-name" id="template-name" class="search-input" placeholder="Search templates..." />
-                            <button class="btn btn--primary template-search-btn">
-                                <span class="material-symbols-outlined">
-                                    search
-                                </span>
-                            </button>
-                        </div>
-
-                        <div class="templates-container email-templates-container">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="body-templates template_overview-container template_overview-container--hidden">
-                    <span class="material-symbols-outlined templates-visibility-toggle-btn">
-                        arrow_forward_ios
-                    </span>
-
-                    <h1 class="template_overview-title">Your Email Body Templates</h1>
-
-                    <div class="template-overview-body-container">
-                        <div class="templates-search">
-                            <input type="text" name="template-name" id="template-name" class="search-input" placeholder="Search templates..." />
-                            <button class="btn btn--primary template-search-btn">
-                            <span class="material-symbols-outlined">
-                                search
-                            </span>
-                            </button>
-                        </div>
-
-                        <div class="templates-container body-templates-container">
-                        </div>
-                    </div>
-                </div>
+                {% embed 'admin/_body_templates.html.twig' with {
+                    display_add_btn: false
+                }%}{% endembed %}
             </div>
 
             <div class="send-data-container">
@@ -159,5 +121,5 @@
 
     <script src="{{ asset('/scripts/bundle.js') }}"></script>
     <script src="{{ asset('/scripts/modal.js') }}"></script>
-    <script src="{{ asset('/scripts/sendEmail.js') }}"></script>
+    <script src="{{ asset('/scripts/sendEmail.js') }}" type="module"></script>
 {% endblock %}

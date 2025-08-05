@@ -1,0 +1,65 @@
+.add-template-container {
+    height: 95rem;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.template-name-input {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+
+.editor-container {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.add-template-input-container {
+    max-width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.template-input-container {
+    height: 100%;
+    position: relative;
+}
+
+.save-container {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.save-format-container {
+    background-color: var(--color-primary);
+    border-radius: 2rem;
+    padding: 1.2rem 2.4rem;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.add-template-save-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.preview {
+    padding: 2rem;
+}

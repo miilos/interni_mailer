@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add a body template{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="add-template-container">
+            <div class="add-template-input-container">
+                <div class="editor-container template_overview-container">
+                    <input type="text" class="template_overview-title template-name-input" id="template-name" placeholder="Enter template name..." />
+
+                    <div class="template-input-container">
+                        <div id="editor" class="add-template-editor"></div>
+
+                        <div class="save-container">
+                            <div class="save-format-container">
+                                <p>Save as: </p>
+                                <div class="format">
+                                    <label for="format-twig">Twig</label>
+                                    <input type="radio" name="format" id="format-twig" class="format-input" value="html.twig" checked />
+                                </div>
+                                <div class="format">
+                                    <label for="format-mjml">Mjml</label>
+                                    <input type="radio" name="format" id="format-mjml" class="format-input" value="mjml.html" />
+                                </div>
+                            </div>
+
+                            <button class="btn btn--primary add-template-save-btn">
+                                <span>Save</span>
+                                <span class="material-symbols-outlined">
+                                    save
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {% embed 'admin/_variables_container.html.twig' with {
+                    hidden: false
+                } %}
+                {% endembed %}
+            </div>
+
+            <div class="preview-container template_overview-container">
+                <h1 class="template_overview-title">Preview</h1>
+
+                <div class="preview">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('/scripts/bundle.js') }}" type="module"></script>
+    <script src="{{ asset('/scripts/modal.js') }}"></script>
+    <script src="{{ asset('/scripts/addBodyTemplate.js') }}"></script>
+{% endblock %}

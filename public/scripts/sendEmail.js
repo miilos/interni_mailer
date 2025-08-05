@@ -1,19 +1,20 @@
+import { fetchAndRenderEmailTemplates, attachEmailTemplateEventListeners } from "./emailTemplateUtils.js";
+import { fetchAndRenderBodyTemplates, attachBodyTemplateEventListeners } from "./bodyTemplateUtils.js";
+
 const API_URL = '/api/templates'
 const PARSE_API_URL = '/api/email-body/render'
 const BODY_TEMPLATES_URL = '/api/email-body'
 
 /**** containers ****/
 
-const templateContainer = document.querySelector('.email-templates-container')
-const bodyTemplateContainer = document.querySelector('.body-templates-container')
-const sendDataContainer = document.querySelector('.send-data-container')
-const previewContainer = document.querySelector('.email-preview-container')
 const variablesContainer = document.querySelector('.variables')
 
 /**** inputs ****/
 
-const templateNameInput = document.getElementById('template-name')
-const searchBtn = document.querySelector('.template-search-btn')
+const emailTemplateNameInput = document.querySelector('.email-template-search-input')
+const emailTemplateSearchBtn = document.querySelector('.email-template-search-btn')
+const bodyTemplateNameInput = document.querySelector('.body-template-search-input')
+const bodyTemplateSearchBtn = document.querySelector('.body-template-search-btn')
 const subjectInput = document.getElementById('subject')
 const fromInput = document.getElementById('from')
 const toInput = document.getElementById('to')
@@ -23,8 +24,6 @@ const sendBtn = document.querySelector('.send-btn')
 const addVariableNameInput = document.getElementById('add-variable-name')
 const addVariableValueInput = document.getElementById('add-variable-value')
 const addVariableBtn = document.querySelector('.add-variable-btn')
-const toggleEmailTemplateVisibilityBtn = document.querySelector('.templates > .templates-visibility-toggle-btn')
-const toggleBodyTemplateVisibilityBtn = document.querySelector('.body-templates > .templates-visibility-toggle-btn')
 
 /**** UI elements ****/
 
@@ -133,6 +132,10 @@ const updateEmailVariables = (name, value) => {
     email.variables[name] = value
 }
 
+const clearEmailVariables = () => {
+    email.variables = {}
+}
+
 const updateEmail = async (data) => {
     updateEmailSubject(data.subject)
     updateEmailFrom(data.from)
@@ -145,15 +148,6 @@ const updateEmail = async (data) => {
 }
 
 /**** data fetching ****/
-
-const fetchTemplates = async (apiUrl) => {
-    const name = templateNameInput.value || ''
-
-    const res = await fetch(apiUrl+`?name=${name}`)
-    const json = await res.json()
-
-    return json.data.templates
-}
 
 const fetchRenderedEmailBody = async (body) => {
     const res = await fetch(PARSE_API_URL, {
@@ -179,16 +173,18 @@ const onSearchResultClick = async (e) => {
     const parent = e.target.closest('.template')
     const name = parent.querySelector('.template-title').innerText
     activeTemplate = templates.find(template => template.name === name)
+
+    clearEmailVariables()
     renderEmailTemplate()
 
     if (activeTemplate.bodyTemplate) {
         email.variables = activeTemplate.bodyTemplate.variables
-        variablesContainer.style.display = 'block'
-        renderVariables()
     }
     else {
-        variablesContainer.style.display = 'none'
+        clearEmailVariables()
     }
+
+    renderVariables()
 
     await updateEmail({
         subject: activeTemplate.subject,
@@ -207,6 +203,7 @@ const onBodyTemplateResultClick = (e) => {
     const name = parent.querySelector('.template-title').innerText
     activeBodyTemplate = bodyTemplates.find(template => template.name === name)
 
+    clearEmailVariables()
     const templateVariables = activeBodyTemplate.variables
     for (const [key, value] of Object.entries(templateVariables)) {
         updateEmailVariables(key, value)
@@ -277,57 +274,6 @@ const onVariableChange = async (e) => {
 
 /**** render functions ****/
 
-const renderTemplates = () => {
-    clearTemplateResults()
-
-    templates.forEach(template => {
-        templateContainer.insertAdjacentHTML('beforeend', `
-            <div class="template">
-                <h3 class="template-title">${template.name}</h3>
-                ${template.bodyTemplateName ? `<p class="body-template-name">Body template: ${template.bodyTemplateName}</p>` : ''}
-            </div>
-        `)
-    })
-
-    templateContainer.querySelectorAll('.template').forEach(curr => {
-        curr.addEventListener('click', onSearchResultClick)
-    })
-}
-
-const renderBodyTemplates = () => {
-    clearBodyTemplateResults()
-
-    bodyTemplates.forEach(template => {
-        // the 2 formats are: html.twig and mjml.html,
-        // so the .html extensions need to be removed
-        // when displaying the template info
-        let extension = template.extension
-
-        switch (extension) {
-            case 'html.twig':
-                extension = extension.split('.')[1]
-                break
-            case 'mjml.html':
-                extension = extension.split('.')[0]
-                break
-            default:
-                break
-        }
-
-        bodyTemplateContainer.insertAdjacentHTML('beforeend',
-            `
-                <div class="template body-template">
-                    <h3 class="template-title">${template.name}</h3>
-                    <p class="template-format template-format--${extension}">${extension !== 'twig' ? extension.toUpperCase() : extension.charAt(0).toUpperCase()+extension.slice(1)}</p>
-                </div>
-            `);
-    })
-
-    document.querySelectorAll('.body-template').forEach(curr => {
-        curr.addEventListener('click', onBodyTemplateResultClick)
-    })
-}
-
 const renderAddress = (address, container, addressListName) => {
     const addressDiv = document.createElement('div')
     addressDiv.classList.add('address')
@@ -370,6 +316,8 @@ const renderEmailTemplate = () => {
 }
 
 const renderVariables = () => {
+    //variablesContainer.style.display = 'block'
+    clearVariableContainer()
     let variablesHtml = ''
 
     for (const [key, value] of Object.entries(email.variables)) {
@@ -389,24 +337,6 @@ const renderVariables = () => {
 }
 
 /**** util functions ****/
-
-const clearTemplateResults = () => {
-    templateContainer.innerHTML = ''
-}
-
-const clearBodyTemplateResults = () => {
-    bodyTemplateContainer.innerHTML = ''
-}
-
-const fetchAndRenderTemplates = async () => {
-    templates = await fetchTemplates(API_URL)
-    renderTemplates()
-}
-
-const fetchAndRenderBodyTemplates = async () => {
-    bodyTemplates = await fetchTemplates(BODY_TEMPLATES_URL)
-    renderBodyTemplates()
-}
 
 const formatAddressList = (addresses) => {
     return '<b>To: </b>' + addresses.join(', ')
@@ -441,23 +371,42 @@ const showSuccessMessage = () => {
     }, 2000)
 }
 
+const clearVariableContainer = () => {
+    variablesContainer.innerHTML = ''
+}
+
 /**** event listeners ****/
 
 window.addEventListener('load', async () => {
-    await fetchAndRenderTemplates()
-    await fetchAndRenderBodyTemplates()
+    templates = await fetchAndRenderEmailTemplates(API_URL)
+    attachEmailTemplateEventListeners(onSearchResultClick)
+
+    bodyTemplates = await fetchAndRenderBodyTemplates(BODY_TEMPLATES_URL)
+    attachBodyTemplateEventListeners(onBodyTemplateResultClick)
 })
 
-templateNameInput.addEventListener('keydown', async (e) => {
+emailTemplateNameInput.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
-        templateContainer.innerHTML = ''
-        await fetchAndRenderTemplates()
+        templates = await fetchAndRenderEmailTemplates(API_URL)
+        attachEmailTemplateEventListeners(onSearchResultClick)
     }
 });
 
-searchBtn.addEventListener('click', async (e) => {
-    templateContainer.innerHTML = ''
-    await fetchAndRenderTemplates()
+emailTemplateSearchBtn.addEventListener('click', async (e) => {
+    templates = await fetchAndRenderEmailTemplates(API_URL)
+    attachEmailTemplateEventListeners(onSearchResultClick)
+})
+
+bodyTemplateNameInput.addEventListener('keydown', async (e) => {
+    if (e.key === 'Enter') {
+        templates = await fetchAndRenderBodyTemplates(BODY_TEMPLATES_URL)
+        attachBodyTemplateEventListeners(onBodyTemplateResultClick)
+    }
+})
+
+bodyTemplateSearchBtn.addEventListener('click', async (e) => {
+    templates = await fetchAndRenderBodyTemplates(BODY_TEMPLATES_URL)
+    attachBodyTemplateEventListeners(onBodyTemplateResultClick)
 })
 
 /**** change listeners to update current email object and the preview panel whenever something in the UI changes ****/
@@ -522,12 +471,4 @@ addVariableBtn.addEventListener('click', () => {
 
     addVariableNameInput.value = ''
     addVariableValueInput.value = ''
-})
-
-toggleEmailTemplateVisibilityBtn.addEventListener('click', () => {
-    document.querySelector('.templates').classList.toggle('template_overview-container--hidden')
-})
-
-toggleBodyTemplateVisibilityBtn.addEventListener('click', () => {
-    document.querySelector('.body-templates').classList.toggle('template_overview-container--hidden')
 })

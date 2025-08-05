@@ -2,7 +2,7 @@ const API_URL = '/api/email-body'
 
 /**** containers ****/
 
-const templateContainer = document.querySelector('.templates-container')
+const templateContainer = document.querySelector('.body-templates-container')
 const templateVariablesContainer = document.querySelector('.template-variables')
 const templateViewContainer = document.querySelector('.template-view-container')
 
@@ -73,11 +73,11 @@ const onTemplateResultClick = (e) => {
             `
         }
 
-        templateVariablesContainer.style.display = 'block'
+        templateVariablesContainer.classList.remove('template-variables--hidden')
         templateVariablesContainer.querySelector('.variables-container').innerHTML = variablesHtml
     }
     else {
-        templateVariablesContainer.style.display = 'none'
+        templateVariablesContainer.classList.add('template-variables--hidden')
     }
 }
 
@@ -110,10 +110,12 @@ const clearTemplateView = () => {
 
     // hide variables container
     const container = document.querySelector('.template-variables')
-    container.style.display = 'none'
+    container.classList.add('template-variables--hidden')
 }
 
 const renderTemplates = () => {
+    clearTemplateView()
+
     templates.forEach(template => {
         // the 2 formats are: html.twig and mjml.html,
         // so the .html extensions need to be removed
@@ -147,8 +149,6 @@ const renderTemplates = () => {
         curr.addEventListener('click', onTemplateResultClick)
         curr.querySelector('.template-delete-icon').addEventListener('click', onDeleteTemplate)
     })
-
-    clearTemplateView()
 }
 
 const setActiveClassForActiveTemplate = (activeTemplate) => {
@@ -194,7 +194,7 @@ const getTemplateVariableInputValues = () => {
     // go through the selected template's variables and get the input values
     // for them instead of just using its variables property
     // in case the user changed the value of a variable
-    if (templateVariablesContainer.style.display !== 'none') {
+    if (!templateVariablesContainer.classList.contains('template-variables--hidden')) {
         for (const [key, value] of Object.entries(activeTemplate.variables)) {
             const input = document.getElementById(`var-${key}`)
             variables[key] = input.value

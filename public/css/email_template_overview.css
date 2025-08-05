@@ -1,0 +1,6 @@
+.email-templates {
+    height: 95rem;
+
+    display: grid;
+    grid-template-columns: 35rem 1fr;
+}

@@ -9,21 +9,10 @@
 {% block body %}
     <div class="container">
         <div class="template_overview">
-            <div class="templates template_overview-container">
-                <h1 class="template_overview-title">Your Email Body Templates</h1>
-
-                <div class="templates-search">
-                    <input type="text" name="template-name" id="template-name" class="search-input" placeholder="Search templates..." />
-                    <button class="btn btn--primary template-search-btn">
-                        <span class="material-symbols-outlined">
-                            search
-                        </span>
-                    </button>
-                </div>
-
-                <div class="templates-container">
-                </div>
-            </div>
+            {% embed 'admin/_body_templates.html.twig' with {
+                classname: 'templates',
+                display_add_btn: true
+            } %}{% endembed %}
 
             <div class="template-content-container">
                 <div class="templates-content template_overview-container">
@@ -48,24 +37,10 @@
                     </div>
                 </div>
 
-                <div class="template_overview-container template-variables">
-                    <h1 class="template_overview-title">Variables</h1>
-
-                    <div class="variables-container">
-                        <!-- dynamically rendered variables -->
-                    </div>
-
-                    <div class="add-variables-container">
-                        <h3>Add variables</h3>
-
-                        <div class="add-variables-inputs">
-                            <input class="variable-input add-variable-input" id="add-variable-name" placeholder="Name..." />
-                            <input class="variable-input add-variable-input" id="add-variable-value" placeholder="Value..." />
-                            <button class="btn btn--primary add-variable-btn">Add</button>
-                        </div>
-
-                    </div>
-                </div>
+                {% embed 'admin/_variables_container.html.twig' with {
+                    hidden: true
+                } %}
+                {% endembed %}
             </div>
 
             <div class="templates-view template_overview-container">

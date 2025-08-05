@@ -26,6 +26,12 @@ class AdminPanelController extends AbstractController
         return $this->render('admin/body_template_overview.html.twig');
     }
 
+    #[Route('/admin/templates-body/add', name: 'add_body_template')]
+    public function addBodyTemplate(): Response
+    {
+        return $this->render('admin/add_body_template.html.twig');
+    }
+
     #[Route('/admin/templates-email', name: 'email_template_overview')]
     public function emailTemplateOverview(): Response
     {

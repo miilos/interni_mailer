@@ -2,9 +2,11 @@
 
 @import "modal.css";
 @import "search.css";
-@import "logs.css";
-@import "template_overview.css";
 @import "send_email.css";
+@import "logs.css";
+@import "body_template_overview.css";
+@import "add_body_template.css";
+@import "email_template_overview.css";
 @import "groups.css";
 
 * {

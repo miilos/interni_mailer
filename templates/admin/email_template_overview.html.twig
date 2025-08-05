@@ -3,5 +3,13 @@
 {% block title %}Email Template Overview{% endblock %}
 
 {% block body %}
+    <div class="container">
+        <div class="email-templates">
+            {% embed 'admin/_email_templates.html.twig'%}{% endembed %}
+        </div>
+    </div>
 
+    <script src="{{ asset('/scripts/modal.js') }}"></script>
+    <script src="{{ asset('/scripts/bundle.js') }}"></script>
+    <script src="{{ asset('/scripts/emailTemplateOverview.js') }}" type="module"></script>
 {% endblock %}

@@ -1,0 +1,23 @@
+<div class="templates template_overview-container">
+    <h1 class="template_overview-title">Your Email Body Templates</h1>
+
+    <div class="templates-search">
+        <input type="text" name="template-name" id="template-name" class="search-input body-template-search-input" placeholder="Search templates..." />
+        <button class="btn btn--primary template-search-btn body-template-search-btn">
+            <span class="material-symbols-outlined">
+                search
+            </span>
+        </button>
+    </div>
+
+    <div class="body-templates-container">
+    </div>
+
+    {% if display_add_btn %}
+        <a href="{{ path('add_body_template') }}" class="add-template-btn">
+            <span class="material-symbols-outlined add-template-btn-icon">
+                add
+            </span>
+        </a>
+    {% endif %}
+</div>
