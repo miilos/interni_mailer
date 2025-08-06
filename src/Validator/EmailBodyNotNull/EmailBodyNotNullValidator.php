@@ -2,6 +2,8 @@
 
 namespace App\Validator\EmailBodyNotNull;
 
+use App\Dto\EmailDto;
+use App\Dto\EmailTemplateDto;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -19,10 +21,19 @@ class EmailBodyNotNullValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'object');
         }
 
-        if (!$value->getBody() && !$value->getBodyTemplate()) {
-            $this->context
-                ->buildViolation($constraint->message)
-                ->addViolation();
+        if ($value instanceof EmailDto) {
+            if (!$value->getBody() && !$value->getBodyTemplate()) {
+                $this->context
+                    ->buildViolation($constraint->message)
+                    ->addViolation();
+            }
+        }
+        elseif ($value instanceof EmailTemplateDto) {
+            if (!$value->getBody() && !$value->getBodyTemplateName()) {
+                $this->context
+                    ->buildViolation($constraint->message)
+                    ->addViolation();
+            }
         }
     }
 

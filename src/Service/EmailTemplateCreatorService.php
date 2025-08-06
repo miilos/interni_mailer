@@ -3,10 +3,10 @@
 namespace App\Service;
 
 use App\Dto\EmailTemplateDto;
+use App\Entity\EmailBody;
 use App\Entity\EmailTemplate;
 use App\Repository\EmailBodyRepository;
 use Faker\Factory;
-use http\Exception\InvalidArgumentException;
 
 class EmailTemplateCreatorService
 {
@@ -14,13 +14,14 @@ class EmailTemplateCreatorService
         private EmailBodyRepository $emailBodyRepository,
     ) {}
 
+    public function getBodyTemplateByName(string $name): ?EmailBody
+    {
+        return $this->emailBodyRepository->getBodyTemplateByName($name);
+    }
+
     public function createTemplateWithBodyName(EmailTemplateDto $emailTemplateDto): EmailTemplate
     {
-        $bodyTemplate = $this->emailBodyRepository->getBodyTemplateByName($emailTemplateDto->getBodyTemplateName());
-
-        if (!$bodyTemplate) {
-            throw new InvalidArgumentException('No email body template found with that name!');
-        }
+        $bodyTemplate = $this->getBodyTemplateByName($emailTemplateDto->getBodyTemplateName());
 
         $template = new EmailTemplate();
 

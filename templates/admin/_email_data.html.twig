@@ -1,0 +1,63 @@
+<div class="{{ containerClassName }}">
+    <div class="{{ inputContainerClassName }}">
+        <label class="{{ labelClassName }}" for="subject">Subject</label>
+        <input type="text" class="{{ inputClassName }}" id="subject" />
+        <span class="error-message" id="errmsg-subject">Subject can't be blank!</span>
+    </div>
+
+    <div class="{{ inputContainerClassName }}">
+        <label class="{{ labelClassName }}" for="from">From</label>
+        <input type="text" class="{{ inputClassName }}" id="from" />
+        <span class="error-message" id="errmsg-from">You must specify a from address!</span>
+    </div>
+
+    <div class="{{ inputContainerClassName }}">
+        <label class="{{ labelClassName }}" for="to">To</label>
+        <input type="text" class="{{ inputClassName }}" id="to" />
+        <span class="error-message" id="errmsg-to">You must specify at least one recipient address!</span>
+
+        <div class="address-container to-address-container">
+        </div>
+    </div>
+
+    <div class="{{ inputContainerClassName }}">
+        <label class="{{ labelClassName }}" for="cc">CC</label>
+        <input type="text" class="{{ inputClassName }}" id="cc" />
+
+        <div class="address-container cc-address-container">
+        </div>
+    </div>
+
+    <div class="{{ inputContainerClassName }}">
+        <label class="{{ labelClassName }}" for="bcc">BCC</label>
+        <input type="text" class="{{ inputClassName }}" id="bcc" />
+
+        <div class="address-container bcc-address-container">
+        </div>
+    </div>
+
+    {% block extraInputs %}{% endblock %}
+
+    <div class="{{ inputContainerClassName }}">
+        <label class="{{ labelClassName }}" for="body">Body</label>
+        <div id="editor" class="editor {{ editorClassName }}"></div>
+
+        {% if displayVariables %}
+            <div class="send-variables-container">
+                <p class="variables-title">Variables</p>
+                <div class="variables">
+
+                </div>
+                <div class="send-add-variables-container">
+                    <div class="send-add-variables-inputs">
+                        <input class="send-add-variables-input send-add-variables-input--{{ theme }}" id="add-variable-name" placeholder="Name..." />
+                        <input class="send-add-variables-input send-add-variables-input--{{ theme }}" id="add-variable-value" placeholder="Value..." />
+                        <button class="btn btn--{{ theme }} add-variable-btn">Add</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {% block buttons %}{% endblock %}
+</div>

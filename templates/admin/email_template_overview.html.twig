@@ -6,6 +6,47 @@
     <div class="container">
         <div class="email-templates">
             {% embed 'admin/_email_templates.html.twig'%}{% endembed %}
+
+            <div class="email-template template_overview-container">
+                <h1 class="template_overview-title">Template</h1>
+
+                {% embed 'admin/_email_data.html.twig' with {
+                    containerClassName: 'email-template-data',
+                    inputContainerClassName: 'template-data-input-container',
+                    labelClassName: 'template-data-input-label',
+                    inputClassName: 'template-data-input',
+                    editorClassName: 'editor template-data-editor',
+                    theme: 'primary',
+                    displayVariables: false
+                } %}
+                    {% block extraInputs %}
+                        <div class="template-data-input-container">
+                            <label class="template-data-input-label" for="body-template">Body Template</label>
+                            <select class="template-data-select" id="body-template">
+                                <option value="-">-</option>
+                            </select>
+                        </div>
+                    {% endblock %}
+
+                    {% block buttons %}
+                        <div class="send-btn-container">
+                            <button class="btn btn--primary save-btn">
+                                <span>Save</span>
+                                <span class="material-symbols-outlined">
+                                    save
+                                </span>
+                            </button>
+
+                            <div class="success-msg">
+                                <span>Saved!</span>
+                                <span class="material-symbols-outlined">
+                                    check_circle
+                                </span>
+                            </div>
+                        </div>
+                    {% endblock %}
+                {% endembed %}
+            </div>
         </div>
     </div>
 

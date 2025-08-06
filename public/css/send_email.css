@@ -97,16 +97,24 @@
 }
 
 .address {
-    background-color: #fff;
     padding: 0.3rem 0.5rem;
     border-radius: 0.2rem;
-    color: #383b43;
     margin-top: 0.3rem;
     margin-right: 0.5rem;
 
     display: flex;
     gap: 0.5rem;
     align-items: center;
+}
+
+.address--primary {
+    background-color: #fff;
+    color: #383b43;
+}
+
+.address--secondary {
+    background-color: var(--color-primary);
+    color: #fff;
 }
 
 .remove-address-btn {
@@ -116,7 +124,7 @@
 
 .editor {
     width: 100%;
-    height: 30rem !important;
+    height: 30rem;
     border: 1px solid #fff;
     border-radius: 0.5rem;
 }
@@ -142,10 +150,27 @@
 .send-add-variables-inputs {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .send-add-variables-input {
-    width: 20rem;
+    width: 30rem;
+    font-size: 1.8rem;
+    border: none;
+    background-color: transparent;
+}
+
+.send-add-variables-input:focus {
+    outline: none;
+}
+
+.send-add-variables-input--primary {
+    border-bottom: 1px solid var(--color-primary);
+}
+
+.send-add-variables-input--secondary {
+    border-bottom: 1px solid #fff;
+    color: #fff;
 }
 
 .send-btn {

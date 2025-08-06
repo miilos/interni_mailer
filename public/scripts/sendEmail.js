@@ -1,5 +1,6 @@
 import { fetchAndRenderEmailTemplates, attachEmailTemplateEventListeners } from "./emailTemplateUtils.js";
 import { fetchAndRenderBodyTemplates, attachBodyTemplateEventListeners } from "./bodyTemplateUtils.js";
+import * as utils from './emailDataUtils.js'
 
 const API_URL = '/api/templates'
 const PARSE_API_URL = '/api/email-body/render'
@@ -24,6 +25,7 @@ const sendBtn = document.querySelector('.send-btn')
 const addVariableNameInput = document.getElementById('add-variable-name')
 const addVariableValueInput = document.getElementById('add-variable-value')
 const addVariableBtn = document.querySelector('.add-variable-btn')
+const saveAsTemplateBtn = document.querySelector('.save-as-template-btn')
 
 /**** UI elements ****/
 
@@ -210,7 +212,7 @@ const onBodyTemplateResultClick = (e) => {
     }
     renderVariables()
 
-    const beautifiedContent = vkbeautify.xml(activeBodyTemplate.content, 2)
+    const beautifiedContent = utils.beautify(activeBodyTemplate.content)
     window.editor.setContent(beautifiedContent)
     updateEmailBody(activeBodyTemplate.content)
     updateEmailBodyTemplate(name)
@@ -224,7 +226,7 @@ const addAddressElement = (e, addressListName) => {
         const parent = e.target.closest('.send-input-container')
         const addressContainer = parent.querySelector('.address-container')
 
-        renderAddress(address, addressContainer, addressListName)
+        utils.renderAddress(address, addressContainer, addressListName, onRemoveAddressClick)
         e.target.value = ''
 
         switch (addressListName) {
@@ -274,39 +276,16 @@ const onVariableChange = async (e) => {
 
 /**** render functions ****/
 
-const renderAddress = (address, container, addressListName) => {
-    const addressDiv = document.createElement('div')
-    addressDiv.classList.add('address')
-    addressDiv.innerHTML = `
-        <span class="address-content">${address}</span>
-        <span class="material-symbols-outlined remove-address-btn">
-            close
-        </span>
-    `
-
-    container.appendChild(addressDiv)
-    addressDiv.addEventListener('click', (e) => {
-        onRemoveAddressClick(e, addressListName)
-    })
-}
-
-const renderAddressList = (addresses, container, addressListName) => {
-    container.innerHTML = ``
-    addresses.forEach(addr => {
-        renderAddress(addr, container, addressListName)
-    })
-}
-
 const renderEmailTemplate = () => {
     subjectInput.value = activeTemplate.subject
     fromInput.value = activeTemplate.fromAddr
-    renderAddressList(activeTemplate.toAddr, toAddresses, 'to')
-    renderAddressList(activeTemplate.cc, ccAddresses, 'cc')
-    renderAddressList(activeTemplate.bcc, bccAddresses, 'bcc')
+    utils.renderAddressList(activeTemplate.toAddr, toAddresses, 'to', onRemoveAddressClick )
+    utils.renderAddressList(activeTemplate.cc, ccAddresses, 'cc', onRemoveAddressClick)
+    utils.renderAddressList(activeTemplate.bcc, bccAddresses, 'bcc', onRemoveAddressClick)
 
     let editorText = ''
     if (activeTemplate.bodyTemplate) {
-        editorText = vkbeautify.xml(activeTemplate.bodyTemplate.content, 2)
+        editorText = utils.beautify(activeTemplate.bodyTemplate.content)
     }
     else {
         editorText = activeTemplate.body
@@ -316,7 +295,6 @@ const renderEmailTemplate = () => {
 }
 
 const renderVariables = () => {
-    //variablesContainer.style.display = 'block'
     clearVariableContainer()
     let variablesHtml = ''
 
@@ -361,14 +339,6 @@ const validateBeforeSend = () => {
     }
 
     return passedValidation
-}
-
-const showSuccessMessage = () => {
-    const msg = document.querySelector('.success-msg')
-    msg.style.display = 'flex'
-    setTimeout(() => {
-        msg.style.display = 'none'
-    }, 2000)
 }
 
 const clearVariableContainer = () => {
@@ -458,7 +428,7 @@ sendBtn.addEventListener('click', async () => {
         return
     }
 
-    showSuccessMessage()
+    utils.showSuccessMessage()
 })
 
 addVariableBtn.addEventListener('click', () => {
@@ -471,4 +441,51 @@ addVariableBtn.addEventListener('click', () => {
 
     addVariableNameInput.value = ''
     addVariableValueInput.value = ''
+})
+
+saveAsTemplateBtn.addEventListener('click', async () => {
+    openInputModal('Save as template', 'Enter the template name:')
+})
+
+document.querySelector('.modal-save-btn').addEventListener('click', async (e) => {
+    const templateName = document.querySelector('.modal-input').value
+
+    if (!templateName) {
+        document.getElementById('errmsg-template-name').style.display = 'block'
+        return
+    }
+
+    const res = await fetch('/api/templates', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: templateName,
+            subject: email.subject,
+            from: email.from,
+            to: email.to,
+            cc: email.cc,
+            bcc: email.bcc,
+            body: email.body,
+            bodyTemplateName: email.bodyTemplate
+        })
+    })
+    const json = await res.json()
+
+    if (!res.ok) {
+        document.getElementById('errmsg-create-error').style.display = 'block'
+        document.getElementById('errmsg-create-error').innerText = json.details
+        return
+    }
+
+    document.querySelector('.create-template-success-msg').style.display = 'flex';
+    setTimeout(() => {
+        document.querySelector('.create-template-success-msg').style.display = 'none';
+        closeModal()
+    }, 2000)
+})
+
+document.querySelector('.modal-input').addEventListener('input', () => {
+    document.getElementById('errmsg-template-name').style.display = 'none'
 })

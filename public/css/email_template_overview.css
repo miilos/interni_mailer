@@ -3,4 +3,47 @@
 
     display: grid;
     grid-template-columns: 35rem 1fr;
+    gap: 2rem;
+}
+
+.email-template-data {
+    padding: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.template-data-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.template-data-input-label {
+    font-weight: bold;
+    width: 7rem;
+}
+
+.template-data-input {
+    width: 30rem;
+    font-size: 1.8rem;
+    border: none;
+    border-bottom: 1px solid var(--color-primary);
+    background-color: transparent;
+}
+
+.template-data-input:focus {
+    outline: none;
+}
+
+.template-data-select {
+    width: 30rem;
+    font-size: 1.8rem;
+    border: 1px solid var(--color-primary);
+    background-color: transparent;
+}
+
+.template-data-editor {
+    width: 50%;
 }

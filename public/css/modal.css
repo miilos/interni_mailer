@@ -89,3 +89,24 @@
     font-size: 1.1em;
     opacity: 0.9;
 }
+
+.modal-input-container {
+    margin-top: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.modal-input {
+    width: 70%;
+    padding: 0.5rem;
+    font-size: 1.8rem;
+    border: none;
+    border-bottom: 1px solid var(--color-primary);
+}
+
+.modal-input:focus {
+    outline: none;
+}

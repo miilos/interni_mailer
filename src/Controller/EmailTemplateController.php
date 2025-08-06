@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Dto\EmailTemplateDto;
 use App\Dto\SearchCriteria\EmailTemplateSearchCriteria;
+use App\Entity\EmailTemplate;
 use App\Repository\EmailTemplateRepository;
 use App\Service\Search\EmailTemplateSearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Encoder\DecoderInterface;
 
 class EmailTemplateController extends AbstractController
 {
@@ -48,5 +51,25 @@ class EmailTemplateController extends AbstractController
                 'template' => $template
             ]
         ], 201);
+    }
+
+    #[Route('/api/templates/{id}', methods: ['PATCH'])]
+    public function updateTemplate(
+        EmailTemplate $template,
+        DecoderInterface $decoder,
+        Request $request,
+    ): JsonResponse
+    {
+        $valuesToChange = $decoder->decode($request->getContent(), 'json');
+
+        $template = $this->emailTemplateRepository->updateEmailTemplate($template, $valuesToChange);
+
+        return $this->json([
+            'status' => 'success',
+            'message' => 'Template updated successfully!',
+            'data' => [
+                'template' => $template
+            ]
+        ]);
     }
 }

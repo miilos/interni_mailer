@@ -4,15 +4,12 @@ namespace App\Repository;
 
 use App\Dto\EmailTemplateDto;
 use App\Dto\SearchCriteria\EmailTemplateSearchCriteria;
-use App\Dto\SearchCriteria\SearchCriteria;
-use App\Entity\EmailBody;
 use App\Entity\EmailTemplate;
 use App\Service\EmailTemplateCreatorService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Faker\Factory;
 
 /**
  * @extends ServiceEntityRepository<EmailTemplate>
@@ -57,5 +54,25 @@ class EmailTemplateRepository extends ServiceEntityRepository
         $this->entityManager->persist($template);
         $this->entityManager->flush();
         return $template;
+    }
+
+    public function updateEmailTemplate(EmailTemplate $emailTemplate, array $newValues): EmailTemplate
+    {
+        $allowedFields = ['subject', 'fromAddr', 'toAddr', 'cc', 'bcc', 'body', 'bodyTemplateName'];
+
+        foreach ($newValues as $key => $value) {
+            if (in_array($key, $allowedFields)) {
+                $setter = 'set'.ucfirst($key);
+                $emailTemplate->$setter($value);
+            }
+        }
+
+        if ($emailTemplate->getBodyTemplateName()) {
+            $bodyTemplate = $this->creatorService->getBodyTemplateByName($emailTemplate->getBodyTemplateName());
+            $emailTemplate->setBodyTemplate($bodyTemplate);
+        }
+
+        $this->entityManager->flush();
+        return $emailTemplate;
     }
 }

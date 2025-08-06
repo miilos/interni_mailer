@@ -21,84 +21,40 @@
                 <div class="send-data">
                     <h1 class="send-title">Send an email</h1>
 
-                    <div class="send-inputs">
-                        <div class="send-input-container">
-                            <label class="send-input-label" for="subject">Subject</label>
-                            <input type="text" class="send-input" id="subject" />
-                            <span class="error-message" id="errmsg-subject">Subject can't be blank!</span>
-                        </div>
+                    {% embed 'admin/_email_data.html.twig' with {
+                        containerClassName: 'send-inputs',
+                        inputContainerClassName: 'send-input-container',
+                        labelClassName: 'send-input-label',
+                        inputClassName: 'send-input',
+                        editorClassName: 'editor',
+                        theme: 'secondary',
+                        displayVariables: true
+                    } %}
+                        {% block buttons %}
+                            <div class="send-btn-container">
+                                <button class="btn btn--secondary send-btn">
+                                    <span>Send</span>
+                                    <span class="material-symbols-outlined">
+                                        send
+                                    </span>
+                                </button>
 
-                        <div class="send-input-container">
-                            <label class="send-input-label" for="from">From</label>
-                            <input type="text" class="send-input" id="from" />
-                            <span class="error-message" id="errmsg-from">You must specify a from address!</span>
-                        </div>
-
-                        <div class="send-input-container">
-                            <label class="send-input-label" for="to">To</label>
-                            <input type="text" class="send-input" id="to" />
-                            <span class="error-message" id="errmsg-to">You must specify at least one recipient address!</span>
-
-                            <div class="address-container to-address-container">
-                            </div>
-                        </div>
-
-                        <div class="send-input-container">
-                            <label class="send-input-label" for="cc">CC</label>
-                            <input type="text" class="send-input" id="cc" />
-
-                            <div class="address-container cc-address-container">
-                            </div>
-                        </div>
-
-                        <div class="send-input-container">
-                            <label class="send-input-label" for="bcc">BCC</label>
-                            <input type="text" class="send-input" id="bcc" />
-
-                            <div class="address-container bcc-address-container">
-                            </div>
-                        </div>
-
-                        <div class="send-input-container">
-                            <label class="send-input-label" for="body">Body</label>
-                            <div id="editor" class="editor"></div>
-
-                            <div class="send-variables-container">
-                                <p class="variables-title">Variables</p>
-                                <div class="variables">
-                                    <!-- dynamically generated variable inputs
-                                    <div class="variable-input-container">
-                                        <label>var1: </label>
-                                        <input type="text" class="variable-input send-input" />
-                                    </div>
-                                    -->
+                                <div class="success-msg">
+                                    <span>Sent!</span>
+                                    <span class="material-symbols-outlined">
+                                        check_circle
+                                    </span>
                                 </div>
-                                <div class="send-add-variables-container">
-                                    <div class="send-add-variables-inputs">
-                                        <input class="send-input send-add-variables-input" id="add-variable-name" placeholder="Name..." />
-                                        <input class="send-input send-add-variables-input" id="add-variable-value" placeholder="Value..." />
-                                        <button class="btn btn--secondary add-variable-btn">Add</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="send-btn-container">
-                            <button class="btn btn--secondary send-btn">
-                                <span>Send</span>
-                                <span class="material-symbols-outlined">
-                                    send
-                                </span>
-                            </button>
-
-                            <div class="success-msg">
-                                <span>Sent!</span>
-                                <span class="material-symbols-outlined">
-                                    check_circle
-                                </span>
+                                <button class="btn btn--secondary save-as-template-btn">
+                                    <span>Save as template</span>
+                                    <span class="material-symbols-outlined">
+                                        save
+                                    </span>
+                                </button>
                             </div>
-                        </div>
-                    </div>
+                        {% endblock %}
+                    {% endembed %}
                 </div>
             </div>
 
@@ -118,6 +74,25 @@
             </div>
         </div>
     </div>
+
+    {% embed '/admin/_modal.html.twig' with {
+        id: 'modalInputOverlay'
+    }%}
+        {% block input %}
+            <div class="modal-input-container">
+                <input type="text" class="modal-input" />
+                <span class="error-message" id="errmsg-template-name">You must specify a template name!</span>
+                <span class="error-message" id="errmsg-create-error"></span>
+                <div class="success-msg create-template-success-msg">
+                    <span>Template created!</span>
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                </div>
+                <button class="btn btn--primary modal-save-btn">Save</button>
+            </div>
+        {% endblock %}
+    {% endembed %}
 
     <script src="{{ asset('/scripts/bundle.js') }}"></script>
     <script src="{{ asset('/scripts/modal.js') }}"></script>

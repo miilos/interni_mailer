@@ -66,6 +66,11 @@ body {
     border-radius: 10rem;
     border: none;
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .btn--primary {
