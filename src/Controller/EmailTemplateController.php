@@ -36,7 +36,7 @@ class EmailTemplateController extends AbstractController
             'data' => [
                 'templates' => $templates
             ]
-        ]);
+        ], context: ['groups' => 'basicTemplateData']);
     }
 
     #[Route('/api/templates', methods: ['POST'])]

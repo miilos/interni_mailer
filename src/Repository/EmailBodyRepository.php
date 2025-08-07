@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 /**
  * @extends ServiceEntityRepository<EmailBody>
@@ -19,16 +19,19 @@ class EmailBodyRepository extends ServiceEntityRepository
 {
     private EntityManagerInterface $entityManager;
     private BodyParserService $bodyParser;
+    private ObjectMapperInterface $objectMapper;
 
     public function __construct(
         ManagerRegistry $registry,
         EntityManagerInterface $entityManager,
         BodyParserService $bodyParser,
+        ObjectMapperInterface $objectMapper
     )
     {
         parent::__construct($registry, EmailBody::class);
         $this->entityManager = $entityManager;
         $this->bodyParser = $bodyParser;
+        $this->objectMapper = $objectMapper;
     }
 
     public function getBodyTemplateByName(string $name): ?EmailBody
@@ -81,23 +84,12 @@ class EmailBodyRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function updateBodyTemplate(EmailBody $emailBody, array $newValues):  EmailBody
+    public function updateBodyTemplate(EmailBody $oldBody, EmailBody $newBody): EmailBody
     {
-        $allowedFields = ['content', 'variables'];
-
-        foreach ($newValues as $key => $value) {
-            if (in_array($key, $allowedFields)) {
-                $setter = 'set'.ucfirst($key);
-                $emailBody->$setter($value);
-            }
-        }
-
-        $emailBody->setParsedBodyHtml(
-            $this->bodyParser->parse($emailBody->getContent(), $emailBody->getExtension(), $emailBody->getVariables())
-        );
+        $this->objectMapper->map($newBody, $oldBody);
 
         $this->entityManager->flush();
-        return $emailBody;
+        return $oldBody;
     }
 
     public function deleteBodyTemplate(EmailBody $body): void

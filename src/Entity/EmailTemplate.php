@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\ObjectMapper\Attribute\Map;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: EmailTemplateRepository::class)]
 #[UniqueEntity(fields: ['name'], message: 'That template name is already in use!')]
@@ -17,39 +18,50 @@ class EmailTemplate
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['basicTemplateData'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['basicTemplateData'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['basicTemplateData'])]
     private ?string $subject = null;
 
     #[ORM\Column(length: 255)]
     #[Map(target: 'from')]
+    #[Groups(['basicTemplateData'])]
     private ?string $fromAddr = null;
 
     #[ORM\Column(type: Types::JSON)]
     #[Map(target: 'to')]
+    #[Groups(['basicTemplateData'])]
     private array $toAddr = [];
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
+    #[Groups(['basicTemplateData'])]
     private ?array $cc = null;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
+    #[Groups(['basicTemplateData'])]
     private ?array $bcc = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['basicTemplateData'])]
     private ?string $body = null;
 
     #[ORM\Column]
+    #[Groups(['basicTemplateData'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['basicTemplateData'])]
     private ?string $bodyTemplateName = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'body_template')]
+    #[Groups(['basicTemplateData'])]
     private ?EmailBody $bodyTemplate = null;
 
     public function getId(): ?int

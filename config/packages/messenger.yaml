@@ -11,6 +11,7 @@ framework:
             email: '%env(MESSENGER_TRANSPORT_DSN)%'
             file: '%env(MESSENGER_TRANSPORT_DSN)%'
             log: '%env(MESSENGER_TRANSPORT_DSN)%'
+            changelog: '%env(MESSENGER_TRANSPORT_DSN)%'
 
         routing:
             # Route your messages to the transports
@@ -18,6 +19,7 @@ framework:
             'App\Message\SendEmail': email
             'App\Message\CreateBodyTemplateFile': file
             'App\Message\LogEmail': log
+            'App\Message\UpdateBodyTemplateChangelog': changelog
 
 # when@test:
 #    framework:

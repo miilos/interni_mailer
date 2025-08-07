@@ -6,7 +6,9 @@ use App\Dto\EmailBodyDto;
 use App\Dto\SearchCriteria\BodyTemplateSearchCriteria;
 use App\Entity\EmailBody;
 use App\Message\CreateBodyTemplateFile;
+use App\Message\UpdateBodyTemplateChangelog;
 use App\Repository\EmailBodyRepository;
+use App\Service\BodyTemplateUpdateService;
 use App\Service\EmailParser\BodyParser\BodyParserService;
 use App\Service\Search\BodyTemplateSearchService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +37,7 @@ class EmailBodyController extends AbstractController
             'data' => [
                 'templates' => $templates,
             ]
-        ]);
+        ], context: ['groups' => 'fullTemplateData']);
     }
 
     #[Route('/api/email-body', methods: ['POST'])]
@@ -56,7 +58,7 @@ class EmailBodyController extends AbstractController
             'data' => [
                 'body' => $body,
             ]
-        ], 201);
+        ], 201, context: ['groups' => 'basicTemplateData']);
     }
 
     #[Route('/api/email-body/{id}', methods: ['PATCH'])]
@@ -64,12 +66,13 @@ class EmailBodyController extends AbstractController
         EmailBody $body,
         EmailBodyRepository $emailBodyRepository,
         DecoderInterface $decoder,
-        Request $request
+        Request $request,
+        BodyTemplateUpdateService  $bodyTemplateUpdateService
     ): JsonResponse
     {
         $newValues = $decoder->decode($request->getContent(), 'json');
 
-        $updatedBody = $emailBodyRepository->updateBodyTemplate($body, $newValues);
+        $updatedBody = $bodyTemplateUpdateService->updateTemplate($body, $newValues);
 
         return $this->json([
             'status' => 'success',
@@ -77,7 +80,7 @@ class EmailBodyController extends AbstractController
             'data' => [
                 'body' => $updatedBody,
             ]
-        ]);
+        ], context: ['groups' => 'basicTemplateData']);
     }
 
     #[Route('/api/email-body/{id}', methods: ['DELETE'])]
