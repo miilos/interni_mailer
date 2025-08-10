@@ -40,12 +40,14 @@ function closeModal(event) {
         const overlay = document.getElementById('modalOverlay');
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
+        return
     }
 
     if (!event || event.target === document.getElementById('modalInputOverlay') || event.target.classList.contains('close-btn')) {
         const overlay = document.getElementById('modalInputOverlay');
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
+        return
     }
 }
 

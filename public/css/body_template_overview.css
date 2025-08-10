@@ -1,9 +1,9 @@
 .template_overview {
-    height: 95rem;
-
     display: grid;
+    grid-template-rows: 95rem 55rem;
     grid-template-columns: 35rem repeat(2, 1fr);
-    gap: 2rem;
+    row-gap: 5rem;
+    column-gap: 2rem;
 }
 
 .template_overview-container {
@@ -227,4 +227,93 @@
     padding: 2rem;
     border-radius: 1.5rem;
     font-size: 2rem;
+}
+
+.changelog {
+    grid-row: 2 / 3;
+    grid-column: 1 / -1;
+}
+
+.changelog-header {
+    height: 5rem;
+    padding: 3rem 0;
+    border-bottom: 1px solid #878c94;
+
+    display: flex;
+    align-items: center;
+}
+
+.changelog-data-entries {
+    overflow-y: scroll;
+}
+
+.changelog-entry {
+    display: flex;
+    align-items: center;
+}
+
+.changelog-header-text {
+    font-size: 2rem;
+}
+
+.changelog-data {
+    padding: 1.5rem 0;
+}
+
+.changelog-data:nth-child(odd) {
+    background-color: #e8eaef;
+}
+
+.changelog-entry-cell {
+    width: 20%;
+    text-align: center;
+}
+
+.changelog-entry-cell--clickable {
+    color: var(--color-primary);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.diff {
+    background-color: #e8eaef;
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.3);
+}
+
+.diff-property {
+    margin: 1rem 0;
+}
+
+.diff-property-name {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.diff-content-label {
+    font-size: 1.8rem;
+    margin: 1rem 0;
+}
+
+.diff-new {
+    padding: 0 0.5rem;
+    color: var(--color-success-primary);
+    background-color: var(--color-success-secondary);
+    display: inline-block;
+    margin: 0.1rem 0;
+    border-radius: 0.3rem;
+}
+
+.diff-original {
+    padding: 0 0.5rem;
+    color: var(--color-error-primary);
+    background-color: var(--color-error-secondary);
+    display: inline-block;
+    margin: 0.1rem 0;
+    border-radius: 0.3rem;
+}
+
+.diff-content-diff-text {
+    white-space: pre-line;
 }

@@ -1,3 +1,6 @@
+import { fetchAndRenderBodyTemplates, attachBodyTemplateEventListeners } from './bodyTemplateUtils.js'
+import * as utils from './emailDataUtils.js'
+
 const API_URL = '/api/email-body'
 
 /**** containers ****/
@@ -5,6 +8,7 @@ const API_URL = '/api/email-body'
 const templateContainer = document.querySelector('.body-templates-container')
 const templateVariablesContainer = document.querySelector('.template-variables')
 const templateViewContainer = document.querySelector('.template-view-container')
+const changelogEntriesContainer = document.querySelector('.changelog-data-entries')
 
 /**** inputs ****/
 
@@ -79,6 +83,8 @@ const onTemplateResultClick = (e) => {
     else {
         templateVariablesContainer.classList.add('template-variables--hidden')
     }
+
+    renderChangelog()
 }
 
 const onDeleteTemplate = async (e) => {
@@ -100,6 +106,32 @@ const onDeleteTemplate = async (e) => {
 
     parent.remove()
     clearTemplateView()
+}
+
+const onChangelogCellClick = (e) => {
+    const parent = e.target.closest('.changelog-entry-cell')
+    const row = e.target.closest('.changelog-entry')
+    const logId = parseInt(row.dataset.logId)
+    const log = activeTemplate.changelog.find(curr => curr.id === logId)
+
+    if (parent.classList.contains('cell-template-content')) {
+        const escapedContent = parseHtml(log.content)
+
+        const content = `<pre>${utils.beautify(escapedContent)}</pre>`
+
+        openModal('Content', content)
+        return
+    }
+
+    if (parent.classList.contains('cell-template-body')) {
+        openModal('Parsed Body', log.parsedBodyHtml)
+        return
+    }
+
+    if (parent.classList.contains('cell-template-diff')) {
+        const diffHtml = formatDiff(log.diff)
+        openModal('Diff', diffHtml)
+    }
 }
 
 /**** render functions ****/
@@ -151,11 +183,34 @@ const renderTemplates = () => {
     })
 }
 
-const setActiveClassForActiveTemplate = (activeTemplate) => {
-    document.querySelectorAll('.template').forEach(curr => {
-        curr.classList.remove('template--active')
+const renderChangelog = () => {
+    changelogEntriesContainer.innerHTML = ''
+
+    activeTemplate.changelog.forEach(log => {
+        changelogEntriesContainer.insertAdjacentHTML('beforeend', `
+            <div class="changelog-entry changelog-data" data-log-id="${log.id}">
+                <div class="changelog-entry-cell cell-template-name">
+                    <p class="changelog-entry-text">${activeTemplate.name}</p>
+                </div>
+                <div class="changelog-entry-cell cell-template-content changelog-entry-cell--clickable">
+                    <p class="changelog-entry-text">View content</p>
+                </div>
+                <div class="changelog-entry-cell cell-template-body changelog-entry-cell--clickable">
+                    <p class="changelog-entry-text">View parsed body</p>
+                </div>
+                <div class="changelog-entry-cell cell-template-diff changelog-entry-cell--clickable">
+                    <p class="changelog-entry-text">View diff</p>
+                </div>
+                <div class="changelog-entry-cell cell-changedat">
+                    <p class="changelog-entry-text">${utils.formatDate(log.createdAt)}</p>
+                </div>
+            </div>
+        `)
     })
-    activeTemplate.classList.add('template--active')
+
+    changelogEntriesContainer.querySelectorAll('.changelog-entry-cell').forEach(curr => {
+        curr.addEventListener('click', onChangelogCellClick)
+    })
 }
 
 /**** util functions ****/
@@ -182,6 +237,13 @@ const formatExtension = (extension) => {
     return formattedExtension
 }
 
+const setActiveClassForActiveTemplate = (activeTemplate) => {
+    document.querySelectorAll('.template').forEach(curr => {
+        curr.classList.remove('template--active')
+    })
+    activeTemplate.classList.add('template--active')
+}
+
 const getActiveTemplateExtension = () => {
     if (!activeTemplate) return
 
@@ -202,6 +264,80 @@ const getTemplateVariableInputValues = () => {
     }
 
     return variables
+}
+
+const formatDiff = (diffObj) => {
+    let diffHtml = '<div class="diff">'
+    for (const [key, value] of Object.entries(diffObj)) {
+        diffHtml += `
+               <div class="diff-property">
+                    <h4 class="diff-property-name">${key}:</h4>
+                    <div class="diff-content-container">
+                        <h5 class="diff-content-label">Old:</h5>
+                        <div class="diff-content">
+                            ${formatChangelogOldAndNewViews(value.old)}
+                        </div>
+                    </div>
+                    <div class="diff-content-container">
+                        <h5 class="diff-content-label">New:</h5>
+                        <div class="diff-content">
+                            ${formatChangelogOldAndNewViews(value.new)}
+                        </div>
+                    </div>
+                    <div class="diff-content-container">
+                        <h5 class="diff-content-label">Diff:</h5>
+                        <div class="diff-content diff-content-diff-text">
+                            ${formatDiffText(value.diff)}
+                        </div>
+                    </div>
+               </div>
+        `.trim()
+    }
+
+    diffHtml += '</div>'
+    return diffHtml
+}
+
+const parseHtml = (html) => {
+    return html.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+}
+
+const formatChangelogOldAndNewViews = (changelogVal) => {
+    let valueHtml = ''
+
+    if (typeof changelogVal === 'object') {
+        for (const [key, value] of Object.entries(changelogVal)) {
+            valueHtml += `
+                <div>
+                    <b>${key}: </b>
+                    <span>${value}</span>
+                </div>
+            `
+        }
+    }
+    else {
+        valueHtml = changelogVal
+    }
+
+    return valueHtml
+}
+
+const formatDiffText = (diff) => {
+    return parseHtml(diff).split('\n').map(curr => {
+        if (curr.startsWith('+')) {
+            return `<span class="diff-new">${curr}</span>`
+        }
+
+        if (curr.startsWith('-')) {
+            return `<span class="diff-original">${curr}</span>`
+        }
+
+        return curr
+    }).join('\n')
 }
 
 /**** event listeners ****/
