@@ -13,7 +13,6 @@ class EmailSenderService
     public function send(EmailDto $emailDto): void
     {
         $this->builder
-            ->createEmail()
             ->subject($emailDto->getSubject())
             ->from($emailDto->getFrom())
             ->cc($emailDto->getCc())

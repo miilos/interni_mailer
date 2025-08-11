@@ -4,39 +4,32 @@ namespace App\Service;
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 class EmailBuilderService
 {
-    private Email $email;
-    private array $sendTo = [];
+    private string $subject = '';
+    private string $from = '';
+    private array $to = [];
+    private ?array $cc = [];
+    private ?array $bcc = [];
+    private string $body = '';
 
     public function __construct(
         private MailerInterface $mailer
     ) {}
 
-    public function createEmail(bool $usesTemplate = false): static
-    {
-        if ($usesTemplate) {
-            $this->email = new TemplatedEmail();
-        }
-        else {
-            $this->email = new Email();
-        }
-
-        return $this;
-    }
-
     public function subject(string $subject): static
     {
-        $this->email->subject($subject);
+        $this->subject = $subject;
 
         return $this;
     }
 
     public function from(string $from): static
     {
-        $this->email->from($from);
+        $this->from = $from;
 
         return $this;
     }
@@ -44,37 +37,53 @@ class EmailBuilderService
     // doesn't change the email object so that a separate email can be sent for every address passed
     public function to(array $to): static
     {
-        $this->sendTo = $to;
+        $this->to = $to;
 
         return $this;
     }
 
     public function cc(array $cc): static
     {
-        $this->email->cc(...$cc);
+        $this->cc = $cc;
 
         return $this;
     }
 
     public function bcc(array $bcc): static
     {
-        $this->email->bcc(...$bcc);
+        $this->bcc = $bcc;
 
         return $this;
     }
 
     public function body(string $body): static
     {
-        $this->email->html($body);
+        $this->body = $body;
 
         return $this;
     }
 
     public function send(): void
     {
-        foreach ($this->sendTo as $to) {
-            $this->email->to($to);
-            $this->mailer->send($this->email);
+        $emailCount = 1;
+
+        foreach ($this->to as $to) {
+            $email = (new TemplatedEmail())
+                ->subject($this->subject)
+                ->from($this->from)
+                ->to($to)
+                ->html($this->body);
+
+            // set cc and bcc only on the first email if multiple emails are being sent,
+            // so that the same person doesn't get cc'd or bcc'd multiple times for the same email
+            if ($emailCount === 1) {
+                $email->cc(...$this->cc);
+                $email->bcc(...$this->bcc);
+            }
+
+            $this->mailer->send($email);
+
+            $emailCount++;
         }
     }
 }
