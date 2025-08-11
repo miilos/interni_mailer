@@ -101,6 +101,9 @@
       <path value="$PROJECT_DIR$/vendor/stof/doctrine-extensions-bundle" />
       <path value="$PROJECT_DIR$/vendor/gedmo/doctrine-extensions" />
       <path value="$PROJECT_DIR$/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />

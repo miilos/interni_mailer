@@ -2,14 +2,12 @@
 
 namespace App\Message;
 
-use App\Dto\EmailDto;
-
 class SendEmail
 {
-    public function __construct(private EmailDto $email) {}
+    public function __construct(private string $batchId) {}
 
-    public function getEmail(): EmailDto
+    public function getBatchId(): string
     {
-        return $this->email;
+        return $this->batchId;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\EmailDto;
 use App\Message\SendEmail;
+use App\Service\EmailBatchDispatcherService;
 use App\Service\EmailParser\EmailParserService;
 use App\Service\EmailTemplateAssemblerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,10 +23,11 @@ class EmailController extends AbstractController
         EmailParserService $parser,
         #[MapRequestPayload]
         EmailDto $emailDto,
+        EmailBatchDispatcherService $batchDispatcherService,
     ): JsonResponse
     {
         $emailDto = $parser->parse($emailDto);
-        $messageBus->dispatch(new SendEmail($emailDto));
+        $batchDispatcherService->batchSend($emailDto);
 
         return $this->json([
             'status' => 'success',
