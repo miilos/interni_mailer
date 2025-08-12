@@ -30,14 +30,15 @@ function openInputModal(title, text) {
 
     document.querySelector('.modal-text').innerHTML = text
 
-    document.getElementById('errmsg-template-name').style.display = 'none'
-    document.getElementById('errmsg-create-error').style.display = 'none'
-
+    document.querySelectorAll('.error-message--modal').forEach(curr => {
+        curr.style.display = 'none'
+    })
 }
 
 function closeModal(event) {
-    if (!event || event.target === document.getElementById('modalOverlay') || event.target.classList.contains('close-btn')) {
-        const overlay = document.getElementById('modalOverlay');
+    // assume the function is being called somewhere from the code, not as a result of some event listener
+    if (!event) {
+        const overlay = document.getElementById('modalInputOverlay');
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
         return
@@ -45,6 +46,13 @@ function closeModal(event) {
 
     if (!event || event.target === document.getElementById('modalInputOverlay') || event.target.classList.contains('close-btn')) {
         const overlay = document.getElementById('modalInputOverlay');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        return
+    }
+
+    if (!event || event.target === document.getElementById('modalOverlay') || event.target.classList.contains('close-btn')) {
+        const overlay = document.getElementById('modalOverlay');
         overlay.classList.remove('active');
         document.body.style.overflow = 'auto';
         return

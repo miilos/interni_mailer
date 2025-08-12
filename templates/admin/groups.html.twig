@@ -19,6 +19,12 @@
 
                 <div class="group-results-container templates-container">
                 </div>
+
+                <button class="add-btn add-group-btn">
+                    <span class="material-symbols-outlined add-template-btn-icon">
+                        add
+                    </span>
+                </button>
             </div>
 
             <div class="group-details template_overview-container">
@@ -87,6 +93,43 @@
             </div>
         </div>
     </div>
+
+    {% embed '/admin/_modal.html.twig' with {
+        id: 'modalInputOverlay'
+    }%}
+        {% block input %}
+            <div class="modal-input-container">
+                <label for="modal-group-name" class="modal-text">Group name:</label>
+                <input type="text" class="modal-input" id="modal-group-name" />
+                <span class="error-message error-message--modal" id="errmsg-group-name">You must specify a group name!</span>
+
+                <label for="group-address" class="modal-text">Group address:</label>
+                <input type="text" class="modal-input" id="group-address" />
+                <span class="error-message error-message--modal" id="errmsg-group-address">You must specify a group address!</span>
+
+                <label for="group-search-members" class="modal-text">Add members:</label>
+                <input type="text" class="modal-input" id="group-search-members" />
+                <div class="modal-search-container">
+                    <div class="add-members-search-results--modal">
+                    </div>
+                </div>
+
+                <p class="modal-text">Members</p>
+                <div class="modal-group-members">
+
+                </div>
+
+                <span class="error-message error-message--modal" id="errmsg-create-error"></span>
+                <div class="success-msg create-template-success-msg">
+                    <span>Group created!</span>
+                    <span class="material-symbols-outlined">
+                        check_circle
+                    </span>
+                </div>
+                <button class="btn btn--primary modal-save-btn">Create group</button>
+            </div>
+        {% endblock %}
+    {% endembed %}
 
     <script src="{{ asset('/scripts/groups.js') }}"></script>
     <script src="{{ asset('/scripts/modal.js') }}"></script>

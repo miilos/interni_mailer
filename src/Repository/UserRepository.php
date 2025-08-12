@@ -18,12 +18,12 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function getUsersFromEmailList(array $emails): array
+    public function getUsersFromList(array $emails): array
     {
         $users = [];
 
         foreach ($emails as $email) {
-            $user = $this->getUserByEmail($email);
+            $user = $this->getUserById($email);
 
             if ($user) {
                 $users[] = $user;
@@ -33,11 +33,11 @@ class UserRepository extends ServiceEntityRepository
         return $users;
     }
 
-    public function getUserByEmail($email): ?User
+    public function getUserById($id): ?User
     {
         return $this->createQueryBuilder('user')
-            ->andWhere('user.email = :email')
-            ->setParameter('email', $email)
+            ->andWhere('user.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
     }

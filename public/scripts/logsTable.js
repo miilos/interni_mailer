@@ -57,7 +57,7 @@ const fetchResults = async () => {
     return json.data.logs
 }
 
-/**** util functions to format data inside the table ****/
+/**** util functions ****/
 
 const formatArray = (arr) => {
     let res = ''
@@ -91,7 +91,7 @@ const formatEmailList = (emailsHtml) => {
 const resetTableContent = () => {
     table.innerHTML = `
         <tr>
-            <th>Id</th>
+            <th class="column-id">Id</th>
             <th>Email Id</th>
             <th>Subject</th>
             <th>From</th>
@@ -106,6 +106,27 @@ const resetTableContent = () => {
             <th>Email Template</th>
         </tr>
     `
+}
+
+const search = async () => {
+    currPage = 1
+    const logs = await fetchResults()
+
+    if (logs.length === 0) {
+        resetTableContent()
+
+        table.querySelector('tbody').insertAdjacentHTML('beforeend', `
+            <tr>
+                <td colspan="13" class="no-results-msg">
+                    No results for this filter
+                </td>
+            </tr>
+        `)
+
+        return
+    }
+
+    renderTable(logs)
 }
 
 /**** result rendering ****/
@@ -132,7 +153,7 @@ const renderTable = (logs) => {
         tbody.insertAdjacentHTML('beforeend',
             `
                 <tr>
-                    <td>${log.id}</td>
+                    <td class="column-id">${log.id}</td>
                     <td>${log.emailId}</td>
                     <td>${log.subject}</td>
                     <td>${log.fromAddr}</td>
@@ -162,26 +183,16 @@ window.addEventListener('load', async () => {
     await fetchAndDisplayResults()
 })
 
-searchBtn.addEventListener('click', async (e) => {
-    currPage = 1
-    const logs = await fetchResults()
-
-    if (logs.length === 0) {
-        resetTableContent()
-
-        table.querySelector('tbody').insertAdjacentHTML('beforeend', `
-            <tr>
-                <td colspan="13" class="no-results-msg">
-                    No results for this filter
-                </td>
-            </tr>
-        `)
-
-        return
-    }
-
-    renderTable(logs)
+searchBtn.addEventListener('click', search)
+document.querySelectorAll('.search-input').forEach((curr) => {
+    curr.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            search()
+        }
+    })
 })
+
+statusInput.addEventListener('change', search)
 
 resetBtn.addEventListener('click', async (e) => {
     subjectInput.value = ''

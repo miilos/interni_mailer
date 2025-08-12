@@ -17,7 +17,7 @@ class AdminPanelController extends AbstractController
     #[Route('/admin/logs', name: 'admin_panel')]
     public function adminPanel(): Response
     {
-        return $this->render('admin/admin_panel.html.twig');
+        return $this->render('admin/logs.html.twig');
     }
 
     #[Route('/admin/templates-body', name: 'body_template_overview')]

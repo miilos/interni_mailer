@@ -233,3 +233,19 @@
     color: var(--color-success-primary);
     display: none;
 }
+
+.clear-btn {
+    font-size: 1.8rem;
+    position: absolute;
+    top: 4rem;
+    right: 4rem;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.clear-btn:focus {
+    outline: none;
+}

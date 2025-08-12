@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\GroupDto;
 use App\Dto\SearchCriteria\GroupSearchCriteria;
+use App\Entity\Group;
 use App\Repository\GroupRepository;
 use App\Repository\UserRepository;
 use App\Service\GroupManager\GroupManagerException;
@@ -45,7 +46,7 @@ class GroupController extends AbstractController
         GroupDto $groupDto,
     ): JsonResponse
     {
-        $users = $userRepository->getUsersFromEmailList($groupDto->getRecipients());
+        $users = $userRepository->getUsersFromList($groupDto->getRecipients());
         $groupDto->setRecipients($users);
         $group = $groupRepository->createGroup($groupDto);
 
@@ -94,5 +95,16 @@ class GroupController extends AbstractController
                 'group' => $group,
             ]
         ], context: [ 'groups' => 'groupData' ]);
+    }
+
+    #[Route('/api/groups/{id}', methods: ['DELETE'])]
+    public function deleteGroup(
+        Group $group,
+        GroupRepository $groupRepository,
+    ): JsonResponse
+    {
+        $groupRepository->deleteGroup($group);
+
+        return $this->json([], 204);
     }
 }

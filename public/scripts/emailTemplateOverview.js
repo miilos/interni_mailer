@@ -68,6 +68,8 @@ const onRemoveAddressClick = (e, addressListName) => {
             break
     }
 
+
+
     addressEl.remove()
 }
 
@@ -77,9 +79,8 @@ const onAddAddress = (e, addressListName) => {
         const parent = e.target.closest('.template-data-input-container')
         const addressContainer = parent.querySelector('.address-container')
 
-        utils.renderAddress(address, addressContainer, addressListName, onRemoveAddressClick)
+        utils.renderAddress(address, addressContainer, addressListName, onRemoveAddressClick, 'secondary')
         e.target.value = ''
-
 
         switch (addressListName) {
             case 'to':
@@ -100,9 +101,9 @@ const onAddAddress = (e, addressListName) => {
 const renderTemplateData = (template) => {
     subjectInput.value = template.subject
     fromInput.value = template.fromAddr
-    utils.renderAddressList(template.toAddr, toAddresses, 'to', onRemoveAddressClick)
-    utils.renderAddressList(template.cc, ccAddresses, 'cc', onRemoveAddressClick)
-    utils.renderAddressList(template.bcc, bccAddresses, 'bcc', onRemoveAddressClick)
+    utils.renderAddressList(template.toAddr, toAddresses, 'to', onRemoveAddressClick, 'secondary')
+    utils.renderAddressList(template.cc, ccAddresses, 'cc', onRemoveAddressClick, 'secondary')
+    utils.renderAddressList(template.bcc, bccAddresses, 'bcc', onRemoveAddressClick, 'secondary')
 
     const body = template.bodyTemplate ? template.bodyTemplate.content : template.body
     const beautifiedBody = utils.beautify(body)
@@ -136,24 +137,43 @@ const fetchAndRenderBodyTemplateSelectOptions = async () => {
 }
 
 const getUpdateData = () => {
-    let updateObj = {}
-
-    updateObj.subject = subjectInput.value
-    updateObj.from = fromInput.value
-    updateObj.to = to
-    updateObj.cc = cc
-    updateObj.bcc = bcc
+    activeTemplate.subject = subjectInput.value
+    activeTemplate.fromAddr = fromInput.value
+    activeTemplate.toAddr = to
+    activeTemplate.cc = cc
+    activeTemplate.bcc = bcc
 
     const bodyTemplateName = bodyTemplateSelect.value
     if (bodyTemplateName !== '-') {
-        updateObj.bodyTemplateName = bodyTemplateSelect.value
+        activeTemplate.bodyTemplateName = bodyTemplateSelect.value
     }
     else {
-        updateObj.body = window.editor.getContent()
-        updateObj.bodyTemplateName = null
+        activeTemplate.body = window.editor.getContent()
+        activeTemplate.bodyTemplateName = null
     }
+}
 
-    return updateObj
+const search = async () => {
+    clearData()
+    templates = await fetchAndRenderEmailTemplates(API_URL)
+    attachEmailTemplateEventListeners(onSearchResultClick)
+}
+
+const clearData = () => {
+    activeTemplate = null
+    subjectInput.value = ''
+    fromInput.value = ''
+    toInput.value = ''
+    toAddresses.innerHTML = ''
+    to = []
+    ccInput.value = ''
+    ccAddresses.innerHTML = ''
+    cc = []
+    bccInput.value = ''
+    bccAddresses.innerHTML = ''
+    bcc = []
+    bodyTemplateSelect.selectedIndex = 0
+    window.editor.setContent('')
 }
 
 /**** event listeners ****/
@@ -166,14 +186,12 @@ window.addEventListener('load', async (e) => {
 
 templateNameInput.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
-        templates = await fetchAndRenderEmailTemplates(API_URL)
-        attachEmailTemplateEventListeners(onSearchResultClick)
+        await search()
     }
 })
 
 searchBtn.addEventListener('click', async (e) => {
-    templates = await fetchAndRenderEmailTemplates(API_URL)
-    attachEmailTemplateEventListeners(onSearchResultClick)
+    search()
 })
 
 toInput.addEventListener('keydown', (e) => onAddAddress(e, 'to'))
@@ -193,14 +211,17 @@ bodyTemplateSelect.addEventListener('change', (e) => {
 })
 
 saveBtn.addEventListener('click', async (e) => {
-    const updateObj = getUpdateData()
+    if (!activeTemplate) return
+
+    // add updated data into activeTemplate
+    getUpdateData()
 
     const res = await fetch(`${API_URL}/${activeTemplate.id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(updateObj)
+        body: JSON.stringify(activeTemplate)
     })
     const json = await res.json()
 

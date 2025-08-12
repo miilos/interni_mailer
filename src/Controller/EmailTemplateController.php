@@ -50,7 +50,7 @@ class EmailTemplateController extends AbstractController
             'data' => [
                 'template' => $template
             ]
-        ], 201);
+        ], 201, context: ['groups' => 'basicTemplateData']);
     }
 
     #[Route('/api/templates/{id}', methods: ['PATCH'])]
@@ -70,6 +70,6 @@ class EmailTemplateController extends AbstractController
             'data' => [
                 'template' => $template
             ]
-        ]);
+        ], context: ['groups' => 'basicTemplateData']);
     }
 }

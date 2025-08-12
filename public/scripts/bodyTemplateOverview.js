@@ -109,8 +109,8 @@ const onDeleteTemplate = async (e) => {
 }
 
 const onChangelogCellClick = (e) => {
-    const parent = e.target.closest('.changelog-entry-cell')
-    const row = e.target.closest('.changelog-entry')
+    const parent = e.target.closest('.table-entry-cell')
+    const row = e.target.closest('.table-entry')
     const logId = parseInt(row.dataset.logId)
     const log = activeTemplate.changelog.find(curr => curr.id === logId)
 
@@ -188,27 +188,27 @@ const renderChangelog = () => {
 
     activeTemplate.changelog.forEach(log => {
         changelogEntriesContainer.insertAdjacentHTML('beforeend', `
-            <div class="changelog-entry changelog-data" data-log-id="${log.id}">
-                <div class="changelog-entry-cell cell-template-name">
-                    <p class="changelog-entry-text">${activeTemplate.name}</p>
+            <div class="table-entry table-data" data-log-id="${log.id}">
+                <div class="table-entry-cell table-entry-cell--changelog cell-template-name">
+                    <p class="table-entry-text">${activeTemplate.name}</p>
                 </div>
-                <div class="changelog-entry-cell cell-template-content changelog-entry-cell--clickable">
-                    <p class="changelog-entry-text">View content</p>
+                <div class="table-entry-cell table-entry-cell--changelog cell-template-content table-entry-cell--clickable">
+                    <p class="table-entry-text">View content</p>
                 </div>
-                <div class="changelog-entry-cell cell-template-body changelog-entry-cell--clickable">
-                    <p class="changelog-entry-text">View parsed body</p>
+                <div class="table-entry-cell table-entry-cell--changelog cell-template-body table-entry-cell--clickable">
+                    <p class="table-entry-text">View parsed body</p>
                 </div>
-                <div class="changelog-entry-cell cell-template-diff changelog-entry-cell--clickable">
-                    <p class="changelog-entry-text">View diff</p>
+                <div class="table-entry-cell table-entry-cell--changelog cell-template-diff table-entry-cell--clickable">
+                    <p class="table-entry-text">View diff</p>
                 </div>
-                <div class="changelog-entry-cell cell-changedat">
-                    <p class="changelog-entry-text">${utils.formatDate(log.createdAt)}</p>
+                <div class="table-entry-cell table-entry-cell--changelog cell-changedat">
+                    <p class="table-entry-text">${utils.formatDate(log.createdAt)}</p>
                 </div>
             </div>
         `)
     })
 
-    changelogEntriesContainer.querySelectorAll('.changelog-entry-cell').forEach(curr => {
+    changelogEntriesContainer.querySelectorAll('.table-entry-cell').forEach(curr => {
         curr.addEventListener('click', onChangelogCellClick)
     })
 }
@@ -359,6 +359,8 @@ searchBtn.addEventListener('click', async (e) => {
 })
 
 testSendBtn.addEventListener('click', async (e) => {
+    if (!activeTemplate) return
+
     const extension = getActiveTemplateExtension()
     const variables = getTemplateVariableInputValues()
 

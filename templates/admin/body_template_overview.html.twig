@@ -58,29 +58,32 @@
             <div class="changelog template_overview-container">
                 <h1 class="template_overview-title">Changelog</h1>
 
-                <div class="changelog-entries">
-                    <div class="changelog-entry changelog-header">
-                        <h4 class="changelog-entry-cell changelog-header-text">Template</h4>
-                        <h4 class="changelog-entry-cell changelog-header-text">Content</h4>
-                        <h4 class="changelog-entry-cell changelog-header-text">Parsed Body</h4>
-                        <h4 class="changelog-entry-cell changelog-header-text">Diff</h4>
-                        <h4 class="changelog-entry-cell changelog-header-text">Edited At</h4>
+                <div class="table-entries">
+                    <div class="table-entry table-header">
+                        <h4 class="table-entry-cell table-entry-cell--changelog table-header-text">Template</h4>
+                        <h4 class="table-entry-cell table-entry-cell--changelog table-header-text">Content</h4>
+                        <h4 class="table-entry-cell table-entry-cell--changelog table-header-text">Parsed Body</h4>
+                        <h4 class="table-entry-cell table-entry-cell--changelog table-header-text">Diff</h4>
+                        <h4 class="table-entry-cell table-entry-cell--changelog table-header-text">Edited At</h4>
                     </div>
 
-                    <div class="changelog-data-entries">
+                    <div class="table-data-entries changelog-data-entries">
                         <!--
-                        <div class="changelog-entry changelog-data">
-                            <div class="changelog-entry-cell cell-template-name">
-                                <p class="changelog-entry-text">Name</p>
+                        <div class="table-entry table-data" data-log-id="${log.id}">
+                            <div class="table-entry-cell table-entry-cell--changelog cell-template-name">
+                                <p class="table-entry-text">${activeTemplate.name}</p>
                             </div>
-                            <div class="changelog-entry-cell cell-template-content changelog-entry-cell--clickable">
-                                <p class="changelog-entry-text">View content</p>
+                            <div class="table-entry-cell table-entry-cell--changelog cell-template-content table-entry-cell--clickable">
+                                <p class="table-entry-text">View content</p>
                             </div>
-                            <div class="changelog-entry-cell cell-template-body changelog-entry-cell--clickable">
-                                <p class="changelog-entry-text">View parsed Body</p>
+                            <div class="table-entry-cell table-entry-cell--changelog cell-template-body table-entry-cell--clickable">
+                                <p class="table-entry-text">View parsed body</p>
                             </div>
-                            <div class="changelog-entry-cell cell-template-diff changelog-entry-cell--clickable">
-                                <p class="changelog-entry-text">View diff</p>
+                            <div class="table-entry-cell table-entry-cell--changelog cell-template-diff table-entry-cell--clickable">
+                                <p class="table-entry-text">View diff</p>
+                            </div>
+                            <div class="table-entry-cell table-entry-cell--changelog cell-changedat">
+                                <p class="table-entry-text">${utils.formatDate(log.createdAt)}</p>
                             </div>
                         </div>
                         -->

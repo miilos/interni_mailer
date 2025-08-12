@@ -34,6 +34,23 @@ class GroupRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getAllGroupNames(): array
+    {
+        return $this->createQueryBuilder('g')
+            ->select('g.name')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getGroupByAddress(string $address): ?Group
+    {
+        return $this->createQueryBuilder('g')
+            ->where('g.address = :address')
+            ->setParameter('address', $address)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function buildSearch(GroupSearchCriteria $criteria): QueryBuilder
     {
         $qb = $this->createQueryBuilder('g');
@@ -75,5 +92,11 @@ class GroupRepository extends ServiceEntityRepository
         $group->removeUser($user);
         $this->entityManager->flush();
         return $group;
+    }
+
+    public function deleteGroup(Group $group): void
+    {
+        $this->entityManager->remove($group);
+        $this->entityManager->flush();
     }
 }

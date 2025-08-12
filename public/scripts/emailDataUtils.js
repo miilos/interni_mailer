@@ -30,7 +30,7 @@ export const renderAddress = (address, container, addressListName, listenerFn, t
     `
 
     container.appendChild(addressDiv)
-    addressDiv.addEventListener('click', (e) => {
+    addressDiv.querySelector('.remove-address-btn').addEventListener('click', (e) => {
         listenerFn(e, addressListName)
     })
 }

@@ -26,6 +26,7 @@ const addVariableNameInput = document.getElementById('add-variable-name')
 const addVariableValueInput = document.getElementById('add-variable-value')
 const addVariableBtn = document.querySelector('.add-variable-btn')
 const saveAsTemplateBtn = document.querySelector('.save-as-template-btn')
+const clearBtn = document.querySelector('.clear-btn')
 
 /**** UI elements ****/
 
@@ -37,6 +38,10 @@ const previewSubject = document.querySelector('.preview-subject')
 const previewFrom = document.querySelector('.preview-from')
 const previewTo = document.querySelector('.preview-to')
 const previewBody = document.querySelector('.preview-body')
+
+const subjectEmptyErrMessage = document.getElementById('errmsg-subject')
+const fromEmptyErrMessage = document.getElementById('errmsg-from')
+const toEmptyErrMessage = document.getElementById('errmsg-to')
 
 let templates = []
 let bodyTemplates = []
@@ -178,6 +183,9 @@ const onSearchResultClick = async (e) => {
 
     clearEmailVariables()
     renderEmailTemplate()
+    subjectEmptyErrMessage.style.display = 'none'
+    fromEmptyErrMessage.style.display = 'none'
+    toEmptyErrMessage.style.display = 'none'
 
     if (activeTemplate.bodyTemplate) {
         email.variables = activeTemplate.bodyTemplate.variables
@@ -252,6 +260,11 @@ const onRemoveAddressClick = (e, addressListName) => {
     switch (addressListName) {
         case 'to':
             removeEmailTo(address)
+
+            // if there are no more addresses specified, don't display the to: text in the preview
+            if (email.to.length === 0) {
+                previewTo.innerHTML = ''
+            }
             break
         case 'cc':
             removeEmailCc(address)
@@ -324,17 +337,17 @@ const validateBeforeSend = () => {
     let passedValidation = true
 
     if (!email.subject) {
-        document.getElementById('errmsg-subject').style.display = 'block'
+        subjectEmptyErrMessage.style.display = 'block'
         passedValidation = false
     }
 
     if (!email.from) {
-        document.getElementById('errmsg-from').style.display = 'block'
+        fromEmptyErrMessage.style.display = 'block'
         passedValidation = false
     }
 
     if (email.to.length === 0) {
-        document.getElementById('errmsg-to').style.display = 'block'
+        toEmptyErrMessage.style.display = 'block'
         passedValidation = false
     }
 
@@ -389,6 +402,11 @@ subjectInput.addEventListener('input', (e) => {
 fromInput.addEventListener('input', (e) => {
     updateEmailFrom(e.target.value)
     document.getElementById('errmsg-from').style.display = 'none'
+
+    // if the input is empty, don't even display the from: text in the preview
+    if (!e.target.value) {
+        previewFrom.innerHTML = ''
+    }
 })
 
 toInput.addEventListener('keydown', (e) => {
@@ -488,4 +506,35 @@ document.querySelector('.modal-save-btn').addEventListener('click', async (e) =>
 
 document.querySelector('.modal-input').addEventListener('input', () => {
     document.getElementById('errmsg-template-name').style.display = 'none'
+})
+
+clearBtn.addEventListener('click', async (e) => {
+    await updateEmail({
+        subject: '',
+        from: '',
+        to: [],
+        cc: [],
+        bcc: [],
+        body: '',
+        bodyTemplate: '',
+        emailTemplate: '',
+        variables: {}
+    })
+    clearEmailVariables()
+
+    previewSubject.innerHTML = ''
+    previewFrom.innerHTML = ''
+    previewTo.innerHTML = ''
+    previewBody.innerHTML = ''
+
+    subjectInput.value = ''
+    fromInput.value = ''
+    toInput.value = ''
+    toAddresses.innerHTML = ''
+    ccInput.value = ''
+    ccAddresses.innerHTML = ''
+    bccInput.value = ''
+    bccAddresses.innerHTML = ''
+    window.editor.setContent('')
+    variablesContainer.innerHTML = ''
 })

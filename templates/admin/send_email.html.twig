@@ -53,6 +53,8 @@
                                     </span>
                                 </button>
                             </div>
+
+                            <button class="clear-btn">Clear</button>
                         {% endblock %}
                     {% endembed %}
                 </div>
@@ -81,8 +83,8 @@
         {% block input %}
             <div class="modal-input-container">
                 <input type="text" class="modal-input" />
-                <span class="error-message" id="errmsg-template-name">You must specify a template name!</span>
-                <span class="error-message" id="errmsg-create-error"></span>
+                <span class="error-message error-message--modal" id="errmsg-template-name">You must specify a template name!</span>
+                <span class="error-message error-message--modal" id="errmsg-create-error"></span>
                 <div class="success-msg create-template-success-msg">
                     <span>Template created!</span>
                     <span class="material-symbols-outlined">
