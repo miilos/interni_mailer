@@ -462,7 +462,7 @@ addVariableBtn.addEventListener('click', () => {
 })
 
 saveAsTemplateBtn.addEventListener('click', async () => {
-    openInputModal('Save as template', 'Enter the template name:')
+    openModal('Save as template', 'Enter the template name:')
 })
 
 document.querySelector('.modal-save-btn').addEventListener('click', async (e) => {

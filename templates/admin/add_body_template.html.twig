@@ -13,6 +13,11 @@
                         <div id="editor" class="add-template-editor template-content-editor"></div>
 
                         <div class="save-container">
+                            <button class="ask-chat-btn">
+                                <img src="{{ asset('/img/chat-logo.png') }}" alt="ChatGPT logo" />
+                                Ask chat
+                            </button>
+
                             <div class="save-format-container">
                                 <p>Save as: </p>
                                 <div class="format">
@@ -49,6 +54,18 @@
             </div>
         </div>
     </div>
+
+    {% embed 'admin/_modal.html.twig' %}
+    {% endembed %}
+
+    {% embed 'admin/_modal_ask_chat.html.twig' %}
+        {% block input %}
+            <textarea class="input-prompt"></textarea>
+            <span class="error-message error-message--modal" id="errmsg-prompt-error"></span>
+            <button class="btn btn--secondary prompt-btn">Prompt</button>
+            <span id="prompting-text">Prompting...</span>
+        {% endblock %}
+    {% endembed %}
 
     <script src="{{ asset('/scripts/bundle.js') }}" type="module"></script>
     <script src="{{ asset('/scripts/modal.js') }}"></script>

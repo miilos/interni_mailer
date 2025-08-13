@@ -6,10 +6,12 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/public/img
 /var/
 /vendor/
 /docker/.env
 /docker/mysql_data
 /node_modules
 /mjml-service/node_modules
+/openai-service/node_modules
 ###< symfony/framework-bundle ###

@@ -68,16 +68,22 @@
 .modal-title {
     font-size: 24px;
     font-weight: bold;
-    color: #333;
     margin-bottom: 20px;
     text-align: left;
 }
 
+.modal-title--classic {
+    color: #333;
+}
+
 .modal-text {
-    color: #555;
     line-height: 1.6;
     text-align: left;
     width: 100%;
+}
+
+.modal-text--classic {
+    color: #555;
 }
 
 .modal h1 {
@@ -110,4 +116,13 @@
 
 .modal-input:focus {
     outline: none;
+}
+
+.modal--chat {
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+.modal-title--chat {
+    color: #fff;
 }

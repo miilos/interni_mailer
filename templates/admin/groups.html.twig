@@ -94,9 +94,7 @@
         </div>
     </div>
 
-    {% embed '/admin/_modal.html.twig' with {
-        id: 'modalInputOverlay'
-    }%}
+    {% embed '/admin/_modal.html.twig' %}
         {% block input %}
             <div class="modal-input-container">
                 <label for="modal-group-name" class="modal-text">Group name:</label>

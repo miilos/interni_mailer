@@ -1,0 +1,11 @@
+<div class="modal-overlay modal-overlay--chat" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal modal--chat" onclick="event.stopPropagation()">
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+        <div class="modal-content">
+            <h2 class="modal-title modal-title--chat"></h2>
+            <div class="modal-text modal-text--chat">
+            </div>
+            {% block input %}{% endblock %}
+        </div>
+    </div>
+</div>

@@ -77,9 +77,7 @@
         </div>
     </div>
 
-    {% embed '/admin/_modal.html.twig' with {
-        id: 'modalInputOverlay'
-    }%}
+    {% embed '/admin/_modal.html.twig' %}
         {% block input %}
             <div class="modal-input-container">
                 <input type="text" class="modal-input" />

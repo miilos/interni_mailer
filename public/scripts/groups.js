@@ -150,6 +150,7 @@ const onRemoveFromGroupClickModal = (e) => {
     createGroupUsers = createGroupUsers.filter(curr => curr !== member.dataset.id)
 
     member.remove()
+    groupDetailsContainer.innerHTML = ''
 }
 
 const onCreateGroup = async () => {
@@ -168,7 +169,7 @@ const onCreateGroup = async () => {
         allDataEntered = false
     }
 
-    if (!allDataEntered) return
+    if (!allDataEntered) return false
 
     const res = await fetch(API_URL, {
         method: 'POST',
@@ -187,7 +188,7 @@ const onCreateGroup = async () => {
         const errorMsgEl = document.getElementById("errmsg-create-error")
         errorMsgEl.style.display = 'block'
         errorMsgEl.innerText = json.details
-        return
+        return false
     }
 
     groupContainer.insertAdjacentHTML('beforeend', `
@@ -216,6 +217,8 @@ const onCreateGroup = async () => {
 
     createGroupUsers = []
     groups.push(json.data.group)
+
+    return true
 }
 
 /**** render functions ****/
@@ -391,8 +394,10 @@ document.addEventListener('click', (e) => {
     }
 });
 
+/**** event listeners for modal elements ****/
+
 addGroupBtn.addEventListener('click', () => {
-    openInputModal('Add group', '')
+    openModal('Add group', '')
 
     // clear any values that might have been previously left in the modal
     document.getElementById('modal-group-name').value = ''
@@ -416,8 +421,11 @@ addGroupBtn.addEventListener('click', () => {
 })
 
 document.querySelector('.modal-save-btn').addEventListener('click', async (e) => {
-    await onCreateGroup()
-    closeModal()
+    const createStatus = await onCreateGroup()
+
+    if (createStatus) {
+        closeModal()
+    }
 })
 
 document.getElementById('modal-group-name').addEventListener('input', () => {

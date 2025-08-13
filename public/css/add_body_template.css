@@ -60,6 +60,59 @@
     gap: 1rem;
 }
 
+.ask-chat-btn {
+    height: 5rem;
+    padding: 0.5rem;
+    padding-right: 1.5rem;
+    border-radius: 2rem;
+    border: none;
+    background-color: #000;
+    color: #fff;
+    font-size: 1.6rem;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+}
+
+.ask-chat-btn img {
+    height: 100%;
+}
+
+.ask-chat-btn:focus {
+    outline: none;
+}
+
+.input-prompt {
+    width: 100%;
+    height: 20rem;
+    border: 1px solid #fff;
+    color: #fff;
+    border-radius: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    resize: none;
+    font-size: 1.8rem;
+    background-color: transparent;
+}
+
+.input-prompt:focus {
+    outline: none;
+}
+
+.prompt-btn {
+    margin-top: 1rem;
+}
+
+#prompting-text {
+    display: none;
+    color: #fff;
+    font-size: 1.8rem;
+    margin: 1rem;
+}
+
 .preview {
     padding: 2rem;
 }

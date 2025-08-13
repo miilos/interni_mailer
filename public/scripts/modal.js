@@ -12,51 +12,30 @@ function openModalLogs(title, td) {
 }
 
 function openModal(title, text) {
-    const overlay = document.getElementById('modalOverlay');
+    const overlay = document.querySelector(`.modal-overlay`);
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    document.querySelector('.modal-title').innerText = title
+    overlay.querySelector('.modal-title').innerText = title
 
-    document.querySelector('.modal-text').innerHTML = text
+    overlay.querySelector('.modal-text').innerHTML = text
 }
 
-function openInputModal(title, text) {
-    const overlay = document.getElementById('modalInputOverlay');
+function openChatGPTModal(title, text) {
+    const overlay = document.querySelector(`.modal-overlay--chat`);
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    document.querySelector('.modal-title').innerText = title
+    overlay.querySelector('.modal-title').innerText = title
 
-    document.querySelector('.modal-text').innerHTML = text
-
-    document.querySelectorAll('.error-message--modal').forEach(curr => {
-        curr.style.display = 'none'
-    })
+    overlay.querySelector('.modal-text').innerHTML = text
 }
 
 function closeModal(event) {
-    // assume the function is being called somewhere from the code, not as a result of some event listener
-    if (!event) {
-        const overlay = document.getElementById('modalInputOverlay');
-        overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        return
-    }
-
-    if (!event || event.target === document.getElementById('modalInputOverlay') || event.target.classList.contains('close-btn')) {
-        const overlay = document.getElementById('modalInputOverlay');
-        overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        return
-    }
-
-    if (!event || event.target === document.getElementById('modalOverlay') || event.target.classList.contains('close-btn')) {
-        const overlay = document.getElementById('modalOverlay');
-        overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        return
-    }
+    const overlays = document.querySelectorAll('.modal-overlay');
+    overlays.forEach(curr => curr.classList.remove('active'));
+    document.body.style.overflow = 'auto';
+    return
 }
 
 document.addEventListener('keydown', function(event) {
