@@ -33,6 +33,7 @@ final class MailerWorkerFailureListener
 
         $batchId = $message->getBatchId();
         $this->batchRepository->updateBatchStatus(EmailBatchStatusEnum::FAILED->value, $batchId);
+        $this->batchRepository->incrementNumFailedResends($batchId);
 
         $batch = $this->batchRepository->getBatchById($batchId);
         $emailDto = $this->objectMapper->map($batch, EmailDto::class);

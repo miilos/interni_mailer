@@ -8,6 +8,7 @@ use App\Entity\EmailBatchStatusEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Mime\Email;
 
 /**
  * @extends ServiceEntityRepository<EmailBatch>
@@ -29,6 +30,15 @@ class EmailBatchRepository extends ServiceEntityRepository
             ->setParameter('batchId', $batchId)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getFailedBatches(): array
+    {
+        return $this->createQueryBuilder('batch')
+            ->where('batch.status = :status')
+            ->setParameter('status', EmailBatchStatusEnum::FAILED->value)
+            ->getQuery()
+            ->getResult();
     }
 
     public function createBatch(string $batchId, EmailDto $emailDto): EmailBatch
@@ -62,5 +72,22 @@ class EmailBatchRepository extends ServiceEntityRepository
             ->setParameter('batchStatus', $batchStatus)
             ->getQuery()
             ->execute();
+    }
+
+    public function incrementNumFailedResends(string $batchId): EmailBatch
+    {
+        return $this->createQueryBuilder('batch')
+            ->update()
+            ->set('batch.numFailedResends', 'batch.numFailedResends + 1')
+            ->andWhere('batch.batchId = :batchId')
+            ->setParameter('batchId', $batchId)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function deleteBatch(EmailBatch $batch): void
+    {
+        $this->entityManager->remove($batch);
+        $this->entityManager->flush();
     }
 }

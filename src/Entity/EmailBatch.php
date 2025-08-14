@@ -62,6 +62,9 @@ class EmailBatch
     #[Map(target: 'emailTemplate')]
     private ?string $emailTemplate = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $numFailedResends = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -207,6 +210,18 @@ class EmailBatch
     public function setEmailTemplate(?string $emailTemplate): static
     {
         $this->emailTemplate = $emailTemplate;
+
+        return $this;
+    }
+
+    public function getNumFailedResends(): ?int
+    {
+        return $this->numFailedResends;
+    }
+
+    public function setNumFailedResends(?int $numFailedResends): static
+    {
+        $this->numFailedResends = $numFailedResends;
 
         return $this;
     }
