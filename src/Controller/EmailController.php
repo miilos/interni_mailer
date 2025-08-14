@@ -19,7 +19,6 @@ class EmailController extends AbstractController
 {
     #[Route('/api/send', methods: ['POST'])]
     public function send(
-        MessageBusInterface $messageBus,
         EmailParserService $parser,
         #[MapRequestPayload]
         EmailDto $emailDto,
@@ -39,10 +38,10 @@ class EmailController extends AbstractController
     public function sendFromTemplate(
         string $templateName,
         EmailTemplateAssemblerService $templateAssembler,
-        MessageBusInterface $messageBus,
         EmailParserService $parser,
         Request $request,
-        DecoderInterface $decoder
+        DecoderInterface $decoder,
+        EmailBatchDispatcherService $batchDispatcherService,
     ): JsonResponse
     {
         $valuesToChange = $decoder->decode($request->getContent(), 'json');
@@ -51,7 +50,7 @@ class EmailController extends AbstractController
             $templateAssembler->createEmailFromTemplate($templateName,  $valuesToChange)
         );
 
-        $messageBus->dispatch(new SendEmail($emailDto));
+        $batchDispatcherService->batchSend($emailDto);
 
         return $this->json([
             'status' => 'success',

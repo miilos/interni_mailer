@@ -65,6 +65,9 @@ class EmailBatch
     #[ORM\Column(nullable: true)]
     private ?int $numFailedResends = 0;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $error = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -222,6 +225,18 @@ class EmailBatch
     public function setNumFailedResends(?int $numFailedResends): static
     {
         $this->numFailedResends = $numFailedResends;
+
+        return $this;
+    }
+
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    public function setError(?string $error): static
+    {
+        $this->error = $error;
 
         return $this;
     }

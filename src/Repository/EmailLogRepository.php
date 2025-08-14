@@ -31,7 +31,7 @@ class EmailLogRepository extends ServiceEntityRepository
         $log->setSubject($emailLog->getSubject());
         $log->setFromAddr($emailLog->getFrom());
         $log->setToAddr($emailLog->getTo());
-        $log->setCC($emailLog->getCc());
+        $log->setCc($emailLog->getCc());
         $log->setBcc($emailLog->getBcc());
         $log->setBody($emailLog->getBody());
         $log->setStatus(EmailStatusEnum::from($emailLog->getStatus()));

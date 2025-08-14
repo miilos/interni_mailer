@@ -67,6 +67,7 @@ class EmailBatchRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('batch')
             ->update()
             ->set('batch.status', ':batchStatus')
+            ->set('batch.numFailedResends', 0)
             ->andWhere('batch.batchId = :batchId')
             ->setParameter('batchId', $batchId)
             ->setParameter('batchStatus', $batchStatus)
@@ -74,13 +75,25 @@ class EmailBatchRepository extends ServiceEntityRepository
             ->execute();
     }
 
-    public function incrementNumFailedResends(string $batchId): EmailBatch
+    public function updateFailedResends(string $batchId): int
     {
         return $this->createQueryBuilder('batch')
             ->update()
             ->set('batch.numFailedResends', 'batch.numFailedResends + 1')
             ->andWhere('batch.batchId = :batchId')
             ->setParameter('batchId', $batchId)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function updateError(string $batchId, string $error): int
+    {
+        return $this->createQueryBuilder('batch')
+            ->update()
+            ->set('batch.error', ':error')
+            ->andWhere('batch.batchId = :batchId')
+            ->setParameter('batchId', $batchId)
+            ->setParameter('error', $error)
             ->getQuery()
             ->execute();
     }

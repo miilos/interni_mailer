@@ -8,6 +8,7 @@ class EmailSenderService
 {
     public function __construct(
         private EmailBuilderService $builder,
+        private EmailLoggerService $loggerService,
     ) {}
 
     public function send(EmailDto $emailDto): void
@@ -20,5 +21,7 @@ class EmailSenderService
             ->body($emailDto->getBody())
             ->to($emailDto->getTo())
             ->send();
+
+        $this->loggerService->logSent($emailDto);
     }
 }

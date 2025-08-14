@@ -135,7 +135,6 @@ const renderTable = (logs) => {
     resetTableContent()
 
     logs.forEach(log => {
-        const formattedToAddr = formatArray(log.toAddr)
         const formattedCC = formatArray(log.cc)
         const formattedBCC = formatArray(log.bcc)
         const body = log.body
@@ -157,7 +156,7 @@ const renderTable = (logs) => {
                     <td>${log.emailId}</td>
                     <td>${log.subject}</td>
                     <td>${log.fromAddr}</td>
-                    <td class="truncate-cell" data-content="${encodeURIComponent(formattedToAddr)}" onclick="openModalLogs('All Recipient Addresses', this)">${formatEmailList(formattedToAddr)}</td>
+                    <td>${log.toAddr}</td>
                     <td class="truncate-cell" data-content="${encodeURIComponent(formattedCC)}" onclick="openModalLogs('All CC Addresses', this)">${formatEmailList(formattedCC)}</td>
                     <td class="truncate-cell" data-content="${encodeURIComponent(formattedBCC)}" onclick="openModalLogs('All BCC Addresses', this)">${formatEmailList(formattedBCC)}</td>
                     <td class="truncate-cell" data-content="${encodeURIComponent(body)}" onclick="openModalLogs('Full Email Body', this)">View body</td>

@@ -9,7 +9,7 @@ class EmailLogDto
     private ?string $emailTemplate;
     private string $subject;
     private string $from;
-    private array $to;
+    private string $to;
     private array $cc;
     private array $bcc;
     private string $body;
@@ -19,6 +19,7 @@ class EmailLogDto
 
     public function __construct (
         EmailDto $emailDto,
+        string $to,
         string $status,
         ?string $error = null,
     ) {
@@ -27,7 +28,7 @@ class EmailLogDto
         $this->emailTemplate = $emailDto->getEmailTemplate();
         $this->subject = $emailDto->getSubject();
         $this->from = $emailDto->getFrom();
-        $this->to = $emailDto->getTo();
+        $this->to = $to;
         $this->cc = $emailDto->getCc();
         $this->bcc = $emailDto->getBcc();
         $this->body = $emailDto->getBody();
@@ -51,7 +52,7 @@ class EmailLogDto
         return $this->from;
     }
 
-    public function getTo(): array
+    public function getTo(): string
     {
         return $this->to;
     }
