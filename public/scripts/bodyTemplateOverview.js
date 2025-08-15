@@ -1,4 +1,8 @@
-import { fetchAndRenderBodyTemplates, attachBodyTemplateEventListeners } from './bodyTemplateUtils.js'
+import {
+    fetchAndRenderBodyTemplates,
+    attachBodyTemplateEventListeners,
+    attachDeleteEventListener
+} from './bodyTemplateUtils.js'
 import * as utils from './emailDataUtils.js'
 
 const API_URL = '/api/email-body'
@@ -24,17 +28,6 @@ let templates = []
 
 // the currently selected template
 let activeTemplate = null
-
-/**** data fetching ****/
-
-const fetchTemplates = async () => {
-    const name = templateNameInput.value || ''
-
-    const res = await fetch(API_URL+`?name=${name}`)
-    const json = await res.json()
-
-    return json.data.templates
-}
 
 /**** click listener function ****/
 
@@ -145,44 +138,6 @@ const clearTemplateView = () => {
     container.classList.add('template-variables--hidden')
 }
 
-const renderTemplates = () => {
-    clearTemplateView()
-
-    templates.forEach(template => {
-        // the 2 formats are: html.twig and mjml.html,
-        // so the .html extensions need to be removed
-        // when displaying the template info
-        let extension = template.extension
-
-        switch (extension) {
-            case 'html.twig':
-                extension = extension.split('.')[1]
-                break
-            case 'mjml.html':
-                extension = extension.split('.')[0]
-                break
-            default:
-                break
-        }
-
-        templateContainer.insertAdjacentHTML('beforeend',
-            `
-                <div class="template">
-                    <h3 class="template-title">${template.name}</h3>
-                    <p class="template-format template-format--${extension}">${extension !== 'twig' ? extension.toUpperCase() : extension.charAt(0).toUpperCase()+extension.slice(1)}</p>
-                    <span class="material-symbols-outlined template-delete-icon">
-                        delete
-                    </span>
-                </div>
-            `);
-    })
-
-    document.querySelectorAll('.template').forEach(curr => {
-        curr.addEventListener('click', onTemplateResultClick)
-        curr.querySelector('.template-delete-icon').addEventListener('click', onDeleteTemplate)
-    })
-}
-
 const renderChangelog = () => {
     changelogEntriesContainer.innerHTML = ''
 
@@ -214,11 +169,6 @@ const renderChangelog = () => {
 }
 
 /**** util functions ****/
-
-const fetchAndRenderTemplates = async () => {
-    templates = await fetchTemplates()
-    renderTemplates()
-}
 
 const formatExtension = (extension) => {
     let formattedExtension = extension
@@ -343,19 +293,23 @@ const formatDiffText = (diff) => {
 /**** event listeners ****/
 
 window.addEventListener('load', async (e) => {
-    await fetchAndRenderTemplates()
+    templates = await fetchAndRenderBodyTemplates(API_URL, true)
+    attachBodyTemplateEventListeners(onTemplateResultClick)
+    attachDeleteEventListener(onDeleteTemplate)
 })
 
 templateNameInput.addEventListener('keydown', async (e) => {
     if (e.key === 'Enter') {
-        templateContainer.innerHTML = ''
-        await fetchAndRenderTemplates()
+        await fetchAndRenderBodyTemplates(API_URL, true)
+        attachBodyTemplateEventListeners(onTemplateResultClick)
+        attachDeleteEventListener(onDeleteTemplate)
     }
 });
 
 searchBtn.addEventListener('click', async (e) => {
-    templateContainer.innerHTML = ''
-    await fetchAndRenderTemplates()
+    await fetchAndRenderBodyTemplates(API_URL, true)
+    attachBodyTemplateEventListeners(onTemplateResultClick)
+    attachDeleteEventListener(onDeleteTemplate)
 })
 
 testSendBtn.addEventListener('click', async (e) => {

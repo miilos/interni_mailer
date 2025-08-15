@@ -72,4 +72,14 @@ class EmailTemplateController extends AbstractController
             ]
         ], context: ['groups' => 'basicTemplateData']);
     }
+
+    #[Route('/api/templates/{id}', methods: ['DELETE'])]
+    public function deleteTemplate(
+        EmailTemplate $template,
+    ): JsonResponse
+    {
+        $this->emailTemplateRepository->deleteTemplate($template);
+
+        return $this->json([], 204);
+    }
 }

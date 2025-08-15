@@ -15,7 +15,7 @@ const fetchTemplates = async (apiUrl) => {
 
 /**** render functions ****/
 
-const renderTemplates = (templates) => {
+const renderTemplates = (templates, includeDeleteIcon) => {
     clearTemplateResults()
 
     templates.forEach(template => {
@@ -23,6 +23,7 @@ const renderTemplates = (templates) => {
             <div class="template">
                 <h3 class="template-title">${template.name}</h3>
                 ${template.bodyTemplateName ? `<p class="body-template-name">Body template: ${template.bodyTemplateName}</p>` : ''}
+                ${includeDeleteIcon ? '<span class="material-symbols-outlined template-delete-icon">delete</span>' : ''}
             </div>
         `)
     })
@@ -36,14 +37,20 @@ const clearTemplateResults = () => {
 
 /**** export functions ****/
 
-export const fetchAndRenderEmailTemplates = async (apiUrl) => {
+export const fetchAndRenderEmailTemplates = async (apiUrl, includeDeleteIcon = false) => {
     const templates = await fetchTemplates(apiUrl)
-    renderTemplates(templates)
+    renderTemplates(templates, includeDeleteIcon)
     return templates
 }
 
 export const attachEmailTemplateEventListeners = (listenerFn) => {
     templatesContainer.querySelectorAll('.template').forEach(curr => {
+        curr.addEventListener('click', listenerFn)
+    })
+}
+
+export const attachOnDeleteEventListeners = (listenerFn) => {
+    document.querySelectorAll('.template-delete-icon').forEach(curr => {
         curr.addEventListener('click', listenerFn)
     })
 }

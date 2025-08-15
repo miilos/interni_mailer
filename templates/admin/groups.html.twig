@@ -96,7 +96,6 @@
 
     {% embed '/admin/_modal.html.twig' %}
         {% block input %}
-            <div class="modal-input-container">
                 <label for="modal-group-name" class="modal-text">Group name:</label>
                 <input type="text" class="modal-input" id="modal-group-name" />
                 <span class="error-message error-message--modal" id="errmsg-group-name">You must specify a group name!</span>
@@ -125,7 +124,6 @@
                     </span>
                 </div>
                 <button class="btn btn--primary modal-save-btn">Create group</button>
-            </div>
         {% endblock %}
     {% endembed %}
 

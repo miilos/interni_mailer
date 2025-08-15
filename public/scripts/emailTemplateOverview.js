@@ -1,4 +1,4 @@
-import { fetchAndRenderEmailTemplates, attachEmailTemplateEventListeners } from './emailTemplateUtils.js'
+import { fetchAndRenderEmailTemplates, attachEmailTemplateEventListeners, attachOnDeleteEventListeners } from './emailTemplateUtils.js'
 import * as utils from './emailDataUtils.js'
 
 const API_URL = '/api/templates'
@@ -39,6 +39,8 @@ const fetchBodyTemplates = async () => {
 /**** event listeners for dynamically generated content ****/
 
 const onSearchResultClick = (e) => {
+    if (e.target.classList.contains('template-delete-icon')) return
+
     const parent = e.target.closest('.template')
     const name = parent.querySelector('.template-title').innerText
     const template = templates.find(curr => curr.name === name)
@@ -94,6 +96,27 @@ const onAddAddress = (e, addressListName) => {
                 break
         }
     }
+}
+
+const onDeleteTemplate = async (e) => {
+    const parent = e.target.closest('.template')
+    const name = parent.querySelector('.template-title').innerText
+    const template = templates.find(template => template.name === name)
+
+    const res = await fetch(API_URL+`/${template.id}`, {
+        method: 'DELETE'
+    })
+
+    if (!res.ok) {
+        const json = await res.json()
+        openModal('Error', json.details)
+        return
+    }
+
+    templates = templates.filter(curr => curr.id != template.id)
+
+    parent.remove()
+    clearData()
 }
 
 /**** render functions ****/
@@ -155,8 +178,9 @@ const getUpdateData = () => {
 
 const search = async () => {
     clearData()
-    templates = await fetchAndRenderEmailTemplates(API_URL)
+    templates = await fetchAndRenderEmailTemplates(API_URL, true)
     attachEmailTemplateEventListeners(onSearchResultClick)
+    attachOnDeleteEventListeners(onDeleteTemplate)
 }
 
 const clearData = () => {
@@ -179,8 +203,9 @@ const clearData = () => {
 /**** event listeners ****/
 
 window.addEventListener('load', async (e) => {
-    templates = await fetchAndRenderEmailTemplates(API_URL)
+    templates = await fetchAndRenderEmailTemplates(API_URL, true)
     attachEmailTemplateEventListeners(onSearchResultClick)
+    attachOnDeleteEventListeners(onDeleteTemplate)
     await fetchAndRenderBodyTemplateSelectOptions()
 })
 

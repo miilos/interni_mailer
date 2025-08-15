@@ -34,6 +34,15 @@ class EmailTemplateRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getTemplatesWithBodyTemplateId(int $bodyTemplateId): array
+    {
+        return $this->createQueryBuilder('template')
+            ->where('template.bodyTemplate = :bodyTemplateId')
+            ->setParameter('bodyTemplateId', $bodyTemplateId)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function buildSearch(EmailTemplateSearchCriteria $criteria): QueryBuilder
     {
         $qb = $this->createQueryBuilder('template')
@@ -74,5 +83,22 @@ class EmailTemplateRepository extends ServiceEntityRepository
 
         $this->entityManager->flush();
         return $emailTemplate;
+    }
+
+    public function deleteTemplatesWithBodyTemplateId(int $bodyTemplateId): void
+    {
+        $templates = $this->getTemplatesWithBodyTemplateId($bodyTemplateId);
+
+        foreach ($templates as $template) {
+            $this->entityManager->remove($template);
+        }
+
+        $this->entityManager->flush();
+    }
+
+    public function deleteTemplate(EmailTemplate $emailTemplate): void
+    {
+        $this->entityManager->remove($emailTemplate);
+        $this->entityManager->flush();
     }
 }

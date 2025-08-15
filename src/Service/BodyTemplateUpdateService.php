@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\EmailBody;
 use App\Message\UpdateBodyTemplateChangelog;
 use App\Repository\EmailBodyRepository;
+use App\Repository\EmailTemplateRepository;
 use App\Service\EmailParser\BodyParser\BodyParserService;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -15,6 +16,7 @@ class BodyTemplateUpdateService
         private DiffService $diffService,
         private MessageBusInterface $messageBus,
         private EmailBodyRepository $emailBodyRepository,
+        private EmailTemplateRepository $emailTemplateRepository,
     ) {}
 
     public function updateTemplate(EmailBody $body, array $newData): ?EmailBody {
@@ -49,5 +51,13 @@ class BodyTemplateUpdateService
         );
 
         return $newBody;
+    }
+
+    public function deleteBodyTemplate(EmailBody $body): void
+    {
+        // whenever a body template is deleted, also delete every email template that uses this body template
+        $this->emailTemplateRepository->deleteTemplatesWithBodyTemplateId($body->getId());
+
+        $this->emailBodyRepository->deleteBodyTemplate($body);
     }
 }

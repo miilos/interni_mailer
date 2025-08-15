@@ -64,7 +64,6 @@ class EmailBodyController extends AbstractController
     #[Route('/api/email-body/{id}', methods: ['PATCH'])]
     public function updateBodyTemplate(
         EmailBody $body,
-        EmailBodyRepository $emailBodyRepository,
         DecoderInterface $decoder,
         Request $request,
         BodyTemplateUpdateService  $bodyTemplateUpdateService
@@ -86,15 +85,12 @@ class EmailBodyController extends AbstractController
     #[Route('/api/email-body/{id}', methods: ['DELETE'])]
     public function deleteBodyTemplate(
         EmailBody $body,
-        EmailBodyRepository $emailBodyRepository
+        BodyTemplateUpdateService $bodyTemplateUpdateService
     ): JsonResponse
     {
-        $emailBodyRepository->deleteBodyTemplate($body);
+        $bodyTemplateUpdateService->deleteBodyTemplate($body);
 
-        return $this->json([
-            'status' => 'success',
-            'message' => 'Email body template deleted successfully!',
-        ], 204);
+        return $this->json([], 204);
     }
 
     // called when the 'Test send' button is clicked on the frontend

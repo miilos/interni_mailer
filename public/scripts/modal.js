@@ -19,6 +19,23 @@ function openModal(title, text) {
     overlay.querySelector('.modal-title').innerText = title
 
     overlay.querySelector('.modal-text').innerHTML = text
+
+    const inputContainer = overlay.querySelector('.modal-input-container')
+    if (inputContainer) {
+        inputContainer.style.display = 'flex'
+    }
+}
+
+function openModalWithoutInputBlock(title, text) {
+    const overlay = document.querySelector(`.modal-overlay`);
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    overlay.querySelector('.modal-title').innerText = title
+
+    overlay.querySelector('.modal-text').innerHTML = text
+
+    overlay.querySelector('.modal-input-container').style.display = 'none'
 }
 
 function openChatGPTModal(title, text) {

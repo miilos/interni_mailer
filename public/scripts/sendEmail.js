@@ -467,6 +467,16 @@ saveAsTemplateBtn.addEventListener('click', async () => {
 
 document.querySelector('.modal-save-btn').addEventListener('click', async (e) => {
     const templateName = document.querySelector('.modal-input').value
+    const newTemplate = {
+        name: templateName,
+        subject: email.subject,
+        from: email.from,
+        to: email.to,
+        cc: email.cc,
+        bcc: email.bcc,
+        body: email.body,
+        bodyTemplateName: email.bodyTemplate
+    }
 
     if (!templateName) {
         document.getElementById('errmsg-template-name').style.display = 'block'
@@ -478,16 +488,7 @@ document.querySelector('.modal-save-btn').addEventListener('click', async (e) =>
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            name: templateName,
-            subject: email.subject,
-            from: email.from,
-            to: email.to,
-            cc: email.cc,
-            bcc: email.bcc,
-            body: email.body,
-            bodyTemplateName: email.bodyTemplate
-        })
+        body: JSON.stringify(newTemplate)
     })
     const json = await res.json()
 
@@ -502,6 +503,9 @@ document.querySelector('.modal-save-btn').addEventListener('click', async (e) =>
         document.querySelector('.create-template-success-msg').style.display = 'none';
         closeModal()
     }, 2000)
+
+    templates = await fetchAndRenderEmailTemplates(API_URL)
+    attachEmailTemplateEventListeners(onSearchResultClick)
 })
 
 document.querySelector('.modal-input').addEventListener('input', () => {

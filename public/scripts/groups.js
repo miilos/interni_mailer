@@ -116,7 +116,7 @@ const onAddUserToGroupBtnClick = async (e) => {
     const json = await res.json()
 
     if (!res.ok) {
-        openModal('Error!', json.message)
+        openModalWithoutInputBlock('Error!', json.message)
         return
     }
 
@@ -134,7 +134,7 @@ const onDeleteGroup = async (e) => {
     })
 
     groupEl.remove()
-    clearGroupResults()
+    groupDetailsContainer.innerHTML = ''
 }
 
 const onAddUserToGroupBtnClickModal = (e) => {

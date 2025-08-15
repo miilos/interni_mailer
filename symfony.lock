@@ -153,6 +153,18 @@
             "config/packages/messenger.yaml"
         ]
     },
+    "symfony/monolog-bundle": {
+        "version": "3.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.7",
+            "ref": "aff23899c4440dd995907613c1dd709b6f59503f"
+        },
+        "files": [
+            "config/packages/monolog.yaml"
+        ]
+    },
     "symfony/property-info": {
         "version": "7.3",
         "recipe": {
@@ -226,18 +238,6 @@
         },
         "files": [
             "config/packages/validator.yaml"
-        ]
-    },
-    "symfony/webhook": {
-        "version": "7.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "7.3",
-            "ref": "b70844963dc84e9a99b94ae552efe691d74b087f"
-        },
-        "files": [
-            "config/routes/webhook.yaml"
         ]
     }
 }

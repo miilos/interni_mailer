@@ -9,12 +9,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\ObjectMapper\Attribute\Map;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 #[ORM\Entity(repositoryClass: EmailTemplateRepository::class)]
 #[UniqueEntity(fields: ['name'], message: 'That template name is already in use!')]
 #[Map(target: EmailDto::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt')]
 class EmailTemplate
 {
+
+    use SoftDeleteableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

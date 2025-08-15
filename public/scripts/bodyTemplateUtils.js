@@ -15,7 +15,7 @@ const fetchTemplates = async (apiUrl) => {
 
 /**** render functions ****/
 
-const renderBodyTemplates = (templates) => {
+const renderBodyTemplates = (templates, includeDeleteIcon) => {
     clearTemplateResults()
 
     templates.forEach(template => {
@@ -39,7 +39,8 @@ const renderBodyTemplates = (templates) => {
             `
                 <div class="template body-template">
                     <h3 class="template-title">${template.name}</h3>
-                    <p class="template-format template-format--${extension}">${extension !== 'twig' ? extension.toUpperCase() : extension.charAt(0).toUpperCase()+extension.slice(1)}</p>
+                    <p class="template-format template-format--${extension}">${extension !== 'twig' ? extension.toUpperCase() : extension.charAt(0).toUpperCase() + extension.slice(1)}</p>
+                    ${includeDeleteIcon ? '<span class="material-symbols-outlined template-delete-icon">delete</span>' : ''}
                 </div>
             `);
     })
@@ -53,14 +54,20 @@ const clearTemplateResults = () => {
 
 /**** export functions ****/
 
-export const fetchAndRenderBodyTemplates = async (apiUrl) => {
+export const fetchAndRenderBodyTemplates = async (apiUrl, includeDeleteIcon = false) => {
     const templates = await fetchTemplates(apiUrl)
-    renderBodyTemplates(templates)
+    renderBodyTemplates(templates, includeDeleteIcon)
     return templates
 }
 
 export const attachBodyTemplateEventListeners = (listenerFn) => {
     document.querySelectorAll('.body-template').forEach(curr => {
+        curr.addEventListener('click', listenerFn)
+    })
+}
+
+export const attachDeleteEventListener = (listenerFn) => {
+    document.querySelectorAll('.template-delete-icon').forEach(curr => {
         curr.addEventListener('click', listenerFn)
     })
 }
