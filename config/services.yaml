@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    mailgun_webhook_key: '%env(MAILGUN_WEBHOOK_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -24,13 +25,24 @@ services:
         arguments:
             $rootDir: '%kernel.project_dir%'
 
+    App\Service\WebhookParser\MailgunWebhookParserService:
+        arguments:
+            $webhookKey: '%mailgun_webhook_key%'
+
     _instanceof:
         App\Service\EmailParser\BodyParser\BodyParserInterface:
             tags: ['body.parser']
+        App\Service\WebhookParser\WebhookParserInterface:
+            tags: ['webhook.parser']
 
     App\Service\EmailParser\BodyParser\BodyParserService:
         arguments:
             $parsers: !tagged_iterator body.parser
+
+    App\Service\WebhookParser\WebhookParserService:
+        arguments:
+            $parsers: !tagged_iterator webhook.parser
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

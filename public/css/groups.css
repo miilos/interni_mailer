@@ -116,24 +116,6 @@
     align-self: start;
 }
 
-.remove-from-group-btn {
-    font-size: 1.5rem;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 1rem;
-    border: 1px solid #000;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.remove-from-group-btn:hover {
-    color: var(--color-error-primary);
-    border: 1px solid var(--color-error-primary);
-    background-color: var(--color-error-secondary);
-}
-
 .add-members-search-bar {
     display: flex;
     gap: 1rem;
@@ -153,21 +135,6 @@
 .add-members-search-results--modal {
     background-color: #fff;
     width: 40rem;
-}
-
-.add-to-group-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 0.5rem;
-    cursor: pointer;
-    padding: 0.7rem;
-    border-radius: 50%;
-}
-
-.add-to-group-btn:hover {
-    background-color: var(--color-success-secondary);
-    color: var(--color-success-primary);
 }
 
 .modal-group-members {

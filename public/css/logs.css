@@ -51,6 +51,16 @@
     color: var(--color-error-primary);
 }
 
+.status--delivered {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.status--opened {
+    background-color: var(--color-opened-secondary);
+    color: var(--color-opened-primary);
+}
+
 .truncate-cell {
     max-width: 170px;
     overflow: hidden;

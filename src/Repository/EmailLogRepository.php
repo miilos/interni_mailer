@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Dto\EmailLogDto;
 use App\Dto\SearchCriteria\LogSearchCriteria;
+use App\Dto\WebhookDto;
 use App\Entity\EmailLog;
 use App\Entity\EmailStatusEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -87,5 +88,25 @@ class EmailLogRepository extends ServiceEntityRepository
         $qb->addOrderBy('log.'.$criteria->getSortBy(), $criteria->getSortDirection());
 
         return $qb;
+    }
+
+    public function updateStatusFromWebhook(WebhookDto $webhookDto): int
+    {
+        $qb = $this->createQueryBuilder('log')
+            ->update()
+            ->set('log.status', ':status')
+            ->setParameter('status', EmailStatusEnum::from($webhookDto->getEvent()));
+
+        if ($webhookDto->getError()) {
+            $qb->set('log.error', ':error')
+                ->setParameter('error', $webhookDto->getError());
+        }
+
+        $qb->andWhere('log.emailId LIKE :emailId')
+            ->setParameter('emailId', '%'.$webhookDto->getEmailId().'%')
+            ->andWhere('log.toAddr LIKE :recipient')
+            ->setParameter('recipient', '%'.$webhookDto->getRecipient().'%');
+
+        return $qb->getQuery()->execute();
     }
 }

@@ -29,11 +29,6 @@
     align-items: center;
 }
 
-.template-search-btn {
-    padding: 0.5rem 0.7rem;
-    font-size: 1.5rem;
-}
-
 .body-templates-container,
 .email-templates-container {
     border-top: 1px solid #878c94;
@@ -103,30 +98,6 @@
 .template-delete-icon:hover {
     color: var(--color-error-primary);
     background-color: var(--color-error-secondary);
-}
-
-.add-btn {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    width: 5rem;
-    height: 5rem;
-    border-radius: 50%;
-    background-color: var(--color-primary);
-    text-decoration: none;
-    color: #fff;
-    font-size: 5rem;
-    box-shadow: 0 0 12px 2px rgba(0, 0, 0, 0.3);
-    transition: 0.3s;
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.add-btn:hover {
-    background-color: var(--color-primary-hover);
 }
 
 .template-content-container {

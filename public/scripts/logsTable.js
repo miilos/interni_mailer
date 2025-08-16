@@ -140,13 +140,7 @@ const renderTable = (logs) => {
         const body = log.body
         const error = log.error || ''
 
-        let statusEl = ''
-        if (log.status === 'sent') {
-            statusEl = `<span class="status status--sent">${log.status.toUpperCase()}</span>`
-        }
-        else {
-            statusEl = `<span class="status status--failed">${log.status.toUpperCase()}</span>`
-        }
+        let statusEl = `<span class="status status--${log.status}">${log.status.toUpperCase()}</span>`
 
         const tbody = table.querySelector('tbody')
         tbody.insertAdjacentHTML('beforeend',

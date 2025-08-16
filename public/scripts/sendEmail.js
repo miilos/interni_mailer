@@ -442,7 +442,7 @@ sendBtn.addEventListener('click', async () => {
     const json = await res.json()
 
     if (!res.ok) {
-        openModal('Error', json.details)
+        openModalWithoutInputBlock('Error', json.details)
         return
     }
 

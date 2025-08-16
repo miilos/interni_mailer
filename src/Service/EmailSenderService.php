@@ -14,6 +14,7 @@ class EmailSenderService
     public function send(EmailDto $emailDto): void
     {
         $this->builder
+            ->headerId($emailDto->getId())
             ->subject($emailDto->getSubject())
             ->from($emailDto->getFrom())
             ->cc($emailDto->getCc())

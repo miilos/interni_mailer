@@ -7,6 +7,7 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class EmailBuilderService
 {
+    private string $headerId = '';
     private string $subject = '';
     private string $from = '';
     private array $to = [];
@@ -17,6 +18,13 @@ class EmailBuilderService
     public function __construct(
         private MailerInterface $mailer
     ) {}
+
+    public function headerId(string $id): static
+    {
+        $this->headerId = $id;
+
+        return $this;
+    }
 
     public function subject(string $subject): static
     {
@@ -78,6 +86,12 @@ class EmailBuilderService
                 $email->cc(...$this->cc);
                 $email->bcc(...$this->bcc);
             }
+
+            // add the id in the header so that the email status can later be updated from webhooks
+            $email->getHeaders()
+                ->addHeader('X-Internal-Email-Id', $this->headerId)
+                // added because mailgun strips headers not beginning with X-Mailgun-* for security reasons
+                ->addHeader('X-Mailgun-Internal-Email-Id', $this->headerId);
 
             $this->mailer->send($email);
 
