@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Faker\Core\DateTime;
 
 /**
  * @extends ServiceEntityRepository<EmailLog>
@@ -108,5 +109,54 @@ class EmailLogRepository extends ServiceEntityRepository
             ->setParameter('recipient', '%'.$webhookDto->getRecipient().'%');
 
         return $qb->getQuery()->execute();
+    }
+
+    public function getTotalEmails(string $period): int
+    {
+        return $this->createQueryBuilder('log')
+            ->select('COUNT(log.id)')
+            ->andWhere('log.loggedAt > :date')
+            ->setParameter('date', new \DateTime('-1'.$period))
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function calculateNumEmailsByStatus(string $period): array
+    {
+        return $this->createQueryBuilder('log')
+            ->select('COUNT(log.id) as count, log.status')
+            ->andWhere('log.loggedAt > :date')
+            ->setParameter('date', new \DateTime('-1'.$period))
+            ->groupBy('log.status')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getMostUsedEmailTemplates(string $period): array
+    {
+        return $this->createQueryBuilder('log')
+            ->select('log.emailTemplate as templateName, COUNT(log.emailTemplate) as count')
+            ->andWhere('LENGTH(log.emailTemplate) > 0')
+            ->andWhere('log.loggedAt > :date')
+            ->setParameter('date', new \DateTime('-1'.$period))
+            ->groupBy('log.emailTemplate')
+            ->addOrderBy('count', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getMostUsedBodyTemplates(string $period): array
+    {
+        return $this->createQueryBuilder('log')
+            ->select('log.bodyTemplate as templateName, COUNT(log.bodyTemplate) as count')
+            ->andWhere('LENGTH(log.bodyTemplate) > 0')
+            ->andWhere('log.loggedAt > :date')
+            ->setParameter('date', new \DateTime('-1'.$period))
+            ->groupBy('log.bodyTemplate')
+            ->addOrderBy('count', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="login-container">
+            <div class="login template_overview-container">
+                <h1 class="template_overview-title">Login</h1>
+
+                <div class="login-input-data">
+                    <div class="login-input-container">
+                        <label class="send-input-label" for="email">Email</label>
+                        <input type="text" class="send-input send-input--login" id="email" />
+                        <span class="error-message" id="errmsg-email">You need to enter your email!</span>
+                    </div>
+
+                    <div class="login-input-container">
+                        <label class="send-input-label" for="password">Password</label>
+                        <input type="password" class="send-input send-input--login" id="password" />
+                        <span class="error-message" id="errmsg-password">You need to enter your password!</span>
+                    </div>
+
+                    <button class="btn btn--primary login-btn">Log in</button>
+
+                    <span class="error-message" id="errmsg-login"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('scripts/login.js') }}"></script>
+{% endblock %}

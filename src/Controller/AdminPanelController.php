@@ -8,6 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminPanelController extends AbstractController
 {
+    #[Route('/login', name: 'login')]
+    public function login(): Response
+    {
+        return $this->render('login.html.twig');
+    }
+
     #[Route('/', name: 'send_email')]
     public function sendEmail(): Response
     {
@@ -42,5 +48,11 @@ class AdminPanelController extends AbstractController
     public function groups(): Response
     {
         return $this->render('admin/groups.html.twig');
+    }
+
+    #[Route('/admin/statistics', name: 'statistics')]
+    public function statistics(): Response
+    {
+        return $this->render('admin/statistics.html.twig');
     }
 }

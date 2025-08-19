@@ -10,6 +10,8 @@
 @import "add_body_template.css";
 @import "email_template_overview.css";
 @import "groups.css";
+@import "login.css";
+@import "stats.css";
 
 * {
     margin: 0;
@@ -22,6 +24,7 @@
 
     --color-primary: #2862f7;
     --color-primary-hover: #174bcf;
+    --color-primary-dark: #204095;
     --color-primary-light: #d5e1fd;
     --color-success-primary: #2d6708;
     --color-success-secondary: #d9f4d5;

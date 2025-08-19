@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="stats-content-container">
+            <div class="stat stats-period-select-container">
+                <p class="period-select-text">Select stats for last: </p>
+                <select class="period-select">
+                    <option value="day">day</option>
+                    <option value="week">week</option>
+                    <option value="month">month</option>
+                </select>
+            </div>
+
+            <div class="stat num-sent-container">
+                <h2 class="stat-title">Number of emails sent:</h2>
+                <h1 class="num-sent">42</h1>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat status-overview">
+                    <h2 class="stat-title">Email status overview</h2>
+
+                    <div class="status-container">
+                        <div class="status-container-statuses">
+                            <!--
+                            <div class="status-text">
+                                <p class="status-nums">
+                                    <span class="status status--sent">SENT</span> - <b>29</b> sent (<b>12</b>%)
+                                </p>
+                            </div>
+                            <div class="status-text">
+                                <p class="status-nums">
+                                    <span class="status status--failed">FAILED</span> - <b>29</b> sent (<b>12</b>%)
+                                </p>
+                            </div>
+                            <div class="status-text">
+                                <p class="status-nums">
+                                    <span class="status status--delivered">DELIVERED</span> - <b>29</b> sent (<b>12</b>%)
+                                </p>
+                            </div>
+                            <div class="status-text">
+                                <p class="status-nums">
+                                    <span class="status status--opened">OPENED</span> - <b>29</b> sent (<b>12</b>%)
+                                </p>
+                            </div>
+                            -->
+                        </div>
+
+                        <div class="status-container-chart">
+                            <div class="chart">
+                                <!--
+                                <div class="chart-column chart-column--sent">SENT</div>
+                                <div class="chart-column chart-column--failed">FAILED</div>
+                                <div class="chart-column chart-column--delivered">DELIVERED</div>
+                                <div class="chart-column chart-column--opened">OPENED</div>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="most-used-templates-container">
+                <div class="stat most-used-email-templates-container">
+                    <h2 class="stat-title">Most used email templates</h2>
+
+                    <div class="most-used-templates most-used-email-templates">
+                        <!--
+                        <div class="most-used-template">
+                            <p class="most-used-template-number">1.</p>
+                            <p class="most-used-template-name">Template</p>
+                            <p class="most-used-template-usage">Used <span>12</span> times</p>
+                        </div>
+                        -->
+                    </div>
+                </div>
+                <div class="stat most-used-body-templates-container">
+                    <h2 class="stat-title">Most used body templates</h2>
+
+                    <div class="most-used-templates most-used-body-templates">
+                        <!--
+                        <div class="most-used-template">
+                            <p class="most-used-template-number">1.</p>
+                            <p class="most-used-template-name">Template (<span class="template-num-usages">12</span>)</p>
+                            <p class="template-format template-format--twig">Twig</p>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('scripts/stats.js') }}"></script>
+{% endblock %}
