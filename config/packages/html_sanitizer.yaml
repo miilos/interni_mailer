@@ -3,29 +3,8 @@ framework:
         sanitizers:
             default:
                 allow_safe_elements: true
-                allowed_css_properties:
-                    - color
-                    - background-color
-                    - font
-                    - font-family
-                    - font-size
-                    - font-style
-                    - font-weight
-                    - text-align
-                    - text-decoration
-                    - text-transform
-                    - line-height
-                    - letter-spacing
-                    - word-spacing
-                    - width
-                    - height
-                    - margin
-                    - margin-top
-                    - margin-bottom
-                    - margin-left
-                    - margin-right
-                    - padding
-                    - padding-top
-                    - padding-bottom
-                    - padding-left
-                    - padding-right
+                allow_static_elements: true
+                allow_attributes:
+                    '*': ['style']
+                with_attribute_sanitizers:
+                    - App\Sanitizer\StyleAttributeSanitizer

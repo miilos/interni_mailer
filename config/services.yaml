@@ -43,6 +43,35 @@ services:
         arguments:
             $parsers: !tagged_iterator webhook.parser
 
+    App\Sanitizer\StyleAttributeSanitizer:
+        arguments:
+            $allowedProperties:
+                - color
+                - background-color
+                - font
+                - font-family
+                - font-size
+                - font-style
+                - font-weight
+                - text-align
+                - text-decoration
+                - text-transform
+                - line-height
+                - letter-spacing
+                - word-spacing
+                - width
+                - height
+                - margin
+                - margin-top
+                - margin-bottom
+                - margin-left
+                - margin-right
+                - padding
+                - padding-top
+                - padding-bottom
+                - padding-left
+                - padding-right
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

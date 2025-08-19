@@ -2,20 +2,17 @@
 
 namespace App\Service\EmailParser\BodyParser;
 
-use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
-use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 class BodyParserService
 {
     private iterable $parsers;
-    private HtmlSanitizer $sanitizer;
+    private HtmlSanitizerInterface $sanitizer;
 
-    public function __construct(iterable $parsers)
+    public function __construct(iterable $parsers, HtmlSanitizerInterface $sanitizer)
     {
         $this->parsers = $parsers;
-        $this->sanitizer = new HtmlSanitizer(
-            (new HtmlSanitizerConfig())->allowSafeElements()
-        );
+        $this->sanitizer = $sanitizer;
     }
 
     private function sanitizeTemplate(string $template): string
@@ -28,7 +25,7 @@ class BodyParserService
         foreach ($this->parsers as $parser) {
             if ($parser->supports($extension)) {
                 $parsedTemplate = $parser->parseTemplate($templateContent, $variables);
-                $sanitizedTemplate = $this->sanitizer->sanitize($parsedTemplate);
+                $sanitizedTemplate = $this->sanitizeTemplate($parsedTemplate);
                 return $sanitizedTemplate;
             }
         }

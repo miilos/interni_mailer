@@ -7,6 +7,7 @@ use App\Entity\EmailBodyChangelog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 /**
@@ -16,7 +17,7 @@ class EmailBodyChangelogRepository extends ServiceEntityRepository
 {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, ObjectMapperInterface $objectMapper)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, EmailBodyChangelog::class);
         $this->entityManager = $entityManager;
