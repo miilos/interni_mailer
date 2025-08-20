@@ -18,12 +18,12 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function getUsersFromList(array $emails): array
+    public function getUsersFromList(array $ids): array
     {
         $users = [];
 
-        foreach ($emails as $email) {
-            $user = $this->getUserById($email);
+        foreach ($ids as $id) {
+            $user = $this->getUserById($id);
 
             if ($user) {
                 $users[] = $user;
@@ -40,6 +40,18 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getUsersByEmail(string $email): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.email LIKE :email')
+            ->setParameter('email', '%'.$email.'%')
+            ->getQuery()
+            ->getResult();
     }
 
     public function buildSearch(UserSearchCriteria $criteria): QueryBuilder

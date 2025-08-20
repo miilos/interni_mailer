@@ -5,6 +5,7 @@ import * as utils from './emailDataUtils.js'
 const API_URL = '/api/templates'
 const PARSE_API_URL = '/api/email-body/render'
 const BODY_TEMPLATES_URL = '/api/email-body'
+const SEARCH_API_URL = '/api/search/addresses'
 
 /**** containers ****/
 
@@ -42,6 +43,11 @@ const previewBody = document.querySelector('.preview-body')
 const subjectEmptyErrMessage = document.getElementById('errmsg-subject')
 const fromEmptyErrMessage = document.getElementById('errmsg-from')
 const toEmptyErrMessage = document.getElementById('errmsg-to')
+
+const userSearchResults = document.querySelector('.user-search-results')
+let users = []
+let userSearchTimeout
+let currActiveUserResult = -1
 
 let templates = []
 let bodyTemplates = []
@@ -174,7 +180,14 @@ const fetchRenderedEmailBody = async (body) => {
     return json.data.body
 }
 
-/**** click listener functions for dynamically generated content & elements that share the same listener ****/
+const fetchUsers = async (query) => {
+    const res = await fetch(`${SEARCH_API_URL}?email=${query}`)
+    const json = await res.json()
+
+    return json.data.results
+}
+
+/**** listener functions for dynamically generated content & elements that share the same listener ****/
 
 const onSearchResultClick = async (e) => {
     const parent = e.target.closest('.template')
@@ -231,6 +244,9 @@ const addAddressElement = (e, addressListName) => {
         document.getElementById('errmsg-to').style.display = 'none'
 
         const address = e.target.value
+
+        if (!address) return
+
         const parent = e.target.closest('.send-input-container')
         const addressContainer = parent.querySelector('.address-container')
 
@@ -287,6 +303,16 @@ const onVariableChange = async (e) => {
     previewBody.innerHTML = renderedBody
 }
 
+const onUserResultClick = (e) => {
+    const parent = e.target.closest('.member')
+    const address = parent.querySelector('.member-address').innerText
+
+    utils.renderAddress(address, toAddresses, 'to', onRemoveAddressClick)
+    toInput.value = ''
+    userSearchResults.style.display = 'none'
+    updateEmailTo(address)
+}
+
 /**** render functions ****/
 
 const renderEmailTemplate = () => {
@@ -327,6 +353,22 @@ const renderVariables = () => {
     })
 }
 
+const renderUserResults = (users) => {
+    users.forEach(user => {
+        userSearchResults.insertAdjacentHTML('beforeend', `
+            <div class="member member--send-result">
+                <div class="member-pfp"></div>
+                <h4 class="member-name">${user.name}</h4>
+                <p class="member-address">${user.address}</p>
+            </div>
+        `)
+    })
+
+    document.querySelectorAll('.member--send-result').forEach(curr => {
+        curr.addEventListener('click', onUserResultClick)
+    })
+}
+
 /**** util functions ****/
 
 const formatAddressList = (addresses) => {
@@ -358,6 +400,19 @@ const clearVariableContainer = () => {
     variablesContainer.innerHTML = ''
 }
 
+const showUserResluts = async (query) => {
+    if (!query) {
+        userSearchResults.style.display = 'none'
+        userSearchResults.innerHTML = ''
+        return
+    }
+
+    users = await fetchUsers(query)
+    userSearchResults.style.display = 'block'
+    userSearchResults.innerHTML = ''
+    renderUserResults(users)
+}
+
 /**** event listeners ****/
 
 window.addEventListener('load', async () => {
@@ -366,6 +421,13 @@ window.addEventListener('load', async () => {
 
     bodyTemplates = await fetchAndRenderBodyTemplates(BODY_TEMPLATES_URL)
     attachBodyTemplateEventListeners(onBodyTemplateResultClick)
+})
+
+window.addEventListener('click', (e) => {
+    // if the user clicks outside of the search results while they're shown, hide them
+    if (userSearchResults.style.display !== 'none' && !e.target.classList.contains('user-search-results')) {
+        userSearchResults.style.display = 'none'
+    }
 })
 
 emailTemplateNameInput.addEventListener('keydown', async (e) => {
@@ -409,8 +471,13 @@ fromInput.addEventListener('input', (e) => {
     }
 })
 
-toInput.addEventListener('keydown', (e) => {
+toInput.addEventListener('keydown', async (e) => {
     addAddressElement(e, 'to')
+
+    clearTimeout(userSearchTimeout)
+    userSearchTimeout = setTimeout(() => {
+        showUserResluts(e.target.value)
+    }, 300)
 })
 
 ccInput.addEventListener('keydown', (e) => {
@@ -535,6 +602,7 @@ clearBtn.addEventListener('click', async (e) => {
     fromInput.value = ''
     toInput.value = ''
     toAddresses.innerHTML = ''
+    userSearchResults.style.display = 'none'
     ccInput.value = ''
     ccAddresses.innerHTML = ''
     bccInput.value = ''

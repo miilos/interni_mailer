@@ -51,6 +51,18 @@ class GroupRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return Group[]
+     */
+    public function getGroupsByAddress(string $address): array
+    {
+        return $this->createQueryBuilder('g')
+            ->where('g.address LIKE :address')
+            ->setParameter('address', '%'.$address.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function buildSearch(GroupSearchCriteria $criteria): QueryBuilder
     {
         $qb = $this->createQueryBuilder('g');
