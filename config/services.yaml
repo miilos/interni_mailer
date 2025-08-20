@@ -5,6 +5,53 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     mailgun_webhook_key: '%env(MAILGUN_WEBHOOK_KEY)%'
+    sanitizer_allowed_properties:
+        - color
+        - background-color
+        - font
+        - font-family
+        - font-size
+        - font-style
+        - font-weight
+        - text-align
+        - text-decoration
+        - text-transform
+        - line-height
+        - letter-spacing
+        - word-spacing
+        - width
+        - height
+        - margin
+        - margin-top
+        - margin-bottom
+        - margin-left
+        - margin-right
+        - padding
+        - padding-top
+        - padding-bottom
+        - padding-left
+        - padding-right
+        - position
+        - top
+        - bottom
+        - left
+        - right
+        - border
+        - border-top
+        - border-bottom
+        - border-left
+        - border-right
+        - border-radius
+        - background
+        - background-image
+        - background-position
+        - background-repeat
+        - background-size
+        - border-collapse
+        - border-spacing
+        - vertical-align
+        - text-indent
+        - white-space
 
 services:
     # default configuration for services in *this* file
@@ -45,33 +92,12 @@ services:
 
     App\Sanitizer\StyleAttributeSanitizer:
         arguments:
-            $allowedProperties:
-                - color
-                - background-color
-                - font
-                - font-family
-                - font-size
-                - font-style
-                - font-weight
-                - text-align
-                - text-decoration
-                - text-transform
-                - line-height
-                - letter-spacing
-                - word-spacing
-                - width
-                - height
-                - margin
-                - margin-top
-                - margin-bottom
-                - margin-left
-                - margin-right
-                - padding
-                - padding-top
-                - padding-bottom
-                - padding-left
-                - padding-right
+            $allowedProperties: '%sanitizer_allowed_properties%'
 
+
+    App\Service\CssSanitizerService:
+        arguments:
+            $allowedProperties: '%sanitizer_allowed_properties%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

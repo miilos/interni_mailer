@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2921dfcc13f8009e6b5cf50e4646b262",
+    "content-hash": "2754c60154ad03d0592f772f7dfe5449",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2949,6 +2949,79 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.0"
             },
             "time": "2025-06-25T14:20:11+00:00"
+        },
+        {
+            "name": "sabberworm/php-css-parser",
+            "version": "v9.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MyIntervals/PHP-CSS-Parser.git",
+                "reference": "54574e3de2f8cdc91175ffd2337e5c6804a7d729"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MyIntervals/PHP-CSS-Parser/zipball/54574e3de2f8cdc91175ffd2337e5c6804a7d729",
+                "reference": "54574e3de2f8cdc91175ffd2337e5c6804a7d729",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "php": "^7.2.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "1.4.0",
+                "phpstan/extension-installer": "1.4.3",
+                "phpstan/phpstan": "1.12.28 || 2.1.19",
+                "phpstan/phpstan-phpunit": "1.4.2 || 2.0.7",
+                "phpstan/phpstan-strict-rules": "1.6.2 || 2.0.6",
+                "phpunit/phpunit": "8.5.42",
+                "rawr/phpunit-data-provider": "3.3.1",
+                "rector/rector": "1.2.10 || 2.1.2",
+                "rector/type-perfect": "1.0.0 || 2.1.0"
+            },
+            "suggest": {
+                "ext-mbstring": "for parsing UTF-8 CSS"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "9.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sabberworm\\CSS\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raphael Schweikert"
+                },
+                {
+                    "name": "Oliver Klee",
+                    "email": "github@oliverklee.de"
+                },
+                {
+                    "name": "Jake Hotson",
+                    "email": "jake.github@qzdesign.co.uk"
+                }
+            ],
+            "description": "Parser for CSS Files written in PHP",
+            "homepage": "https://www.sabberworm.com/blog/2010/6/10/php-css-parser",
+            "keywords": [
+                "css",
+                "parser",
+                "stylesheet"
+            ],
+            "support": {
+                "issues": "https://github.com/MyIntervals/PHP-CSS-Parser/issues",
+                "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v9.0.0"
+            },
+            "time": "2025-07-27T07:24:01+00:00"
         },
         {
             "name": "sebastian/diff",
