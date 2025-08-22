@@ -25,7 +25,8 @@ class EmailController extends AbstractController
         EmailBatchDispatcherService $batchDispatcherService,
     ): JsonResponse
     {
-        $emailDto = $parser->parse($emailDto);
+        $emailDto->setId(bin2hex(random_bytes(8)));
+
         $batchDispatcherService->batchSend($emailDto);
 
         return $this->json([

@@ -68,6 +68,9 @@ class EmailBatch
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $error = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $variables = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -237,6 +240,18 @@ class EmailBatch
     public function setError(?string $error): static
     {
         $this->error = $error;
+
+        return $this;
+    }
+
+    public function getVariables(): ?array
+    {
+        return $this->variables;
+    }
+
+    public function setVariables(?array $variables): static
+    {
+        $this->variables = $variables;
 
         return $this;
     }

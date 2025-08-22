@@ -56,6 +56,7 @@ class EmailBatchRepository extends ServiceEntityRepository
         $batch->setDispatchedAt(new \DateTimeImmutable());
         $batch->setBodyTemplate($emailDto->getBodyTemplate());
         $batch->setEmailTemplate($emailDto->getEmailTemplate());
+        $batch->setVariables($emailDto->getVariables());
 
         $this->entityManager->persist($batch);
         $this->entityManager->flush();

@@ -130,7 +130,7 @@ const onChangelogCellClick = (e) => {
 /**** render functions ****/
 
 const clearTemplateView = () => {
-    window.editor.setContent('Select a template to see the code...')
+    window.editor.setContent('')
     templateViewContainer.innerHTML = ''
 
     // hide variables container

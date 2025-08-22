@@ -18,8 +18,6 @@ class EmailParserService
 
     public function parse(EmailDto $emailDto): EmailDto
     {
-        $emailDto->setId(bin2hex(random_bytes(8)));
-
         $emailDto->setSubject(
             $this->variableParser->parseVariables($emailDto->getSubject())
         );
