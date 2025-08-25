@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Dto\EmailDto;
 use App\Message\SendEmail;
+use App\Message\SendSdkEmail;
 use App\Repository\EmailBatchRepository;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,6 +20,8 @@ class EmailBatchDispatcherService
 
     public function batchSend(EmailDto $emailDto): void
     {
+        $emailDto->setId(Uuid::uuid4()->toString());
+
         $batches = array_chunk($emailDto->getTo(), self::BATCH_SIZE);
 
         foreach ($batches as $batch) {

@@ -19,14 +19,11 @@ class EmailController extends AbstractController
 {
     #[Route('/api/send', methods: ['POST'])]
     public function send(
-        EmailParserService $parser,
         #[MapRequestPayload]
         EmailDto $emailDto,
         EmailBatchDispatcherService $batchDispatcherService,
     ): JsonResponse
     {
-        $emailDto->setId(bin2hex(random_bytes(8)));
-
         $batchDispatcherService->batchSend($emailDto);
 
         return $this->json([

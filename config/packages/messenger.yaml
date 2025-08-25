@@ -8,20 +8,34 @@ framework:
             # async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
-            email: '%env(MESSENGER_TRANSPORT_DSN)%'
-            file: '%env(MESSENGER_TRANSPORT_DSN)%'
-            log: '%env(MESSENGER_TRANSPORT_DSN)%'
-            changelog: '%env(MESSENGER_TRANSPORT_DSN)%'
-            webhook: '%env(MESSENGER_TRANSPORT_DSN)%'
+            api_messages:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: messages
+                        type: fanout
+                    queues:
+                        messages:
+            sdk_messages:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: sdk_messages
+                        type: fanout
+                    queues:
+                        sdk_email:
+                serializer: App\Messenger\SdkMessageSerializer
+
 
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
-            'App\Message\SendEmail': email
-            'App\Message\CreateBodyTemplateFile': file
-            'App\Message\LogEmail': log
-            'App\Message\UpdateBodyTemplateChangelog': changelog
-            'App\Message\UpdateEmailStatusFromWebhook': webhook
+            'App\Message\SendEmail': api_messages
+            'App\Message\CreateBodyTemplateFile': api_messages
+            'App\Message\LogEmail': api_messages
+            'App\Message\UpdateBodyTemplateChangelog': api_messages
+            'App\Message\UpdateEmailStatusFromWebhook': api_messages
+            'App\Message\SendSdkEmail': sdk_messages
 
 # when@test:
 #    framework:
