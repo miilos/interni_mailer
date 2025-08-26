@@ -22,7 +22,7 @@ class EmailBodyNotNullValidator extends ConstraintValidator
         }
 
         if ($value instanceof EmailDto) {
-            if (!$value->getBody() && !$value->getBodyTemplate()) {
+            if (!$value->getBody() && !$value->getBodyTemplate() && !$value->getEmailTemplate()) {
                 $this->context
                     ->buildViolation($constraint->message)
                     ->addViolation();

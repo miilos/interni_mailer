@@ -4,8 +4,7 @@ namespace App\Service\EmailParser;
 
 use App\Dto\EmailDto;
 use App\Service\EmailParser\BodyParser\BodyParserService;
-use App\Service\EmailParser\BodyParser\MjmlBodyParserService;
-use App\Service\EmailParser\BodyParser\TwigBodyParserService;
+use App\Service\EmailTemplateAssemblerService;
 
 class EmailParserService
 {
@@ -14,10 +13,15 @@ class EmailParserService
         private EmailBodyTemplateResolverService $bodyTemplateResolver,
         private GroupResolverService $groupResolver,
         private BodyParserService $bodyParser,
+        private EmailTemplateParserService $emailTemplateParser,
     ) {}
 
     public function parse(EmailDto $emailDto): EmailDto
     {
+        if ($emailDto->getEmailTemplate()) {
+            $emailDto = $this->emailTemplateParser->parse($emailDto);
+        }
+
         $emailDto->setSubject(
             $this->variableParser->parseVariables($emailDto->getSubject())
         );

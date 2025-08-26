@@ -44,7 +44,7 @@ class EmailBatch
     #[Map(target: 'bcc')]
     private array $bcc = [];
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Map(target: 'body')]
     private ?string $body = null;
 
@@ -165,7 +165,7 @@ class EmailBatch
         return $this->body;
     }
 
-    public function setBody(string $body): static
+    public function setBody(?string $body): static
     {
         $this->body = $body;
 
