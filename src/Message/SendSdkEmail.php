@@ -9,8 +9,8 @@ class SendSdkEmail
     private string $id;
 
     public function __construct(
-        private string $subject,
-        private string $from,
+        private ?string $subject = null,
+        private ?string $from = null,
         private array $to = [],
         private array $cc = [],
         private array $bcc = [],
@@ -27,22 +27,22 @@ class SendSdkEmail
         return $this->id;
     }
 
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
 
-    public function setSubject(string $subject): void
+    public function setSubject(?string $subject): void
     {
         $this->subject = $subject;
     }
 
-    public function getFrom(): string
+    public function getFrom(): ?string
     {
         return $this->from;
     }
 
-    public function setFrom(string $from): void
+    public function setFrom(?string $from): void
     {
         $this->from = $from;
     }
@@ -77,12 +77,12 @@ class SendSdkEmail
         $this->bcc = $bcc;
     }
 
-    public function getBody(): string
+    public function getBody(): ?string
     {
         return $this->body;
     }
 
-    public function setBody(string $body): void
+    public function setBody(?string $body): void
     {
         $this->body = $body;
     }

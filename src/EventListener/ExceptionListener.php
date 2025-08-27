@@ -2,14 +2,15 @@
 
 namespace App\EventListener;
 
-use App\Service\EmailParser\BodyParser\ParserException;
-use App\Service\EmailParser\BodyParser\UnsupportedTemplateFormatException;
+use App\Service\EmailParser\Exception\ParserException;
+use App\Service\EmailParser\Exception\UnsupportedTemplateFormatException;
 use App\Service\GroupManager\GroupManagerException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 #[AsEventListener]
@@ -21,6 +22,7 @@ final class ExceptionListener
 
         $error = match ($e::class) {
             BadRequestException::class => $this->getResponse($e, 'Bad data in request!', Response::HTTP_BAD_REQUEST),
+            UnprocessableEntityHttpException::class => $this->getResponse($e, 'Validation error!', Response::HTTP_BAD_REQUEST),
             ParserException::class,
             GroupManagerException::class,
             UnsupportedTemplateFormatException::class,
@@ -37,7 +39,7 @@ final class ExceptionListener
         return new JsonResponse([
             'status' => 'fail',
             'message' => $message,
-            'details' => $exception::class . ' ' . $exception->getMessage(),
+            'details' => $exception::class . ': ' . $exception->getMessage(),
         ], $statusCode);
     }
 }

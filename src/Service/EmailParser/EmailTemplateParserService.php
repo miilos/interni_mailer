@@ -5,6 +5,7 @@ namespace App\Service\EmailParser;
 use App\Dto\EmailDto;
 use App\Entity\EmailTemplate;
 use App\Repository\EmailTemplateRepository;
+use App\Service\EmailParser\Exception\ParserException;
 
 class EmailTemplateParserService
 {
@@ -19,6 +20,10 @@ class EmailTemplateParserService
     public function parse(EmailDto $emailDto): EmailDto
     {
         $template = $this->getTemplate($emailDto->getEmailTemplate());
+
+        if (!$template) {
+            throw new ParserException("Email template '{$emailDto->getEmailTemplate()}' not found!", 404);
+        }
 
         $emailDto->setSubject(
             $this->setProperty($emailDto->getSubject(), $template->getSubject())
@@ -42,22 +47,26 @@ class EmailTemplateParserService
             $this->setProperty($emailDto->getBodyTemplate(), $template->getBodyTemplateName())
         );
 
-        // if the email template uses a body template, copy it's variables into the dto
-        // so they can be parsed later
-        if ($template->getBodyTemplateName()) {
+        // if the email template uses a body template and the dto doesn't already contain a body template,
+        // copy it's variables into the dto so they can be parsed later
+        if ($template->getBodyTemplateName() && !$emailDto->getBodyTemplate()) {
             $emailDto->setVariables($template->getBodyTemplate()->getVariables());
         }
 
         return $emailDto;
     }
 
-    private function getTemplate(string $templateName): EmailTemplate
+    private function getTemplate(string $templateName): ?EmailTemplate
     {
         return $this->emailTemplateRepository->findOneBy(['name' => $templateName]);
     }
 
     private function setProperty(mixed $emailDtoProp, mixed $emailTemplateProp): mixed
     {
+        if (is_array($emailDtoProp) && is_array($emailTemplateProp)) {
+            return count($emailDtoProp) > 0 ? $emailDtoProp : $emailTemplateProp;
+        }
+
         return $emailDtoProp ?? $emailTemplateProp;
     }
 }

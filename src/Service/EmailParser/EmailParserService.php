@@ -4,7 +4,6 @@ namespace App\Service\EmailParser;
 
 use App\Dto\EmailDto;
 use App\Service\EmailParser\BodyParser\BodyParserService;
-use App\Service\EmailTemplateAssemblerService;
 
 class EmailParserService
 {
@@ -13,30 +12,32 @@ class EmailParserService
         private EmailBodyTemplateResolverService $bodyTemplateResolver,
         private GroupResolverService $groupResolver,
         private BodyParserService $bodyParser,
-        private EmailTemplateParserService $emailTemplateParser,
     ) {}
 
     public function parse(EmailDto $emailDto): EmailDto
     {
-        if ($emailDto->getEmailTemplate()) {
-            $emailDto = $this->emailTemplateParser->parse($emailDto);
-        }
-
         $emailDto->setSubject(
             $this->variableParser->parseVariables($emailDto->getSubject())
         );
 
-        if ($emailDto->getBodyTemplate() && !$emailDto->getBody()) {
+        if (
+            ($emailDto->getBodyTemplate() && !$emailDto->getBody()) ||
+            ($emailDto->getBodyTemplate() && $emailDto->getEmailTemplate())
+        ) {
             $template = $this->bodyTemplateResolver->resolve($emailDto->getBodyTemplate());
             $body = $template->getContent();
-            $body = $this->bodyParser->parse($body, $template->getExtension(), $template->getVariables());
+
+            $variables = $this->combineVariableArrays($template->getVariables(), $emailDto->getVariables());
+
+            $body = $this->bodyParser->parse($body, $template->getExtension(), $variables);
 
             $emailDto->setBody($body);
         }
-
-        $emailDto->setBody(
-            $this->bodyParser->parse($emailDto->getBody(), 'html.twig', $emailDto->getVariables())
-        );
+        else {
+            $emailDto->setBody(
+                $this->bodyParser->parse($emailDto->getBody(), 'html.twig', $emailDto->getVariables())
+            );
+        }
 
         $emailDto->setBody(
             $this->variableParser->parseVariables($emailDto->getBody())
@@ -47,5 +48,22 @@ class EmailParserService
         );
 
         return $emailDto;
+    }
+
+    // allow the user to specify one or all of the variables from the body template to override
+    private function combineVariableArrays(array $templateVariables, array $dtoVariables): array
+    {
+        $variables = [];
+
+        foreach ($templateVariables as $key => $value) {
+            if (array_key_exists($key, $dtoVariables)) {
+                $variables[$key] = $dtoVariables[$key];
+                continue;
+            }
+
+            $variables[$key] = $value;
+        }
+
+        return $variables;
     }
 }

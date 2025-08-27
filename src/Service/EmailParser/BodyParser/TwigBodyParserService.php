@@ -2,10 +2,8 @@
 
 namespace App\Service\EmailParser\BodyParser;
 
-use App\Service\EmailParser\BodyParser\BodyParserInterface;
-use App\Service\EmailParser\BodyParser\MjmlBodyParserService;
+use App\Service\EmailParser\Exception\ParserException;
 use App\Service\EmailParser\TwigContextBuilderService;
-use Symfony\Bundle\TwigBundle\DependencyInjection\TwigExtension;
 use Twig\Environment;
 use Twig\Error\SyntaxError;
 use Twig\Extension\SandboxExtension;

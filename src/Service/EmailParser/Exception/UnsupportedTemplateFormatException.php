@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\EmailParser\BodyParser;
+namespace App\Service\EmailParser\Exception;
 
 class UnsupportedTemplateFormatException extends \Exception
 {

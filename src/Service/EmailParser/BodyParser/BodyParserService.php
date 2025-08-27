@@ -3,6 +3,7 @@
 namespace App\Service\EmailParser\BodyParser;
 
 use App\Service\CssSanitizerService;
+use App\Service\EmailParser\Exception\UnsupportedTemplateFormatException;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 class BodyParserService
