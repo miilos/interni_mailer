@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form action="{{ path('login_check') }}" method="POST" class="login-from-link-form">
+        <input type="hidden" name="expires" value="{{ expires }}">
+        <input type="hidden" name="user" value="{{ user }}">
+        <input type="hidden" name="hash" value="{{ hash }}">
+
+        <button type="submit" class="btn btn--secondary login-btn">Log in</button>
+    </form>
+{% endblock %}

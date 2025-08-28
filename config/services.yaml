@@ -94,7 +94,6 @@ services:
         arguments:
             $allowedProperties: '%sanitizer_allowed_properties%'
 
-
     App\Service\CssSanitizerService:
         arguments:
             $allowedProperties: '%sanitizer_allowed_properties%'

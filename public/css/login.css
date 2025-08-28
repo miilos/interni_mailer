@@ -1,5 +1,4 @@
 .login-container {
-    width: 100vw;
     height: 90vh;
 
     display: flex;
@@ -9,7 +8,7 @@
 
 .login {
     width: 30%;
-    height: 50%;
+    height: min-content;
 }
 
 .login-input-data {
@@ -27,4 +26,19 @@
 .send-input--login {
     color: #000;
     border-bottom: 1px solid var(--color-primary);
+    width: 100%;
+}
+
+/**** confirm login page styles ****/
+
+.login-from-link-form {
+    width: 40%;
+    height: 20rem;
+    margin: 4rem auto;
+    background-color: var(--color-primary);
+    border-radius: 2.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

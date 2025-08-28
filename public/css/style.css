@@ -48,6 +48,10 @@ body {
 
 .nav {
     background-color: var(--color-primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .nav-list {
@@ -68,6 +72,28 @@ body {
     color: #fff;
 }
 
+.user-container {
+    color: #fff;
+    margin-right: 2rem;
+
+    display: flex;
+    gap: 2rem;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.logout-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 0 1rem;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
 /**** pagination styles ****/
 
 .pagination-controls {
@@ -77,6 +103,15 @@ body {
     align-items: center;
     justify-content: center;
     gap: 2rem;
+}
+
+.success-message {
+    color: var(--color-success-primary);
+    background-color: var(--color-success-secondary);
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    width: max-content;
+    display: none;
 }
 
 .error-message {

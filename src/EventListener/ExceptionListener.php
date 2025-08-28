@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
@@ -23,6 +24,7 @@ final class ExceptionListener
         $error = match ($e::class) {
             BadRequestException::class => $this->getResponse($e, 'Bad data in request!', Response::HTTP_BAD_REQUEST),
             UnprocessableEntityHttpException::class => $this->getResponse($e, 'Validation error!', Response::HTTP_BAD_REQUEST),
+            NotFoundHttpException::class => $this->getResponse($e, $e->getMessage(), Response::HTTP_NOT_FOUND),
             ParserException::class,
             GroupManagerException::class,
             UnsupportedTemplateFormatException::class,
