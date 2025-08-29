@@ -44,7 +44,10 @@
         "symfony/serializer": "7.3.*",
         "symfony/twig-bundle": "7.3.*",
         "symfony/validator": "7.3.*",
-        "symfony/yaml": "7.3.*"
+        "symfony/yaml": "7.3.*",
+        "web-auth/webauthn-lib": "^5.2",
+        "web-auth/webauthn-stimulus": "^5.2",
+        "web-auth/webauthn-symfony-bundle": "^5.2"
     },
     "config": {
         "allow-plugins": {

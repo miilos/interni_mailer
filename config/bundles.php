@@ -11,4 +11,7 @@ return [
     NotFloran\MjmlBundle\MjmlBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
+    Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
+    Webauthn\Bundle\WebauthnBundle::class => ['all' => true],
+    Webauthn\Stimulus\WebauthnStimulusBundle::class => ['all' => true],
 ];

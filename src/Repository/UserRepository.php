@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Dto\SearchCriteria\UserSearchCriteria;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,9 +14,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, User::class);
+        $this->entityManager = $entityManager;
     }
 
     public function getUsersFromList(array $ids): array
@@ -79,5 +83,17 @@ class UserRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+    public function saveUser(User $user): void
+    {
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    public function removeUser(User $user): void
+    {
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
     }
 }

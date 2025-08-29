@@ -217,6 +217,19 @@
             "src/Schedule.php"
         ]
     },
+    "symfony/security-bundle": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+            "ref": "2ae08430db28c8eb4476605894296c82a642028f"
+        },
+        "files": [
+            "config/packages/security.yaml",
+            "config/routes/security.yaml"
+        ]
+    },
     "symfony/translation": {
         "version": "7.3",
         "recipe": {
@@ -243,6 +256,15 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/uid": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.0",
+            "ref": "0df5844274d871b37fc3816c57a768ffc60a43a5"
+        }
+    },
     "symfony/validator": {
         "version": "7.3",
         "recipe": {
@@ -253,6 +275,22 @@
         },
         "files": [
             "config/packages/validator.yaml"
+        ]
+    },
+    "web-auth/webauthn-stimulus": {
+        "version": "5.2.2"
+    },
+    "web-auth/webauthn-symfony-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "a5dff33bd46575bea263af94069650af7742dcb6"
+        },
+        "files": [
+            "config/packages/webauthn.yaml",
+            "config/routes/webauthn_routes.yaml"
         ]
     }
 }
