@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WebauthnCredentialSourceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Uid\Uuid;
 use Webauthn\PublicKeyCredentialSource;
 use Webauthn\TrustPath\TrustPath;
@@ -12,14 +13,9 @@ use Webauthn\TrustPath\TrustPath;
 class WebauthnCredentialSource extends PublicKeyCredentialSource
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    private ?string $id = null;
 
     public function __construct(
         string $publicKeyCredentialId,
@@ -37,6 +33,8 @@ class WebauthnCredentialSource extends PublicKeyCredentialSource
         ?bool $uvInitialized = null
     )
     {
+        $this->id = Ulid::generate();
+
         parent::__construct(
             $publicKeyCredentialId,
             $type,
@@ -52,5 +50,10 @@ class WebauthnCredentialSource extends PublicKeyCredentialSource
             $backupStatus,
             $uvInitialized
         );
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 }

@@ -19,7 +19,18 @@
             <a class="nav-list-link" href="{{ path('statistics') }}">Statistics</a>
         </li>
         <li class="nav-list-item">
-            <a class="nav-list-link" href="{{ path('add_user') }}">Add users</a>
+            <a class="nav-list-link" href="{{ path('create_user') }}">Add users</a>
         </li>
     </ul>
+
+    {% if app.user %}
+        <div class="user-container">
+            <span class="user-name">{{ app.user.email }}</span>
+            <a href="/logout" class="account-link">Log out</a>
+        </div>
+    {% else %}
+        <div class="user-container">
+            <a href="/login" class="account-link">Log in</a>
+        </div>
+    {% endif %}
 </nav>

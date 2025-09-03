@@ -94,10 +94,14 @@ services:
         arguments:
             $allowedProperties: '%sanitizer_allowed_properties%'
 
-
     App\Service\CssSanitizerService:
         arguments:
             $allowedProperties: '%sanitizer_allowed_properties%'
+
+    App\Repository\WebauthnCredentialSourceRepository:
+        public: true
+        autowire: true
+        autoconfigure: true
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

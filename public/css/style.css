@@ -12,6 +12,7 @@
 @import "groups.css";
 @import "login.css";
 @import "stats.css";
+@import "create_user.css";
 
 * {
     margin: 0;
@@ -48,6 +49,10 @@ body {
 
 .nav {
     background-color: var(--color-primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .nav-list {
@@ -66,6 +71,28 @@ body {
 .nav-list-link {
     text-decoration: none;
     color: #fff;
+}
+
+.user-container {
+    color: #fff;
+    margin-right: 2rem;
+
+    display: flex;
+    gap: 2rem;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.account-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 0 1rem;
+}
+
+.account-link:hover {
+    text-decoration: underline;
 }
 
 /**** pagination styles ****/

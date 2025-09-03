@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add a user{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="create-user-form-container">
+            <h1 class="create-user-form-title">Create a new user</h1>
+
+            {{ form_start(registrationForm) }}
+
+                {{ form_row(registrationForm.username, {'row_attr': {'class': 'send-input-container'}}) }}
+                {{ form_row(registrationForm.firstname, {'row_attr': {'class': 'send-input-container'}}) }}
+                {{ form_row(registrationForm.lastname, {'row_attr': {'class': 'send-input-container'}}) }}
+                {{ form_row(registrationForm.email, {'row_attr': {'class': 'send-input-container'}}) }}
+                {{ form_row(registrationForm.roles, {'row_attr': {'class': 'send-input-container'}}) }}
+
+                <div class="create-user-form-btns">
+                    <button type="submit" class="btn btn--secondary create-user-form-btn">Create user</button>
+                </div>
+
+                {% for message in app.flashes('success') %}
+                    <span class="form-success">
+                        {{ message }}
+                    </span>
+                {% endfor %}
+
+
+            {{ form_end(registrationForm) }}
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const flashes = document.querySelectorAll('.form-success');
+            flashes.forEach(flash => {
+                setTimeout(() => {
+                    flash.remove()
+                }, 3000);
+            });
+        });
+    </script>
+
+{% endblock %}

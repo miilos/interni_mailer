@@ -1,33 +1,23 @@
 {
-  "name": "www",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "webpack --mode=production",
-    "dev": "webpack --mode=development",
-    "watch": "webpack --mode=development --watch"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@codemirror/state": "^6.0.0",
-    "@codemirror/view": "^6.0.0",
-    "@codemirror/language": "^6.0.0",
-    "@codemirror/commands": "^6.0.0",
-    "@codemirror/autocomplete": "^6.0.0",
-    "@codemirror/basic-setup": "^0.20.0",
-    "@codemirror/lang-html": "^6.0.0",
-    "@codemirror/theme-one-dark": "^6.0.0"
-  },
-  "devDependencies": {
-    "@hotwired/stimulus": "^3.0.0",
-    "@simplewebauthn/browser": "^13.0.0",
-    "@web-auth/webauthn-stimulus": "file:vendor/web-auth/webauthn-stimulus/assets",
-    "css-loader": "^6.0.0",
-    "style-loader": "^3.0.0",
-    "webpack": "^5.0.0",
-    "webpack-cli": "^5.0.0"
-  }
+    "devDependencies": {
+        "@babel/core": "^7.17.0",
+        "@babel/preset-env": "^7.16.0",
+        "@hotwired/stimulus": "^3.0.0",
+        "@simplewebauthn/browser": "^13.0.0",
+        "@symfony/stimulus-bridge": "^3.2.0 || ^4.0.0",
+        "@symfony/webpack-encore": "^5.2.0",
+        "@web-auth/webauthn-stimulus": "file:vendor/web-auth/webauthn-stimulus/assets",
+        "core-js": "^3.38.0",
+        "regenerator-runtime": "^0.13.9",
+        "webpack": "^5.74.0",
+        "webpack-cli": "^5.1.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
+    }
 }

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Set up a passkey{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="passkey-setup-container">
+            <h1 class="passkey-setup-title">Set up a passkey</h1>
+
+            <div class="passkey-btn-container">
+                {{ form_start(form, {
+                    attr: {
+                        ...stimulus_controller('@web-auth/webauthn-stimulus', {
+                            usernameField: form.email.vars.full_name,
+                            creationSuccessRedirectUri: path('send_email'),
+                            creationResultUrl: path('webauthn.controller.security.main.creation.result'),
+                            creationOptionsUrl: path('webauthn.controller.security.main.creation.options'),
+                        }).toArray
+                    }
+                }) }}
+
+                    <button {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }} class="btn btn--secondary create-user-form-btn" type="button">
+                        Set up passkey
+                    </button>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Dto\SearchCriteria\UserSearchCriteria;
+use App\Dto\UserDto;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,6 +59,14 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getAllEmails(): array
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.email')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function buildSearch(UserSearchCriteria $criteria): QueryBuilder
     {
         $qb = $this->createQueryBuilder('user');
@@ -83,6 +92,31 @@ class UserRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+    public function getLastUserId(): ?int
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user.id')
+            ->addOrderBy('user.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function createUser(UserDto $userDto): User
+    {
+        $user = new User();
+
+        $user->setUsername($userDto->getUsername());
+        $user->setEmail($userDto->getEmail());
+        $user->setFirstName($userDto->getFirstName());
+        $user->setLastName($userDto->getLastName());
+        $user->setRoles($userDto->getRoles());
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+        return $user;
     }
 
     public function saveUser(User $user): void

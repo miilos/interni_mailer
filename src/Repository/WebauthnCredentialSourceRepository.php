@@ -5,23 +5,28 @@ namespace App\Repository;
 use App\Entity\WebauthnCredentialSource;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Webauthn\Bundle\Repository\DoctrineCredentialSourceRepository;
+use Psr\Log\LoggerInterface;
+use Webauthn\Bundle\Repository\CanSaveCredentialSource;
+use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepositoryInterface;
 use Webauthn\PublicKeyCredentialSource;
+use Webauthn\PublicKeyCredentialUserEntity;
 
 /**
  * @extends ServiceEntityRepository<WebauthnCredentialSource>
  */
-class WebauthnCredentialSourceRepository extends DoctrineCredentialSourceRepository
+class WebauthnCredentialSourceRepository extends ServiceEntityRepository implements PublicKeyCredentialSourceRepositoryInterface, CanSaveCredentialSource
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
     {
         parent::__construct($registry, WebauthnCredentialSource::class);
     }
 
     public function saveCredentialSource(PublicKeyCredentialSource $publicKeyCredentialSource): void
     {
+        $credential = null;
+
         if (!$publicKeyCredentialSource instanceof WebauthnCredentialSource) {
-            $publicKeyCredentialSource = new WebauthnCredentialSource(
+            $credential = new WebauthnCredentialSource(
                 $publicKeyCredentialSource->publicKeyCredentialId,
                 $publicKeyCredentialSource->type,
                 $publicKeyCredentialSource->transports,
@@ -32,8 +37,21 @@ class WebauthnCredentialSourceRepository extends DoctrineCredentialSourceReposit
                 $publicKeyCredentialSource->userHandle,
                 $publicKeyCredentialSource->counter
             );
-
-            parent::saveCredentialSource($publicKeyCredentialSource);
+        } else {
+            $credential = $publicKeyCredentialSource;
         }
+
+        $this->getEntityManager()->persist($credential);
+        $this->getEntityManager()->flush();
+    }
+
+    public function findAllForUserEntity(PublicKeyCredentialUserEntity $publicKeyCredentialUserEntity): array
+    {
+        return $this->findBy(['userHandle' => $publicKeyCredentialUserEntity->id]);
+    }
+
+    public function findOneByCredentialId(string $publicKeyCredentialId): ?PublicKeyCredentialSource
+    {
+        return $this->findOneBy(['publicKeyCredentialId' => $publicKeyCredentialId]);
     }
 }
