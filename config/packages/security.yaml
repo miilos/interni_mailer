@@ -29,6 +29,10 @@ security:
                         options_path: '/passkeys/assertion/options'
                         result_path: '/passkeys/assertion/result'
 
+            logout:
+                path: /logout
+                target: /login
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 

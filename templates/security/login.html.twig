@@ -8,22 +8,58 @@
             <div class="login template_overview-container">
                 <h1 class="template_overview-title">Login</h1>
 
-                <div class="login-input-data">
-                    <div class="login-input-container">
-                        <label class="send-input-label" for="email">Email</label>
-                        <input type="text" class="send-input send-input--login" id="email" />
-                        <span class="error-message" id="errmsg-email">You need to enter your email!</span>
+                <div class="login-form-container">
+                    <div class="template-data-input-container">
+                        <label class="template-data-input-label" for="email">Email</label>
+                        <input type="text" id="email" name="email" class="template-data-input" />
+                        <span class="error-message" id="errmsg-email">You need to enter your email to log in!</span>
                     </div>
 
-                    <div class="login-input-container">
-                        <label class="send-input-label" for="password">Password</label>
-                        <input type="password" class="send-input send-input--login" id="password" />
-                        <span class="error-message" id="errmsg-password">You need to enter your password!</span>
-                    </div>
+                    {{ form_start(loginForm, {
+                        attr: {
+                            ...stimulus_controller('@web-auth/webauthn-stimulus', {
+                                useBrowserAutofill: true,
+                                usernameField: loginForm.email.vars.full_name,
+                                requestSuccessRedirectUri: path('send_email'),
+                                requestResultUrl: path('webauthn.controller.security.main.request.result'),
+                                requestOptionsUrl: path('webauthn.controller.security.main.request.options')
+                            }).toArray,
+                            class: 'login-form'
+                        }
+                    }) }}
 
-                    <button class="btn btn--primary login-btn">Log in</button>
+                        <button
+                            {{ stimulus_action('@web-auth/webauthn-stimulus', 'signin') }}
+                            type="button"
+                            class="btn btn--primary create-user-form-btn login-btn"
+                        >
+                            Log in
+                        </button>
 
-                    <span class="error-message" id="errmsg-login"></span>
+                    {{ form_end(loginForm) }}
+
+                    {{ form_start(passkeySetupForm, {
+                        attr: {
+                            ...stimulus_controller('@web-auth/webauthn-stimulus', {
+                                usernameField: passkeySetupForm.email.vars.full_name,
+                                creationSuccessRedirectUri: path('send_email'),
+                                creationResultUrl: path('webauthn.controller.security.main.creation.result'),
+                                creationOptionsUrl: path('webauthn.controller.security.main.creation.options'),
+                            }).toArray,
+                            class: 'passkey-setup-form'
+                        }
+                    }) }}
+                        <p class="passkey-setup-text">
+                            Don't have a passkey set up?
+                            <button
+                                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
+                                type="button"
+                                class="setup-passkey-btn"
+                            >
+                                Set up a passkey
+                            </button>
+                        </p>
+                    {{ form_end(passkeySetupForm) }}
                 </div>
             </div>
         </div>

@@ -3,22 +3,24 @@
 namespace App\Controller;
 
 use App\Dto\UserDto;
+use App\Form\LoginFormType;
 use App\Form\PasskeySetupFormType;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Webauthn\AuthenticatorAttestationResponseValidator;
+use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepositoryInterface;
+use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
+use Webauthn\PublicKeyCredential;
+use Webauthn\PublicKeyCredentialParameters;
+use Webauthn\PublicKeyCredentialUserEntity;
 
 class AdminPanelController extends AbstractController
 {
-    #[Route('/login', name: 'login')]
-    public function login(): Response
-    {
-        return $this->render('security/login.html.twig');
-    }
-
     #[Route('/', name: 'send_email')]
     public function sendEmail(): Response
     {
@@ -87,6 +89,18 @@ class AdminPanelController extends AbstractController
         ]);
     }
 
+    #[Route('/login', name: 'login')]
+    public function login(): Response
+    {
+        $loginForm = $this->createForm(LoginFormType::class);
+        $passkeySetupForm = $this->createForm(PasskeySetupFormType::class);
+
+        return $this->render('security/login.html.twig', [
+            'loginForm' => $loginForm,
+            'passkeySetupForm' => $passkeySetupForm
+        ]);
+    }
+
     #[Route('/users/create/passkey', name: 'create_passkey')]
     public function setUpPasskey(
         Request $request,
@@ -98,7 +112,7 @@ class AdminPanelController extends AbstractController
 
         $user = $userRepository->findOneBy(['id' => $id]);
 
-        $form = $this->createForm(PasskeySetupFormType::class, [
+        $form = $this->createForm(LoginFormType::class, [
             'email' => $user->getEmail(),
         ]);
 

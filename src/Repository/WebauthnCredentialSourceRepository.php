@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\WebauthnCredentialSource;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Psr\Log\LoggerInterface;
 use Webauthn\Bundle\Repository\CanSaveCredentialSource;
 use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepositoryInterface;
 use Webauthn\PublicKeyCredentialSource;
@@ -16,7 +15,7 @@ use Webauthn\PublicKeyCredentialUserEntity;
  */
 class WebauthnCredentialSourceRepository extends ServiceEntityRepository implements PublicKeyCredentialSourceRepositoryInterface, CanSaveCredentialSource
 {
-    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, WebauthnCredentialSource::class);
     }

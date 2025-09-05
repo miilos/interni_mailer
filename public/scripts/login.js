@@ -1,42 +1,33 @@
 const emailInput = document.getElementById('email')
-const passwordInput = document.getElementById('password')
-const loginBtn = document.querySelector('.login-btn')
+const loginFormEmail = document.getElementById('login_form_email')
+const passkeySetupFormEmail = document.getElementById('passkey_setup_form_email')
 
-const errEmailSpan = document.getElementById('errmsg-email')
-const errPasswordSpan = document.getElementById('errmsg-password')
-const errLoginSpan = document.getElementById('errmsg-login')
+const loginFormBtn = document.querySelector('.login-btn')
+const passkeyFormBtn = document.querySelector('.setup-passkey-btn')
 
-const validateInput = (email, password) => {
-    let passed = true
+const errorMsgSpan = document.getElementById('errmsg-email')
 
-    if (!email) {
-        errEmailSpan.style.display = 'block'
-        errEmailSpan.innerText = 'You have to enter your email!'
-        passed = false
+const checkEmailEntered = () => {
+    if (!emailInput.value) {
+        errorMsgSpan.style.display = 'block'
+        return false
     }
 
-    if (!password) {
-        errPasswordSpan.style.display = 'block'
-        errPasswordSpan.innerText = 'You have to enter your password!'
-        passed = false
-    }
-
-    return passed
+    return true
 }
 
-loginBtn.addEventListener('click', async () => {
-    const email = emailInput.value
-    const password = passwordInput.value
-
-    if (!validateInput(email, password)) return
-
-
-})
-
 emailInput.addEventListener('keydown', () => {
-    errEmailSpan.style.display = 'none'
+    errorMsgSpan.style.display = 'none'
 })
 
-passwordInput.addEventListener('keydown', () => {
-    errPasswordSpan.style.display = 'none'
+loginFormBtn.addEventListener('click', () => {
+    if(!checkEmailEntered()) return
+
+    loginFormEmail.value = emailInput.value
+})
+
+passkeyFormBtn.addEventListener('click', () => {
+    if(!checkEmailEntered()) return
+
+    passkeySetupFormEmail.value = emailInput.value
 })

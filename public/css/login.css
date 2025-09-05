@@ -1,6 +1,5 @@
 .login-container {
-    width: 100vw;
-    height: 90vh;
+    width: 100%;
 
     display: flex;
     align-items: flex-start;
@@ -9,7 +8,16 @@
 
 .login {
     width: 30%;
-    height: 50%;
+    height: max-content;
+}
+
+.login-form-container {
+    padding: 2rem;
+}
+
+.login-form {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 
 .login-input-data {
@@ -27,4 +35,17 @@
 .send-input--login {
     color: #000;
     border-bottom: 1px solid var(--color-primary);
+}
+
+.setup-passkey-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--color-primary);
+    text-decoration: underline;
+    font-size: 1.7rem;
+    cursor: pointer;
+}
+
+.setup-passkey-btn:focus {
+    outline: none;
 }
