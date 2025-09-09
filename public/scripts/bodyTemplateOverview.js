@@ -159,6 +159,9 @@ const renderChangelog = () => {
                 <div class="table-entry-cell table-entry-cell--changelog cell-changedat">
                     <p class="table-entry-text">${utils.formatDate(log.createdAt)}</p>
                 </div>
+                <div class="table-entry-cell table-entry-cell--changelog cell-user">
+                    <p class="table-entry-text">${log.user ? log.user.email : ''}</p>
+                </div>
             </div>
         `)
     })

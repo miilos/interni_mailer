@@ -19,19 +19,19 @@ class User implements UserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['groupData', 'userData'])]
+    #[Groups(['groupData', 'userData', 'fullTemplateData'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['groupData', 'userData'])]
+    #[Groups(['groupData', 'userData', 'fullTemplateData'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['groupData', 'userData'])]
+    #[Groups(['groupData', 'userData', 'fullTemplateData'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['groupData', 'userData'])]
+    #[Groups(['groupData', 'userData', 'fullTemplateData'])]
     private ?string $email = null;
 
     /**

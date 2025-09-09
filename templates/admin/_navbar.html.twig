@@ -18,9 +18,11 @@
         <li class="nav-list-item">
             <a class="nav-list-link" href="{{ path('statistics') }}">Statistics</a>
         </li>
-        <li class="nav-list-item">
-            <a class="nav-list-link" href="{{ path('create_user') }}">Add users</a>
-        </li>
+        {% if app.user and is_granted('ROLE_ADMIN') %}
+            <li class="nav-list-item">
+                <a class="nav-list-link" href="{{ path('create_user') }}">Add users</a>
+            </li>
+        {% endif %}
     </ul>
 
     {% if app.user %}

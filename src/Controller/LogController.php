@@ -19,6 +19,10 @@ class LogController extends AbstractController
         LogSearchCriteria $criteria
     ): JsonResponse
     {
+        // the default in the parent class of all criteria classes is ASC,
+        // override the default just for this case
+        $criteria->setSortDirection('DESC');
+
         $paginator = $logSearchService->searchByCriteria($criteria);
         $logs = $paginator->getItems();
 

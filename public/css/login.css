@@ -49,3 +49,7 @@
 .setup-passkey-btn:focus {
     outline: none;
 }
+
+.passkey-login-error {
+    margin: 1rem 0;
+}

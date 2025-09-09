@@ -15,8 +15,6 @@ class EmailLoggerService
 
     public function logSent(EmailDto $emailDto): void
     {
-        // $emailDto has an array of all the addresses the email is going to,
-        // so the dto has to be cloned in order to set only one address for logging
         foreach ($emailDto->getTo() as $to) {
             $this->messageBus->dispatch(new LogEmail($emailDto, $to, EmailStatusEnum::SENT->value));
         }

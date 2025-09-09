@@ -8,16 +8,9 @@ use App\Form\PasskeySetupFormType;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Webauthn\AuthenticatorAttestationResponseValidator;
-use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepositoryInterface;
-use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
-use Webauthn\PublicKeyCredential;
-use Webauthn\PublicKeyCredentialParameters;
-use Webauthn\PublicKeyCredentialUserEntity;
 
 class AdminPanelController extends AbstractController
 {
@@ -63,7 +56,7 @@ class AdminPanelController extends AbstractController
         return $this->render('admin/statistics.html.twig');
     }
 
-    #[Route('/users/create', name: 'create_user')]
+    #[Route('/admin/users/create', name: 'create_user')]
     public function createUser(
         Request $request,
         UserRepository $userRepository,
@@ -77,9 +70,7 @@ class AdminPanelController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-
-            $persistedUser = $userRepository->createUser($user);
-            $request->getSession()->set('new_user_id', $persistedUser->getId());
+            $userRepository->createUser($user);
 
             $this->addFlash('success', 'User created!');
         }
@@ -98,27 +89,6 @@ class AdminPanelController extends AbstractController
         return $this->render('security/login.html.twig', [
             'loginForm' => $loginForm,
             'passkeySetupForm' => $passkeySetupForm
-        ]);
-    }
-
-    #[Route('/users/create/passkey', name: 'create_passkey')]
-    public function setUpPasskey(
-        Request $request,
-        UserRepository $userRepository
-    ): Response
-    {
-        $session = $request->getSession();
-        $id = $session->get('new_user_id');
-
-        $user = $userRepository->findOneBy(['id' => $id]);
-
-        $form = $this->createForm(LoginFormType::class, [
-            'email' => $user->getEmail(),
-        ]);
-
-        return $this->render('security/passkey_setup.html.twig', [
-            'form' => $form,
-            'email' => $user->getEmail(),
         ]);
     }
 }

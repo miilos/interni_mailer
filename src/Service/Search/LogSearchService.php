@@ -14,17 +14,6 @@ class LogSearchService
         private PaginatorInterface $paginator,
     ) {}
 
-    public function searchAll(LogSearchCriteria $criteria): PaginationInterface
-    {
-        $qb = $this->emailLogRepository->buildFindAll();
-
-        return $this->paginator->paginate(
-            $qb,
-            $criteria->getPage(),
-            $criteria->getLimit()
-        );
-    }
-
     public function searchByCriteria(LogSearchCriteria $criteria): PaginationInterface
     {
         $qb = $this->emailLogRepository->buildSearch($criteria);

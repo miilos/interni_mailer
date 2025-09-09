@@ -132,6 +132,12 @@ const onDeleteGroup = async (e) => {
     const res = await fetch(`/api/groups/${group.id}`, {
         method: 'DELETE'
     })
+    const json = await res.json()
+
+    if (!res.ok) {
+        openModalWithoutInputBlock('Error!', json.message)
+        return
+    }
 
     groupEl.remove()
     groupDetailsContainer.innerHTML = ''

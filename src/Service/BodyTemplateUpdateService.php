@@ -7,6 +7,7 @@ use App\Message\UpdateBodyTemplateChangelog;
 use App\Repository\EmailBodyRepository;
 use App\Repository\EmailTemplateRepository;
 use App\Service\EmailParser\BodyParser\BodyParserService;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class BodyTemplateUpdateService
@@ -17,6 +18,7 @@ class BodyTemplateUpdateService
         private MessageBusInterface $messageBus,
         private EmailBodyRepository $emailBodyRepository,
         private EmailTemplateRepository $emailTemplateRepository,
+        private Security $security,
     ) {}
 
     public function updateTemplate(EmailBody $body, array $newData): ?EmailBody {
@@ -27,7 +29,11 @@ class BodyTemplateUpdateService
         $updatedBody = $this->emailBodyRepository->updateBodyTemplate($body, $newBody);
 
         if ($diff) {
-            $this->messageBus->dispatch(new UpdateBodyTemplateChangelog($updatedBody->getId(), $diff));
+            $this->messageBus->dispatch(new UpdateBodyTemplateChangelog(
+                $updatedBody->getId(),
+                $diff,
+                $this->security->getUser()
+            ));
         }
 
         return $updatedBody;

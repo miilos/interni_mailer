@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
@@ -21,8 +22,9 @@ final class ExceptionListener
         $e = $event->getThrowable();
 
         $error = match ($e::class) {
-            BadRequestException::class => $this->getResponse($e, 'Bad data in request!', Response::HTTP_BAD_REQUEST),
-            UnprocessableEntityHttpException::class => $this->getResponse($e, 'Validation error!', Response::HTTP_BAD_REQUEST),
+            BadRequestException::class => $this->getResponse($e, 'Bad data in request', Response::HTTP_BAD_REQUEST),
+            UnprocessableEntityHttpException::class => $this->getResponse($e, 'Validation error', Response::HTTP_BAD_REQUEST),
+            AccessDeniedHttpException::class => $this->getResponse($e, 'You don\'t have permission to preform this action.', Response::HTTP_FORBIDDEN),
             ParserException::class,
             GroupManagerException::class,
             UnsupportedTemplateFormatException::class,

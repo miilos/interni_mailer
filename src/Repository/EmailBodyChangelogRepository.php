@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\EmailBody;
 use App\Entity\EmailBodyChangelog;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,7 +24,7 @@ class EmailBodyChangelogRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
     }
 
-    public function createEmailBodyChangelog(EmailBody $updatedBody, array $diff): EmailBodyChangelog
+    public function createEmailBodyChangelog(EmailBody $updatedBody, array $diff, ?User $user): EmailBodyChangelog
     {
         $changelog = new EmailBodyChangelog();
         $changelog->setTemplate($updatedBody) ;
@@ -34,6 +35,7 @@ class EmailBodyChangelogRepository extends ServiceEntityRepository
         $changelog->setVariables($updatedBody->getVariables());
         $changelog->setDiff($diff);
         $changelog->setCreatedAt(new \DateTimeImmutable());
+        $changelog->setUser($user);
 
         $this->entityManager->persist($changelog);
         $this->entityManager->flush();
