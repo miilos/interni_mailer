@@ -48,6 +48,10 @@ class GroupController extends AbstractController
         GroupDto $groupDto,
     ): JsonResponse
     {
+        if (!$this->isGranted('ROLE_EDITOR')) {
+            throw new AccessDeniedHttpException('You don\'t have permission to perform this action!');
+        }
+
         $users = $userRepository->getUsersFromList($groupDto->getRecipients());
         $groupDto->setRecipients($users);
         $group = $groupRepository->createGroup($groupDto);
@@ -69,6 +73,10 @@ class GroupController extends AbstractController
         Request $req
     ): JsonResponse
     {
+        if (!$this->isGranted('ROLE_EDITOR')) {
+            throw new AccessDeniedHttpException('You don\'t have permission to perform this action!');
+        }
+
         $userId = $decoder->decode($req->getContent(), 'json')['userId'];
         $group = $groupManagerService->addUserToGroup($groupId, $userId);
 
@@ -88,6 +96,10 @@ class GroupController extends AbstractController
         GroupManagerService $groupManagerService
     ): JsonResponse
     {
+        if (!$this->isGranted('ROLE_EDITOR')) {
+            throw new AccessDeniedHttpException('You don\'t have permission to perform this action!');
+        }
+
         $group = $groupManagerService->removeUserFromGroup($groupId, $userId);
 
         return $this->json([

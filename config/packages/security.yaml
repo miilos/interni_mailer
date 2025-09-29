@@ -35,7 +35,8 @@ security:
                 target: /login
 
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_USER]
+        ROLE_ADMIN: [ROLE_USER, ROLE_EDITOR]
+        ROLE_EDITOR: [ROLE_USER]
 
     access_control:
         - { path: ^/api, roles: PUBLIC_ACCESS }

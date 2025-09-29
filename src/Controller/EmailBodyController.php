@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
@@ -48,6 +49,10 @@ class EmailBodyController extends AbstractController
         EmailBodyDto $emailBodyDto
     ): JsonResponse
     {
+        if (!$this->isGranted('ROLE_EDITOR')) {
+            throw new AccessDeniedHttpException('You don\'t have permission to perform this action!');
+        }
+
         $body = $emailBodyRepository->createEmailBody($emailBodyDto);
 
         $messageBus->dispatch(new CreateBodyTemplateFile($emailBodyDto));
@@ -69,6 +74,10 @@ class EmailBodyController extends AbstractController
         BodyTemplateUpdateService  $bodyTemplateUpdateService
     ): JsonResponse
     {
+        if (!$this->isGranted('ROLE_EDITOR')) {
+            throw new AccessDeniedHttpException('You don\'t have permission to perform this action!');
+        }
+
         $newValues = $decoder->decode($request->getContent(), 'json');
 
         $updatedBody = $bodyTemplateUpdateService->updateTemplate($body, $newValues);
@@ -88,6 +97,10 @@ class EmailBodyController extends AbstractController
         BodyTemplateUpdateService $bodyTemplateUpdateService
     ): JsonResponse
     {
+        if (!$this->isGranted('ROLE_EDITOR')) {
+            throw new AccessDeniedHttpException('You don\'t have permission to perform this action!');
+        }
+
         $bodyTemplateUpdateService->deleteBodyTemplate($body);
 
         return $this->json([], 204);
